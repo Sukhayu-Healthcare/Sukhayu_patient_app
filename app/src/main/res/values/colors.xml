@@ -8,4 +8,9 @@
     <color name="white">#FFFFFF</color>
     <color name="card_bg">#FFFFFF</color>
     <color name="bg_light">#F6F7FB</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="gray_50">#F8FAFC</color>
+    <color name="blue_600">#2563EB</color>
+    <color name="red_600">#DC2626</color>
 </resources>
