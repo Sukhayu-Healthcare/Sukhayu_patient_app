@@ -85,7 +85,7 @@ app\build\outputs\apk\debug\app-debug.apk
 
 Replace the path with your actual APK location:
 
-adb install -r app\build\outputs\apk\debug\app-debug.apk
+AppData\Local\Android\Sdk\platform-tools
 
 
 -r = reinstall if the app already exists.

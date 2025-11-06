@@ -26,10 +26,9 @@ com.sukhayu.patient.app-jetified-customview-poolingcontainer-1.0.0-24 C:\Users\a
 com.sukhayu.patient.app-lifecycle-runtime-2.6.2-25 C:\Users\anike\.gradle\caches\9.0-milestone-1\transforms\f30d885b62f58efdef4f97a316f274bb\transformed\lifecycle-runtime-2.6.2\res
 com.sukhayu.patient.app-jetified-lifecycle-viewmodel-savedstate-2.6.2-26 C:\Users\anike\.gradle\caches\9.0-milestone-1\transforms\fa48f7cc394b2c3a051ec292a37b59bc\transformed\jetified-lifecycle-viewmodel-savedstate-2.6.2\res
 com.sukhayu.patient.app-lifecycle-livedata-core-2.6.2-27 C:\Users\anike\.gradle\caches\9.0-milestone-1\transforms\ffc7ea7cecf593d76b36d4784a636ffa\transformed\lifecycle-livedata-core-2.6.2\res
-com.sukhayu.patient.app-pngs-28 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\build\generated\res\pngs\debug
-com.sukhayu.patient.app-resValues-29 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\build\generated\res\resValues\debug
-com.sukhayu.patient.app-packageDebugResources-30 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.sukhayu.patient.app-packageDebugResources-31 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.sukhayu.patient.app-merged_res-32 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\build\intermediates\merged_res\debug
-com.sukhayu.patient.app-debug-33 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\debug\res
-com.sukhayu.patient.app-main-34 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\res
+com.sukhayu.patient.app-resValues-28 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\build\generated\res\resValues\debug
+com.sukhayu.patient.app-packageDebugResources-29 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.sukhayu.patient.app-packageDebugResources-30 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.sukhayu.patient.app-merged_res-31 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\build\intermediates\merged_res\debug
+com.sukhayu.patient.app-debug-32 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\debug\res
+com.sukhayu.patient.app-main-33 C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\res

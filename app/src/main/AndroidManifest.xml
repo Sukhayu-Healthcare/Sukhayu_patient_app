@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sukhayu.patient">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
@@ -8,6 +7,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoleBasedTelemedicinePatient">
 
+        <!-- Login Activity (Launcher) -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -17,12 +17,30 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".DashboardActivity" android:exported="false" />
-        <activity android:name=".ProfileActivity" android:exported="false" />
-        <activity android:name=".ConsultDoctorActivity" android:exported="false" />
-        <activity android:name=".PastConsultationsActivity" android:exported="false" />
-        <activity android:name=".CheckSymptomsActivity" android:exported="false" />
-        <activity android:name=".MedicinesActivity" android:exported="false" />
+        <!-- Other Activities -->
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ConsultDoctorActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".PastConsultationsActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".CheckSymptomsActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".MedicinesActivity"
+            android:exported="true" />
 
     </application>
 

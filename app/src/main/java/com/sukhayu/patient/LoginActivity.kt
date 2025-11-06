@@ -22,12 +22,17 @@ class LoginActivity : AppCompatActivity() {
 
             // Dummy validation
             if (email == "patient@example.com" && pass == "password") {
-                val i = Intent(this, DashboardActivity::class.java)
-                i.putExtra("USER_EMAIL", email)
-                startActivity(i)
-                finish()
+                // Navigate to Dashboard
+                val intent = Intent(this, DashboardActivity::class.java)
+                intent.putExtra("USER_EMAIL", email)
+                startActivity(intent)
+                finish()  // Optional: removes login screen from back stack
             } else {
-                Toast.makeText(this, "Invalid credentials. Use patient@example.com / password", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    "Invalid credentials. Use patient@example.com / password",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }

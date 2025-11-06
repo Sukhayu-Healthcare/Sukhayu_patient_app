@@ -1,9 +1,5 @@
 [
     {
-        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_login.xml.flat",
-        "source": "com.sukhayu.patient.app-main-34:/layout/activity_login.xml"
-    },
-    {
         "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_consult_doctor.xml.flat",
         "source": "com.sukhayu.patient.app-main-34:/layout/activity_consult_doctor.xml"
     },
@@ -12,27 +8,115 @@
         "source": "com.sukhayu.patient.app-main-34:/layout/activity_doctor_detail.xml"
     },
     {
-        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_past_consultations.xml.flat",
-        "source": "com.sukhayu.patient.app-main-34:/layout/activity_past_consultations.xml"
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_login_24.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_login_24.xml"
     },
     {
-        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_check_symptoms.xml.flat",
-        "source": "com.sukhayu.patient.app-main-34:/layout/activity_check_symptoms.xml"
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_arrow_back_24.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_arrow_back_24.xml"
     },
     {
         "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_medicines.xml.flat",
         "source": "com.sukhayu.patient.app-main-34:/layout/activity_medicines.xml"
     },
     {
-        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_dashboard.xml.flat",
-        "source": "com.sukhayu.patient.app-main-34:/layout/activity_dashboard.xml"
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_profile.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_profile.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_sample_patient.jpg.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/sample_patient.jpg"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_search_24.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_search_24.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_rounded_image.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/rounded_image.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_item_doctor.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/layout/item_doctor.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_login.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_logout.png.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_logout.png"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_rounded_card_bg.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/rounded_card_bg.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_check_symptoms.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/layout/activity_check_symptoms.xml"
     },
     {
         "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_profile.xml.flat",
         "source": "com.sukhayu.patient.app-main-34:/layout/activity_profile.xml"
     },
     {
-        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_item_doctor.xml.flat",
-        "source": "com.sukhayu.patient.app-main-34:/layout/item_doctor.xml"
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_analytics.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_analytics.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_medicine.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_medicine.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_language.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_language.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_doctor.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_doctor.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_sukhayu_logo.png.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/sukhayu_logo.png"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_include_header.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/layout/include_header.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_ai.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_ai.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_circle_blue_bg.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/circle_blue_bg.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_premium_badge.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/premium_badge.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_rounded_bg_white.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/rounded_bg_white.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_past_consultations.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/layout/activity_past_consultations.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_history.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_history.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_person_24.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_person_24.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/layout_activity_dashboard.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/layout/activity_dashboard.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_bg_gradient_card.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/bg_gradient_card.xml"
     }
 ]
