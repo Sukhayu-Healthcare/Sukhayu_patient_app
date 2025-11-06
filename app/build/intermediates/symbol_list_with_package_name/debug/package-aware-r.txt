@@ -3223,7 +3223,6 @@ id callMeasure
 id cancel_button
 id cardCheckSymptoms
 id cardConsultDoctor
-id cardInfo
 id cardLogin
 id cardMedicines
 id cardPastConsultations

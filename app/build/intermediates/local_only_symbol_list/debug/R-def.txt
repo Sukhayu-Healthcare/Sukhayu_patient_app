@@ -14,7 +14,6 @@ id btnConsult
 id btnLogin
 id cardCheckSymptoms
 id cardConsultDoctor
-id cardInfo
 id cardLogin
 id cardMedicines
 id cardPastConsultations
