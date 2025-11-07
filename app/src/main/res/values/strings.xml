@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">Telemedicine Patient</string>
-    <string name="login">Login</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
+    <string name="app_name">Sukhayu</string>
+    <string name="app_logo_desc">App Logo</string>
+    <string name="language_icon_desc">Language Icon</string>
+    <string name="language_english">English</string>
+    <string name="profile_icon_desc">Profile Icon</string>
+    <string name="profile">Profile</string>
+    <string name="symptom_icon_desc">Symptom Icon</string>
+    <string name="check_symptoms">Check Symptoms</string>
+    <string name="consult_doctor">Consult Doctor Icon</string>
+    <string name="past_consultations">Past Consultations Icon</string>
+    <string name="medicines">Medicines Icon</string>
 </resources>

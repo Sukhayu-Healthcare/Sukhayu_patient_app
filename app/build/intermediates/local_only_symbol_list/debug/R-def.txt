@@ -13,6 +13,7 @@ color teal_200
 color teal_700
 color white
 drawable bg_gradient_card
+drawable circle_background
 drawable circle_blue_bg
 drawable ic_ai
 drawable ic_analytics
@@ -26,6 +27,7 @@ drawable ic_medicine
 drawable ic_person_24
 drawable ic_profile
 drawable ic_search_24
+drawable ic_symptom
 drawable premium_badge
 drawable rounded_bg_white
 drawable rounded_card_bg
@@ -77,8 +79,15 @@ layout activity_past_consultations
 layout activity_profile
 layout include_header
 layout item_doctor
+string app_logo_desc
 string app_name
-string email
-string login
-string password
+string check_symptoms
+string consult_doctor
+string language_english
+string language_icon_desc
+string medicines
+string past_consultations
+string profile
+string profile_icon_desc
+string symptom_icon_desc
 style Theme.RoleBasedTelemedicinePatient

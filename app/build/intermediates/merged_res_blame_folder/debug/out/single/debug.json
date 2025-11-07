@@ -24,12 +24,12 @@
         "source": "com.sukhayu.patient.app-main-34:/drawable/ic_profile.xml"
     },
     {
-        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_sample_patient.jpg.flat",
-        "source": "com.sukhayu.patient.app-main-34:/drawable/sample_patient.jpg"
-    },
-    {
         "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_search_24.xml.flat",
         "source": "com.sukhayu.patient.app-main-34:/drawable/ic_search_24.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_sample_patient.jpg.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/sample_patient.jpg"
     },
     {
         "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_rounded_image.xml.flat",
@@ -46,6 +46,10 @@
     {
         "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_logout.png.flat",
         "source": "com.sukhayu.patient.app-main-34:/drawable/ic_logout.png"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_ic_symptom.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/ic_symptom.xml"
     },
     {
         "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_rounded_card_bg.xml.flat",
@@ -78,6 +82,10 @@
     {
         "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_sukhayu_logo.png.flat",
         "source": "com.sukhayu.patient.app-main-34:/drawable/sukhayu_logo.png"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-merged_res-32:/drawable_circle_background.xml.flat",
+        "source": "com.sukhayu.patient.app-main-34:/drawable/circle_background.xml"
     },
     {
         "merged": "com.sukhayu.patient.app-merged_res-32:/layout_include_header.xml.flat",

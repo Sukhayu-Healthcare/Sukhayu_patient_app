@@ -16,6 +16,7 @@ class DashboardActivity : AppCompatActivity() {
         val cardMedicines = findViewById<CardView>(R.id.cardMedicines)
         val cardPastConsultations = findViewById<CardView>(R.id.cardPastConsultations)
 
+        // Profile page
         cardProfile.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }

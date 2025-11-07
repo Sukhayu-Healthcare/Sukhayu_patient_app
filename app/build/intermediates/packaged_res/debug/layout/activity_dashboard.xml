@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8FAFC">
+    android:fillViewport="true"
+    android:background="#F8FAFC"
+    tools:context=".DashboardActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="16dp">
 
         <!-- Header -->
@@ -18,7 +21,7 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="8dp"
-            android:background="@color/white"
+            android:background="@android:color/white"
             android:elevation="2dp"
             android:layout_marginBottom="12dp">
 
@@ -26,7 +29,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/sukhayu_logo"
-                android:contentDescription="App Logo"
+                android:contentDescription="@string/app_name"
                 android:layout_marginEnd="8dp" />
 
             <TextView
@@ -48,7 +51,8 @@
                     android:layout_height="18dp"
                     android:src="@drawable/ic_language"
                     android:tint="#0F172A"
-                    android:layout_marginEnd="4dp" />
+                    android:layout_marginEnd="4dp"
+                    android:contentDescription="@string/language_icon_desc" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -69,7 +73,7 @@
             app:cardElevation="3dp"
             app:strokeColor="#E2E8F0"
             app:strokeWidth="1dp"
-            android:backgroundTint="@color/white">
+            android:backgroundTint="@android:color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -82,8 +86,9 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/sample_patient"
+                    android:background="@drawable/circle_background"
                     android:scaleType="centerCrop"
-                    android:background="@drawable/rounded_image"
+                    android:contentDescription="@string/profile_icon_desc"
                     android:layout_marginEnd="12dp" />
 
                 <LinearLayout
@@ -93,12 +98,16 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="राम शर्मा"
                         android:textColor="#0F172A"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="Patient ID: P001"
                         android:textColor="#475569"
                         android:textSize="14sp" />
@@ -113,7 +122,7 @@
             android:columnCount="2"
             android:useDefaultMargins="true">
 
-            <!-- Check Symptoms -->
+            <!-- AI Symptom Checker -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardCheckSymptoms"
                 android:layout_width="0dp"
@@ -121,21 +130,24 @@
                 android:layout_columnWeight="1"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
-                android:backgroundTint="@color/white">
+                android:backgroundTint="@android:color/white">
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_ai"
-                        android:tint="#2563EB" />
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_symptom"
+                        android:tint="#2563EB"
+                        android:contentDescription="@string/symptom_icon_desc" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="AI Symptom Checker"
                         android:textSize="14sp"
                         android:textColor="#0F172A"
@@ -151,21 +163,24 @@
                 android:layout_columnWeight="1"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
-                android:backgroundTint="@color/white">
+                android:backgroundTint="@android:color/white">
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/ic_doctor"
-                        android:tint="#16A34A" />
+                        android:tint="#16A34A"
+                        android:contentDescription="@string/consult_doctor" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="Consult Doctor"
                         android:textSize="14sp"
                         android:textColor="#0F172A"
@@ -181,21 +196,24 @@
                 android:layout_columnWeight="1"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
-                android:backgroundTint="@color/white">
+                android:backgroundTint="@android:color/white">
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/ic_history"
-                        android:tint="#7C3AED" />
+                        android:tint="#7C3AED"
+                        android:contentDescription="@string/past_consultations" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="Past Consultations"
                         android:textSize="14sp"
                         android:textColor="#0F172A"
@@ -211,21 +229,24 @@
                 android:layout_columnWeight="1"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
-                android:backgroundTint="@color/white">
+                android:backgroundTint="@android:color/white">
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/ic_medicine"
-                        android:tint="#059669" />
+                        android:tint="#059669"
+                        android:contentDescription="@string/medicines" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="Medicines"
                         android:textSize="14sp"
                         android:textColor="#0F172A"
