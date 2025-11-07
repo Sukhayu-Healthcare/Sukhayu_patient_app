@@ -86,8 +86,7 @@ app\build\outputs\apk\debug\app-debug.apk
 Replace the path with your actual APK location:
 
 AppData\Local\Android\Sdk\platform-tools
-adb install -r C:<Add Path>RoleBasedTelemedicinePatient\app\build\outputs\
-apk\debug\app-debug.apk
+adb install -r C:<Add Path>RoleBasedTelemedicinePatient\app\build\outputs\apk\debug\app-debug.apk
 
 -r = reinstall if the app already exists.
 

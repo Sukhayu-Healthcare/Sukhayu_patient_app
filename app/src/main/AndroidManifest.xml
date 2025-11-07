@@ -42,6 +42,21 @@
             android:name=".MedicinesActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".DoctorDetailActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".DoctorAdapter"
+            android:exported="true" />
+
+        <activity
+            android:name=".DummyData"
+            android:exported="true" />
+
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

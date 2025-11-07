@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:2:1-47:12
+ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:2:1-62:12
+INJECTED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:2:1-62:12
+INJECTED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:2:1-62:12
+INJECTED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:2:1-62:12
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\anike\.gradle\caches\9.0-milestone-1\transforms\79b67460b1cf313404fbb218bba360c6\transformed\material-1.12.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.2.0] C:\Users\anike\.gradle\caches\9.0-milestone-1\transforms\b5a1cc2a9b476d312f1b9339571a76bb\transformed\constraintlayout-2.2.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.appcompat:appcompat-resources:1.7.0] C:\Users\anike\.gradle\caches\9.0-milestone-1\transforms\86832a99e221d5be4d351a32e6444e44\transformed\jetified-appcompat-resources-1.7.0\AndroidManifest.xml:2:1-7:12
@@ -55,8 +55,8 @@ MERGED from [androidx.print:print:1.0.0] C:\Users\anike\.gradle\caches\9.0-miles
 	xmlns:android
 		ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:2:11-69
 application
-ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:4:5-45:19
-INJECTED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:4:5-45:19
+ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:4:5-60:19
+INJECTED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:4:5-60:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\anike\.gradle\caches\9.0-milestone-1\transforms\79b67460b1cf313404fbb218bba360c6\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\anike\.gradle\caches\9.0-milestone-1\transforms\79b67460b1cf313404fbb218bba360c6\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.2.0] C:\Users\anike\.gradle\caches\9.0-milestone-1\transforms\b5a1cc2a9b476d312f1b9339571a76bb\transformed\constraintlayout-2.2.0\AndroidManifest.xml:7:5-20
@@ -137,6 +137,24 @@ ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\An
 		ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:43:13-36
 	android:name
 		ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:42:13-46
+activity#com.sukhayu.patient.DoctorDetailActivity
+ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:45:9-47:39
+	android:exported
+		ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:47:13-36
+	android:name
+		ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:46:13-49
+activity#com.sukhayu.patient.DoctorAdapter
+ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:49:9-51:39
+	android:exported
+		ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:51:13-36
+	android:name
+		ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:50:13-42
+activity#com.sukhayu.patient.DummyData
+ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:53:9-55:39
+	android:exported
+		ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:55:13-36
+	android:name
+		ADDED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:54:13-38
 uses-sdk
 INJECTED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml

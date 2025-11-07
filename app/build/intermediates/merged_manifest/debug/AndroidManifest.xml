@@ -53,6 +53,18 @@
         <activity
             android:name="com.sukhayu.patient.MedicinesActivity"
             android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.DoctorDetailActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.DoctorAdapter"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.DummyData"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ProfileActivity"
+            android:exported="true" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"
