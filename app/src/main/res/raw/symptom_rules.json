@@ -1,0 +1,22 @@
+{
+  "fever": {
+    "possible_diseases": ["Common Cold", "Typhoid", "Dengue"],
+    "severity": "medium"
+  },
+  "headache": {
+    "possible_diseases": ["Migraine", "Sinusitis", "Tension Headache"],
+    "severity": "low"
+  },
+  "cough": {
+    "possible_diseases": ["Flu", "Bronchitis", "COVID-19"],
+    "severity": "medium"
+  },
+  "chest_pain": {
+    "possible_diseases": ["Heart Disease", "Anxiety", "Asthma"],
+    "severity": "high"
+  },
+  "fatigue": {
+    "possible_diseases": ["Anemia", "Depression", "Thyroid Disorder"],
+    "severity": "medium"
+  }
+}

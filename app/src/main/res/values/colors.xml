@@ -12,4 +12,9 @@
     <color name="gray_50">#F8FAFC</color>
     <color name="blue_600">#2563EB</color>
     <color name="red_600">#DC2626</color>
+    <color name="red">#E53935</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="primary_blue">#1E88E5</color>
+
 </resources>

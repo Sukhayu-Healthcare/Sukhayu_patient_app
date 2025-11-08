@@ -1,0 +1,90 @@
+[
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/item_chat_user.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/item_chat_user.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_dashboard.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_dashboard.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_emergency_vc.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_emergency_vc.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_disease_outbreak.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_disease_outbreak.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_video_call.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_video_call.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_consent.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_consent.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_consult_doctor.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_consult_doctor.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_symptom_chat.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_symptom_chat.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_medicines.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_medicines.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/include_header.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/include_header.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_doctor_detail.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_doctor_detail.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_prescription.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_prescription.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_past_consultations.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_past_consultations.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/item_doctor.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/item_doctor.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_voice_call.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_voice_call.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_emergency_init.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_emergency_init.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/item_chat_bot.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/item_chat_bot.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_login.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_check_symptoms.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_check_symptoms.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/item_symptom_message.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/item_symptom_message.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_profile.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_profile.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-mergeDebugResources-38:/layout/activity_chat_fallback.xml",
+        "source": "com.sukhayu.patient.app-main-41:/layout/activity_chat_fallback.xml"
+    }
+]

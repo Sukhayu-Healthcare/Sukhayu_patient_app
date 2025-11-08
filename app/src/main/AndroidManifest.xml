@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- 🌐 Network + basic permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.RoleBasedTelemedicinePatient">
+        android:theme="@style/Theme.RoleBasedTelemedicinePatient"
+        android:supportsRtl="true">
 
-        <!-- Login Activity (Launcher) -->
+        <!-- 🏠 Login: Launcher activity -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -17,46 +23,39 @@
             </intent-filter>
         </activity>
 
-        <!-- Other Activities -->
-        <activity
-            android:name=".DashboardActivity"
-            android:exported="true" />
+        <!-- 🩺 Core Patient Screens -->
+        <activity android:name=".DashboardActivity" android:exported="true" />
+        <activity android:name=".ProfileActivity" android:exported="true" />
+        <activity android:name=".ConsultDoctorActivity" android:exported="true" />
+        <activity android:name=".PastConsultationsActivity" android:exported="true" />
+        <activity android:name=".MedicinesActivity" android:exported="true" />
+        <activity android:name=".DoctorDetailActivity" android:exported="true" />
+        <activity android:name=".CheckSymptomsActivity" android:exported="true" />
 
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="true" />
 
-        <activity
-            android:name=".ConsultDoctorActivity"
-            android:exported="true" />
+        <!-- 💬 AI Symptom Checker -->
+        <!-- Adjusted path if your file is in `com.sukhayu.patient.model` -->
+        <activity android:name=".ui.ai_symptom.SymptomChatActivity" android:exported="true" />
 
-        <activity
-            android:name=".PastConsultationsActivity"
-            android:exported="true" />
+        <!-- 💊 Prescription / Consultation -->
+        <activity android:name=".ui.consultation.PrescriptionActivity" android:exported="true" />
 
-        <activity
-            android:name=".CheckSymptomsActivity"
-            android:exported="true" />
+        <!-- 🦠 Health Awareness -->
+        <activity android:name=".ui.awareness.DiseaseOutbreakActivity" android:exported="true" />
 
-        <activity
-            android:name=".MedicinesActivity"
-            android:exported="true" />
+        <!-- ⚙️ Commented out backend-related components (optional to restore later) -->
+        <!--
+        <activity android:name=".ui.teleconsult.ConsentActivity" android:exported="true" />
+        <activity android:name=".ui.teleconsult.VideoCallActivity" android:exported="true" />
+        <activity android:name=".ui.teleconsult.VoiceCallActivity" android:exported="true" />
+        <activity android:name=".ui.teleconsult.ChatFallbackActivity" android:exported="true" />
+        <activity android:name=".ui.emergency.EmergencyInitActivity" android:exported="true" />
+        <activity android:name=".ui.emergency.EmergencyVCActivity" android:exported="true" />
 
-        <activity
-            android:name=".DoctorDetailActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".DoctorAdapter"
-            android:exported="true" />
-
-        <activity
-            android:name=".DummyData"
-            android:exported="true" />
-
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="true" />
+        <service android:name=".notification.CallNotificationManager" android:exported="false" />
+        <receiver android:name=".notification.CallNotificationReceiver" android:exported="false" />
+        <service android:name=".data.remote.SocketManager" android:exported="false" />
+        -->
     </application>
 
 </manifest>
