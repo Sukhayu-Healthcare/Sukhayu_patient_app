@@ -1,0 +1,270 @@
+[
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_doctor_detail.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_doctor_detail.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_bg_gradient_card.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/bg_gradient_card.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_consent.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_consent.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_login.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_emergency_init.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_emergency_init.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_premium_badge.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/premium_badge.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_item_doctor.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/item_doctor.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_symptom.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_symptom.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_call_end.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_call_end.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_send.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_send.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_asha_jyoti_logo.png.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/asha_jyoti_logo.png"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_bg_chat_bubble.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/bg_chat_bubble.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_rounded_image.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/rounded_image.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_chat_ai_bg.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/chat_ai_bg.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_include_header.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/include_header.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_consult_doctor.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_consult_doctor.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_emergency_vc.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_emergency_vc.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_item_chat_user.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/item_chat_user.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_profile.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_profile.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_bg_bot_message.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/bg_bot_message.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_circle_background.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/circle_background.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_medicine.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_medicine.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_search_24.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_search_24.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_arrow_back_24.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_arrow_back_24.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_login_24.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_login_24.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_prescription.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_prescription.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_sample_patient.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/sample_patient.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_rounded_big_card.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/rounded_big_card.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_black_circle.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/black_circle.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_sound.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_sound.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_camera_switch.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_camera_switch.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_disease_outbreak.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_disease_outbreak.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_bg_edittext_rounded.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/bg_edittext_rounded.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_bg_input.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/bg_input.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/raw_symptom_rules.json.flat",
+        "source": "com.sukhayu.patient.app-main-40:/raw/symptom_rules.json"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_mic.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_mic.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_profile.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_profile.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_analytics.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_analytics.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_voice_call.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_voice_call.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_chat_fallback.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_chat_fallback.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_symptom_chat.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_symptom_chat.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_item_chat_bot.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/item_chat_bot.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_mic_off.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_mic_off.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_history.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_history.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_chat_ai_bg.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/chat_ai_bg.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_past_consultations.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_past_consultations.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_bg_round_button.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/bg_round_button.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_language.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_language.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_dashboard.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_dashboard.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_doctor_avatar.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_doctor_avatar.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_medicines.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_medicines.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_rounded_bg_white.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/rounded_bg_white.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_send_button_bg.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/send_button_bg.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_speaker.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_speaker.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_input_field_bg.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/input_field_bg.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_bg_user_message.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/bg_user_message.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_doctor.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_doctor.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_item_symptom_message.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/item_symptom_message.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_health_banner.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_health_banner.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_logout.png.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_logout.png"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_circle_blue_bg.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/circle_blue_bg.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_ic_person_24.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/ic_person_24.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/drawable_rounded_card_bg.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/drawable/rounded_card_bg.xml"
+    },
+    {
+        "merged": "com.sukhayu.patient.app-release-39:/layout_activity_video_call.xml.flat",
+        "source": "com.sukhayu.patient.app-main-40:/layout/activity_video_call.xml"
+    }
+]

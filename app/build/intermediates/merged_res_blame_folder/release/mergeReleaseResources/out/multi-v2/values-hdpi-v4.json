@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.sukhayu.patient.app-mergeReleaseResources-37:/values-hdpi-v4/values-hdpi-v4.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\anike\\.gradle\\caches\\transforms-4\\27307c03ba0c674af10efb452c53e08b\\transformed\\appcompat-1.7.0\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "13",
+                        "endOffsets": "327"
+                    }
+                }
+            ]
+        }
+    ]
+}

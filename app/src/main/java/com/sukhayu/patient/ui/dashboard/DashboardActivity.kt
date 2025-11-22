@@ -1,40 +1,23 @@
-package com.sukhayu.patient
+package com.sukhayu.patient.ui.dashboard
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import com.sukhayu.patient.R
+import com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity
+import com.google.android.material.card.MaterialCardView
 
 class DashboardActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        val cardProfile = findViewById<CardView>(R.id.cardProfile)
-        val cardCheckSymptoms = findViewById<CardView>(R.id.cardCheckSymptoms)
-        val cardConsultDoctor = findViewById<CardView>(R.id.cardConsultDoctor)
-        val cardMedicines = findViewById<CardView>(R.id.cardMedicines)
-        val cardPastConsultations = findViewById<CardView>(R.id.cardPastConsultations)
-
-        // Profile page
-        cardProfile.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
-        }
+        val cardCheckSymptoms = findViewById<MaterialCardView>(R.id.cardCheckSymptoms)
 
         cardCheckSymptoms.setOnClickListener {
-            startActivity(Intent(this, CheckSymptomsActivity::class.java))
-        }
-
-        cardConsultDoctor.setOnClickListener {
-            startActivity(Intent(this, ConsultDoctorActivity::class.java))
-        }
-
-        cardMedicines.setOnClickListener {
-            startActivity(Intent(this, MedicinesActivity::class.java))
-        }
-
-        cardPastConsultations.setOnClickListener {
-            startActivity(Intent(this, PastConsultationsActivity::class.java))
+            val intent = Intent(this, SymptomChatActivity::class.java)
+            startActivity(intent)
         }
     }
 }

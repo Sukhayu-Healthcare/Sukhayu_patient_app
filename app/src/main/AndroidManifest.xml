@@ -24,18 +24,17 @@
         </activity>
 
         <!-- 🩺 Core Patient Screens -->
-        <activity android:name=".DashboardActivity" android:exported="true" />
+        <activity android:name=".ui.dashboard.DashboardActivity" android:exported="true" />
         <activity android:name=".ProfileActivity" android:exported="true" />
         <activity android:name=".ConsultDoctorActivity" android:exported="true" />
         <activity android:name=".PastConsultationsActivity" android:exported="true" />
         <activity android:name=".MedicinesActivity" android:exported="true" />
         <activity android:name=".DoctorDetailActivity" android:exported="true" />
-        <activity android:name=".CheckSymptomsActivity" android:exported="true" />
-
 
         <!-- 💬 AI Symptom Checker -->
         <!-- Adjusted path if your file is in `com.sukhayu.patient.model` -->
         <activity android:name=".ui.ai_symptom.SymptomChatActivity" android:exported="true" />
+        <activity android:name=".ui.ai_symptom.CheckSymptomsActivity" android:exported="true"/>
 
         <!-- 💊 Prescription / Consultation -->
         <activity android:name=".ui.consultation.PrescriptionActivity" android:exported="true" />

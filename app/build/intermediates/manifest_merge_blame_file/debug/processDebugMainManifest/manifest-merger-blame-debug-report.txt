@@ -31,7 +31,7 @@
 20-->[androidx.core:core:1.13.0] C:\Users\anike\.gradle\caches\transforms-4\4b427c2aa09e342ad3da1967e1751c65\transformed\core-1.13.0\AndroidManifest.xml:26:22-94
 21
 22    <application
-22-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:9:5-59:19
+22-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:9:5-58:19
 23        android:allowBackup="true"
 23-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:10:9-35
 24        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -68,11 +68,11 @@
 42
 43        <!-- 🩺 Core Patient Screens -->
 44        <activity
-44-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:27:9-79
-45            android:name="com.sukhayu.patient.DashboardActivity"
-45-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:27:19-52
+44-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:27:9-92
+45            android:name="com.sukhayu.patient.ui.dashboard.DashboardActivity"
+45-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:27:19-65
 46            android:exported="true" />
-46-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:27:53-76
+46-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:27:66-89
 47        <activity
 47-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:28:9-77
 48            android:name="com.sukhayu.patient.ProfileActivity"
@@ -103,37 +103,37 @@
 60-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:32:19-55
 61            android:exported="true" />
 61-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:32:56-79
-62        <activity
-62-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:33:9-83
-63            android:name="com.sukhayu.patient.CheckSymptomsActivity"
-63-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:33:19-56
-64            android:exported="true" />
-64-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:33:57-80
-65
-66        <!-- 💬 AI Symptom Checker -->
-67        <!-- Adjusted path if your file is in `com.sukhayu.patient.model` -->
+62
+63        <!-- 💬 AI Symptom Checker -->
+64        <!-- Adjusted path if your file is in `com.sukhayu.patient.model` -->
+65        <activity
+65-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:36:9-95
+66            android:name="com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity"
+66-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:36:19-68
+67            android:exported="true" />
+67-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:36:69-92
 68        <activity
-68-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:38:9-95
-69            android:name="com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity"
-69-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:38:19-68
+68-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:37:9-96
+69            android:name="com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity"
+69-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:37:19-70
 70            android:exported="true" />
-70-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:38:69-92
+70-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:37:71-94
 71
 72        <!-- 💊 Prescription / Consultation -->
 73        <activity
-73-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:41:9-98
+73-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:40:9-98
 74            android:name="com.sukhayu.patient.ui.consultation.PrescriptionActivity"
-74-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:41:19-71
+74-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:40:19-71
 75            android:exported="true" />
-75-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:41:72-95
+75-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:40:72-95
 76
 77        <!-- 🦠 Health Awareness -->
 78        <activity
-78-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:44:9-98
+78-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:43:9-98
 79            android:name="com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity"
-79-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:44:19-71
+79-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:43:19-71
 80            android:exported="true" />
-80-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:44:72-95
+80-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:43:72-95
 81
 82        <!-- ⚙️ Commented out backend-related components (optional to restore later) -->
 83        <!--

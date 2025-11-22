@@ -25,7 +25,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_arrow_back_24"
-            android:tint="@color/black"
+            app:tint="@color/black"
             android:contentDescription="Back" />
 
         <TextView
@@ -41,7 +41,7 @@
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:src="@drawable/sukhayu_logo"
+            android:src="@drawable/asha_jyoti_logo"
             android:contentDescription="App Logo"
             android:layout_marginEnd="4dp"/>
     </LinearLayout>

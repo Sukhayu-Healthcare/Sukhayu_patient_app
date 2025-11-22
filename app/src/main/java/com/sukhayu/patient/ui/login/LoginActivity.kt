@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.sukhayu.patient.ui.dashboard.DashboardActivity   // ← ADD THIS
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,13 +21,11 @@ class LoginActivity : AppCompatActivity() {
             val username = etUsername.text.toString().trim()
             val otp = etOtp.text.toString().trim()
 
-            // Dummy validation
             if (username == "Dummy Patient" && otp == "123456") {
-                // Navigate to Dashboard
                 val intent = Intent(this, DashboardActivity::class.java)
                 intent.putExtra("USER_username", username)
                 startActivity(intent)
-                finish()  // Optional: removes login screen from back stack
+                finish()
             } else {
                 Toast.makeText(
                     this,

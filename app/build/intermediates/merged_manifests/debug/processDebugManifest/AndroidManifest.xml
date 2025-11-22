@@ -42,7 +42,7 @@
 
         <!-- 🩺 Core Patient Screens -->
         <activity
-            android:name="com.sukhayu.patient.DashboardActivity"
+            android:name="com.sukhayu.patient.ui.dashboard.DashboardActivity"
             android:exported="true" />
         <activity
             android:name="com.sukhayu.patient.ProfileActivity"
@@ -59,14 +59,14 @@
         <activity
             android:name="com.sukhayu.patient.DoctorDetailActivity"
             android:exported="true" />
-        <activity
-            android:name="com.sukhayu.patient.CheckSymptomsActivity"
-            android:exported="true" />
 
         <!-- 💬 AI Symptom Checker -->
         <!-- Adjusted path if your file is in `com.sukhayu.patient.model` -->
         <activity
             android:name="com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity"
             android:exported="true" />
 
         <!-- 💊 Prescription / Consultation -->

@@ -7,8 +7,8 @@ How to run:
 4. Run the app on an emulator or physical device.
 
 Login credentials (dummy):
-Email: patient@example.com
-Password: password
+Username: Dummy Patient
+OTP: 123456
 
 
 First, navigate to your Android SDK tools directory:
@@ -132,6 +132,7 @@ RoleBasedTelemedicinePatient/
 │   │       │       │   │   └── ProfileActivity.kt
 │   │       │       │   │
 │   │       │       │   ├── ai_symptom/
+|   |       |       |   |   ├──CheckSymptomsActivity.kt
 │   │       │       │   │   ├── SymptomChatActivity.kt
 │   │       │       │   │   ├── SymptomChecker.kt
 │   │       │       │   │   ├── SymptomRules.kt
