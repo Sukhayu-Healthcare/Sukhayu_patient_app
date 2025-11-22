@@ -12,25 +12,25 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val etEmail = findViewById<EditText>(R.id.etEmail)
-        val etPassword = findViewById<EditText>(R.id.etPassword)
+        val etUsername = findViewById<EditText>(R.id.etUsername)
+        val etOtp = findViewById<EditText>(R.id.etOtp)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
 
         btnLogin.setOnClickListener {
-            val email = etEmail.text.toString().trim()
-            val pass = etPassword.text.toString().trim()
+            val username = etUsername.text.toString().trim()
+            val otp = etOtp.text.toString().trim()
 
             // Dummy validation
-            if (email == "patient@example.com" && pass == "password") {
+            if (username == "Dummy Patient" && otp == "123456") {
                 // Navigate to Dashboard
                 val intent = Intent(this, DashboardActivity::class.java)
-                intent.putExtra("USER_EMAIL", email)
+                intent.putExtra("USER_username", username)
                 startActivity(intent)
                 finish()  // Optional: removes login screen from back stack
             } else {
                 Toast.makeText(
                     this,
-                    "Invalid credentials. Use patient@example.com / password",
+                    "Invalid credentials. Use Dummy Patient / 123456",
                     Toast.LENGTH_LONG
                 ).show()
             }

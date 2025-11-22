@@ -26,8 +26,8 @@
             android:layout_marginBottom="12dp">
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/sukhayu_logo"
                 android:contentDescription="@string/app_name"
                 android:layout_marginEnd="8dp" />
@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sukhayu"
+                android:text="Asha Jyoti"
                 android:textColor="#0F172A"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -45,11 +45,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end|center_vertical">
-
+                <!--add language-->
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/ic_language"
+                    android:src="@drawable/ic_language" 
                     android:tint="#0F172A"
                     android:layout_marginEnd="4dp"
                     android:contentDescription="@string/language_icon_desc" />
@@ -81,12 +81,11 @@
                 android:orientation="horizontal"
                 android:padding="16dp"
                 android:gravity="center_vertical">
-
+                <!--sample patient photo upload-->
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/sample_patient"
-                    android:background="@drawable/circle_background"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/profile_icon_desc"
                     android:layout_marginEnd="12dp" />
@@ -100,7 +99,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="राम शर्मा"
+                        android:text="Dummy Patient"
                         android:textColor="#0F172A"
                         android:textSize="18sp"
                         android:textStyle="bold" />
