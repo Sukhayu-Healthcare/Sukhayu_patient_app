@@ -29,6 +29,9 @@ emulator -avd <emulator name>
 New terminal - 
 Navigate to your project root (where gradlew is located):
 
+Compile code:
+gradlew compileDebugKotlin
+
 cd C:\Users\....
 gradlew assembleDebug
 adb shell am start -n com.sukhayu.patient/.LoginActivity

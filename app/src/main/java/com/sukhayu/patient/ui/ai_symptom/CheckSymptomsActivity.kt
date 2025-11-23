@@ -1,21 +1,25 @@
 package com.sukhayu.patient.ui.ai_symptom
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.EditText
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
+import com.sukhayu.patient.databinding.ActivitySymptomChatBinding
 
 class CheckSymptomsActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivitySymptomChatBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_symptom_chat)
+        enableEdgeToEdge()
 
-        val backButton = findViewById<ImageView>(R.id.backButton)
+        // ViewBinding instead of findViewById
+        binding = ActivitySymptomChatBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        backButton.setOnClickListener {
+        // Back button handler
+        binding.backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }

@@ -47,7 +47,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:src="@drawable/ic_language"
-                    android:tint="#0F172A"
+                    app:tint="#0F172A"
                     android:layout_marginEnd="4dp"
                     android:contentDescription="@string/language_icon_desc" />
 
@@ -97,7 +97,7 @@
                         android:layout_gravity="bottom|end"
                         android:backgroundTint="@android:color/transparent"
                         android:background="@drawable/black_circle"
-                        android:tint="@android:color/white"
+                        app:tint="@android:color/white"
                         android:contentDescription="Change Profile" />
                 </FrameLayout>
 
