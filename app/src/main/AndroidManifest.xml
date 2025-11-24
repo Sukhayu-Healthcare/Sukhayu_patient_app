@@ -15,8 +15,7 @@
         android:supportsRtl="true">
 
         <!-- 🏠 Login: Launcher activity -->
-        <activity
-            android:name=".ui.login.LoginActivity"
+        <activity android:name="com.sukhayu.patient.ui.login.LoginActivity"
             android:exported="true">
 
             <intent-filter>
