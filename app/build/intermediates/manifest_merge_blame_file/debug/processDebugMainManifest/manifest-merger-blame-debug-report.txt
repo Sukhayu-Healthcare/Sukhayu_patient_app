@@ -1,0 +1,219 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.sukhayu.patient"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10
+11    <!-- 🌐 Network + basic permissions -->
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:5:5-67
+12-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:5:22-64
+13    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+13-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:6:5-79
+13-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:6:22-76
+14    <uses-permission android:name="android.permission.WAKE_LOCK" />
+14-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:7:5-68
+14-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:7:22-65
+15
+16    <permission
+16-->[androidx.core:core:1.13.0] C:\Users\anike\.gradle\caches\transforms-4\4b427c2aa09e342ad3da1967e1751c65\transformed\core-1.13.0\AndroidManifest.xml:22:5-24:47
+17        android:name="com.sukhayu.patient.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+17-->[androidx.core:core:1.13.0] C:\Users\anike\.gradle\caches\transforms-4\4b427c2aa09e342ad3da1967e1751c65\transformed\core-1.13.0\AndroidManifest.xml:23:9-81
+18        android:protectionLevel="signature" />
+18-->[androidx.core:core:1.13.0] C:\Users\anike\.gradle\caches\transforms-4\4b427c2aa09e342ad3da1967e1751c65\transformed\core-1.13.0\AndroidManifest.xml:24:9-44
+19
+20    <uses-permission android:name="com.sukhayu.patient.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+20-->[androidx.core:core:1.13.0] C:\Users\anike\.gradle\caches\transforms-4\4b427c2aa09e342ad3da1967e1751c65\transformed\core-1.13.0\AndroidManifest.xml:26:5-97
+20-->[androidx.core:core:1.13.0] C:\Users\anike\.gradle\caches\transforms-4\4b427c2aa09e342ad3da1967e1751c65\transformed\core-1.13.0\AndroidManifest.xml:26:22-94
+21
+22    <application
+22-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:9:5-58:19
+23        android:name="com.sukhayu.patient.MyApp"
+23-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:10:9-30
+24        android:allowBackup="true"
+24-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:11:9-35
+25        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+25-->[androidx.core:core:1.13.0] C:\Users\anike\.gradle\caches\transforms-4\4b427c2aa09e342ad3da1967e1751c65\transformed\core-1.13.0\AndroidManifest.xml:28:18-86
+26        android:debuggable="true"
+27        android:extractNativeLibs="false"
+28        android:icon="@mipmap/ic_launcher"
+28-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:12:9-43
+29        android:label="@string/app_name"
+29-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:13:9-41
+30        android:supportsRtl="true"
+30-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:15:9-35
+31        android:theme="@style/Theme.RoleBasedTelemedicinePatient" >
+31-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:14:9-66
+32
+33        <!-- 🏠 Login: Launcher activity -->
+34        <activity
+34-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:18:9-25:20
+35            android:name="com.sukhayu.patient.LoginActivity"
+35-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:19:13-42
+36            android:exported="true" >
+36-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:20:13-36
+37            <intent-filter>
+37-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:21:13-24:29
+38                <action android:name="android.intent.action.MAIN" />
+38-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:22:17-69
+38-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:22:25-66
+39
+40                <category android:name="android.intent.category.LAUNCHER" />
+40-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:23:17-77
+40-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:23:27-74
+41            </intent-filter>
+42        </activity>
+43
+44        <!-- 🩺 Core Patient Screens -->
+45        <activity
+45-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:28:9-92
+46            android:name="com.sukhayu.patient.ui.dashboard.DashboardActivity"
+46-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:28:19-65
+47            android:exported="true" />
+47-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:28:66-89
+48        <activity
+48-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:29:9-77
+49            android:name="com.sukhayu.patient.ProfileActivity"
+49-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:29:19-50
+50            android:exported="true" />
+50-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:29:51-74
+51        <activity
+51-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:30:9-83
+52            android:name="com.sukhayu.patient.ConsultDoctorActivity"
+52-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:30:19-56
+53            android:exported="true" />
+53-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:30:57-80
+54        <activity
+54-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:31:9-87
+55            android:name="com.sukhayu.patient.PastConsultationsActivity"
+55-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:31:19-60
+56            android:exported="true" />
+56-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:31:61-84
+57        <activity
+57-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:32:9-79
+58            android:name="com.sukhayu.patient.MedicinesActivity"
+58-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:32:19-52
+59            android:exported="true" />
+59-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:32:53-76
+60        <activity
+60-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:33:9-82
+61            android:name="com.sukhayu.patient.DoctorDetailActivity"
+61-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:33:19-55
+62            android:exported="true" />
+62-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:33:56-79
+63
+64        <!-- 💬 AI Symptom Checker -->
+65        <activity
+65-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:36:9-95
+66            android:name="com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity"
+66-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:36:19-68
+67            android:exported="true" />
+67-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:36:69-92
+68        <activity
+68-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:37:9-96
+69            android:name="com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity"
+69-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:37:19-70
+70            android:exported="true" />
+70-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:37:71-94
+71
+72        <!-- 💊 Prescription / Consultation -->
+73        <activity
+73-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:40:9-98
+74            android:name="com.sukhayu.patient.ui.consultation.PrescriptionActivity"
+74-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:40:19-71
+75            android:exported="true" />
+75-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:40:72-95
+76
+77        <!-- 🦠 Health Awareness -->
+78        <activity
+78-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:43:9-98
+79            android:name="com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity"
+79-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:43:19-71
+80            android:exported="true" />
+80-->C:\Users\anike\Downloads\RoleBasedTelemedicinePatient\app\src\main\AndroidManifest.xml:43:72-95
+81
+82        <!-- ⚙️ Commented out backend-related components -->
+83        <!--
+84        <activity android:name=".ui.teleconsult.ConsentActivity" android:exported="true" />
+85        <activity android:name=".ui.teleconsult.VideoCallActivity" android:exported="true" />
+86        <activity android:name=".ui.teleconsult.VoiceCallActivity" android:exported="true" />
+87        <activity android:name=".ui.teleconsult.ChatFallbackActivity" android:exported="true" />
+88        <activity android:name=".ui.emergency.EmergencyInitActivity" android:exported="true" />
+89        <activity android:name=".ui.emergency.EmergencyVCActivity" android:exported="true" />
+90
+91        <service android:name=".notification.CallNotificationManager" android:exported="false" />
+92        <receiver android:name=".notification.CallNotificationReceiver" android:exported="false" />
+93        <service android:name=".data.remote.SocketManager" android:exported="false" />
+94        -->
+95        <provider
+95-->[androidx.emoji2:emoji2:1.3.0] C:\Users\anike\.gradle\caches\transforms-4\008511998c54bedf332b0e7a869ebcc5\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+96            android:name="androidx.startup.InitializationProvider"
+96-->[androidx.emoji2:emoji2:1.3.0] C:\Users\anike\.gradle\caches\transforms-4\008511998c54bedf332b0e7a869ebcc5\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:25:13-67
+97            android:authorities="com.sukhayu.patient.androidx-startup"
+97-->[androidx.emoji2:emoji2:1.3.0] C:\Users\anike\.gradle\caches\transforms-4\008511998c54bedf332b0e7a869ebcc5\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:26:13-68
+98            android:exported="false" >
+98-->[androidx.emoji2:emoji2:1.3.0] C:\Users\anike\.gradle\caches\transforms-4\008511998c54bedf332b0e7a869ebcc5\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:27:13-37
+99            <meta-data
+99-->[androidx.emoji2:emoji2:1.3.0] C:\Users\anike\.gradle\caches\transforms-4\008511998c54bedf332b0e7a869ebcc5\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+100                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+100-->[androidx.emoji2:emoji2:1.3.0] C:\Users\anike\.gradle\caches\transforms-4\008511998c54bedf332b0e7a869ebcc5\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:30:17-75
+101                android:value="androidx.startup" />
+101-->[androidx.emoji2:emoji2:1.3.0] C:\Users\anike\.gradle\caches\transforms-4\008511998c54bedf332b0e7a869ebcc5\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:31:17-49
+102            <meta-data
+102-->[androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\anike\.gradle\caches\transforms-4\a477ccf9d26a8b357f7a3e12aba5c9e9\transformed\jetified-lifecycle-process-2.8.4\AndroidManifest.xml:29:13-31:52
+103                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+103-->[androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\anike\.gradle\caches\transforms-4\a477ccf9d26a8b357f7a3e12aba5c9e9\transformed\jetified-lifecycle-process-2.8.4\AndroidManifest.xml:30:17-78
+104                android:value="androidx.startup" />
+104-->[androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\anike\.gradle\caches\transforms-4\a477ccf9d26a8b357f7a3e12aba5c9e9\transformed\jetified-lifecycle-process-2.8.4\AndroidManifest.xml:31:17-49
+105            <meta-data
+105-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
+106                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+106-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
+107                android:value="androidx.startup" />
+107-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
+108        </provider>
+109
+110        <receiver
+110-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
+111            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+111-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
+112            android:directBootAware="false"
+112-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
+113            android:enabled="true"
+113-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
+114            android:exported="true"
+114-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
+115            android:permission="android.permission.DUMP" >
+115-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
+116            <intent-filter>
+116-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
+117                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+117-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
+117-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
+118            </intent-filter>
+119            <intent-filter>
+119-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
+120                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+120-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
+120-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
+121            </intent-filter>
+122            <intent-filter>
+122-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
+123                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+123-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
+123-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
+124            </intent-filter>
+125            <intent-filter>
+125-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
+126                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+126-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
+126-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\anike\.gradle\caches\transforms-4\e7365114e1af8177ae6d9dbe04e4affc\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
+127            </intent-filter>
+128        </receiver>
+129    </application>
+130
+131</manifest>

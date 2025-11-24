@@ -1,0 +1,72 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Path: Vertical line for plus -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M12 11v4" />
+
+    <!-- Path: Horizontal line for plus -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M14 13h-4" />
+
+    <!-- Path: Briefcase handle top -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M16 6V4a2 2 0 0 0 -2 -2h-4a2 2 0 0 0 -2 2v2" />
+
+    <!-- Path: Right vertical side -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M18 6v14" />
+
+    <!-- Path: Left vertical side -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M6 6v14" />
+
+    <!-- Rounded rectangle (briefcase body) -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="
+            M4,6
+            h16
+            a2,2 0 0 1 2,2
+            v10
+            a2,2 0 0 1 -2,2
+            h-16
+            a2,2 0 0 1 -2,-2
+            v-10
+            a2,2 0 0 1 2,-2
+            z
+        " />
+
+</vector>

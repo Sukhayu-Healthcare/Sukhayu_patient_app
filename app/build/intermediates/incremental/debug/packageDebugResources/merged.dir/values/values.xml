@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_light">#F6F7FB</color>
+    <color name="black">#000000</color>
+    <color name="blue_600">#2563EB</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="gray_50">#F8FAFC</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="ic_launcher_background">#E3F2FD</color>
+    <color name="primary_blue">#1E88E5</color>
+    <color name="purple_200">#BB86FC</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="red">#E53935</color>
+    <color name="red_600">#DC2626</color>
+    <color name="teal_200">#03DAC5</color>
+    <color name="teal_700">#018786</color>
+    <color name="white">#FFFFFF</color>
+    <string name="app_logo_desc">App Logo</string>
+    <string name="app_name">Sukhayu</string>
+    <string name="check_symptoms">Check Symptoms</string>
+    <string name="consult_doctor">Consult Doctor Icon</string>
+    <string name="language_english">English</string>
+    <string name="language_icon_desc">Language Icon</string>
+    <string name="medicines">Medicines Icon</string>
+    <string name="past_consultations">Past Consultations Icon</string>
+    <string name="profile">Profile</string>
+    <string name="profile_icon_desc">Profile Icon</string>
+    <string name="symptom_icon_desc">Symptom Icon</string>
+    <style name="Theme.RoleBasedTelemedicinePatient" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="android:windowBackground">@color/bg_light</item>
+    </style>
+</resources>

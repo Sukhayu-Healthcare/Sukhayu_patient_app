@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/videoContainer"
+    android:background="@color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <SurfaceView
+        android:id="@+id/localView"
+        android:layout_width="120dp"
+        android:layout_height="160dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom|end" />
+
+    <SurfaceView
+        android:id="@+id/remoteView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:padding="12dp"
+        android:background="#66000000">
+
+        <ImageButton
+            android:id="@+id/btnMute"
+            android:src="@drawable/ic_mic_off"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="56dp"
+            android:layout_height="56dp" />
+
+        <ImageButton
+            android:id="@+id/btnEndCall"
+            android:src="@drawable/ic_call_end"
+            android:tint="@color/red"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginHorizontal="24dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp" />
+
+        <ImageButton
+            android:id="@+id/btnSwitchCamera"
+            android:src="@drawable/ic_camera_switch"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="56dp"
+            android:layout_height="56dp" />
+    </LinearLayout>
+</FrameLayout>

@@ -6,33 +6,114 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.sukhayu.patient.ui.dashboard.DashboardActivity   // ← ADD THIS
+import com.sukhayu.patient.data.remote.ApiClient
+import com.sukhayu.patient.data.remote.LoginRequest
+import com.sukhayu.patient.model.LoginResponse
+import com.sukhayu.patient.ui.dashboard.DashboardActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         val etUsername = findViewById<EditText>(R.id.etUsername)
-        val etOtp = findViewById<EditText>(R.id.etOtp)
+        val etPassword = findViewById<EditText>(R.id.etOtp)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
 
         btnLogin.setOnClickListener {
-            val username = etUsername.text.toString().trim()
-            val otp = etOtp.text.toString().trim()
 
-            if (username == "Dummy Patient" && otp == "123456") {
-                val intent = Intent(this, DashboardActivity::class.java)
-                intent.putExtra("USER_username", username)
-                startActivity(intent)
-                finish()
-            } else {
-                Toast.makeText(
-                    this,
-                    "Invalid credentials. Use Dummy Patient / 123456",
-                    Toast.LENGTH_LONG
-                ).show()
+            val username = etUsername.text.toString().trim()
+            val password = etPassword.text.toString().trim()
+
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Enter username & password", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            val request = LoginRequest(
+                patient_phone = username,
+                password = password
+            )
+
+            ApiClient.retrofit.loginPatient(request)
+                .enqueue(object : Callback<LoginResponse> {
+
+                    override fun onResponse(
+                        call: Call<LoginResponse>,
+                        response: Response<LoginResponse>
+                    ) {
+                        val body = response.body()
+
+                        // ---------------------------
+                        //  SUCCESSFUL API LOGIN
+                        // ---------------------------
+                        if (body?.success == true && body.token != null) {
+
+                            getSharedPreferences("auth", MODE_PRIVATE)
+                                .edit()
+                                .putString("token", body.token)
+                                .apply()
+
+                            startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
+                            finish()
+                            return
+                        }
+
+                        // ---------------------------
+                        //  FALLBACK DUMMY LOGIN
+                        // ---------------------------
+                        if (username == "Dummy Patient" && password == "123456") {
+
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Logged in using dummy account",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
+                            finish()
+                            return
+                        }
+
+                        // ---------------------------
+                        //  BOTH FAILED
+                        // ---------------------------
+                        Toast.makeText(
+                            this@LoginActivity,
+                            body?.message ?: "Login failed",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+
+                        // ---------------------------
+                        //  API DOWN → USE DUMMY LOGIN
+                        // ---------------------------
+                        if (username == "Dummy Patient" && password == "123456") {
+
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "API unreachable — using dummy login",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
+                            finish()
+                            return
+                        }
+
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Network error: ${t.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
         }
     }
 }
