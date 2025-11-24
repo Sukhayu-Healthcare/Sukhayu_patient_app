@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity
+import com.sukhayu.patient.ui.login.LoginActivity
+import android.widget.ImageView
 import com.google.android.material.card.MaterialCardView
 
 class DashboardActivity : AppCompatActivity() {
@@ -19,5 +21,17 @@ class DashboardActivity : AppCompatActivity() {
             val intent = Intent(this, SymptomChatActivity::class.java)
             startActivity(intent)
         }
+
+        val ivLogout = findViewById<ImageView>(R.id.btnLogout)
+        ivLogout.setOnClickListener {
+            // Clear user session or preferences if needed
+
+            // Redirect to login activity
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+
     }
 }

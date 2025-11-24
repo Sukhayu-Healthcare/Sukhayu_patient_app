@@ -1,10 +1,11 @@
-package com.sukhayu.patient
+package com.sukhayu.patient.ui.login 
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.sukhayu.patient.R
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.LoginRequest

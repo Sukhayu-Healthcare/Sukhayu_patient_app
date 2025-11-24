@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="#F8FAFC"
-    tools:context=".DashboardActivity">
+    tools:context="com.sukhayu.patient.ui.dashboard.DashboardActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,12 +44,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="end|center_vertical">
-                <!--add language-->
+                android:gravity="end|center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Language -->
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/ic_language" 
+                    android:src="@drawable/ic_language"
                     app:tint="#0F172A"
                     android:layout_marginEnd="4dp"
                     android:contentDescription="@string/language_icon_desc" />
@@ -59,60 +61,81 @@
                     android:layout_height="wrap_content"
                     android:text="English"
                     android:textSize="14sp"
-                    android:textColor="#0F172A" />
+                    android:textColor="#0F172A"
+                    android:layout_marginEnd="12dp" />
             </LinearLayout>
         </LinearLayout>
 
         <!-- Profile Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="3dp"
-            app:strokeColor="#E2E8F0"
-            app:strokeWidth="1dp"
-            android:backgroundTint="@android:color/white">
-
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:gravity="center_vertical">
-                <!--sample patient photo upload-->
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/sample_patient"
-                    android:scaleType="centerCrop"
-                    android:contentDescription="@string/profile_icon_desc"
-                    android:layout_marginEnd="12dp" />
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp"
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp"
+                android:backgroundTint="@android:color/white"> <!-- Keep white -->
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/sample_patient"
+                            android:scaleType="centerCrop"
+                            android:contentDescription="@string/profile_icon_desc"
+                            android:layout_marginEnd="12dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Dummy Patient"
+                                android:textColor="#0F172A"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Patient ID: P001"
+                                android:textColor="#475569"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Logout Button -->
+                    <Button
+                        android:id="@+id/btnLogout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Dummy Patient"
-                        android:textColor="#0F172A"
-                        android:textSize="18sp"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="12dp"
+                        android:text="Logout"
+                        android:textColor="@android:color/white"
+                        android:backgroundTint="#DC2626"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Patient ID: P001"
-                        android:textColor="#475569"
-                        android:textSize="14sp" />
                 </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
 
         <!-- Dashboard Options -->
         <GridLayout
