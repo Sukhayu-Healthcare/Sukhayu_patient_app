@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:2:1-52:12
-INJECTED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:2:1-52:12
-INJECTED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:2:1-52:12
-INJECTED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:2:1-52:12
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:2:1-47:12
+INJECTED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:2:1-47:12
+INJECTED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:2:1-47:12
+INJECTED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:2:1-47:12
 MERGED from [androidx.databinding:viewbinding:8.5.0] C:\Users\NILESH\.gradle\caches\transforms-4\638977ec9f1b13e2c2a00387646182ed\transformed\jetified-viewbinding-8.5.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\NILESH\.gradle\caches\transforms-4\e45f33641b517632bac9b0788fb84c0e\transformed\material-1.12.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.2.0] C:\Users\NILESH\.gradle\caches\transforms-4\3488749432ee4ea4367438ce42ffc259\transformed\constraintlayout-2.2.0\AndroidManifest.xml:2:1-9:12
@@ -72,8 +72,8 @@ ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManif
 	android:name
 		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:7:22-65
 application
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:9:5-50:19
-INJECTED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:9:5-50:19
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:9:5-45:19
+INJECTED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:9:5-45:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\NILESH\.gradle\caches\transforms-4\e45f33641b517632bac9b0788fb84c0e\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\NILESH\.gradle\caches\transforms-4\e45f33641b517632bac9b0788fb84c0e\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.2.0] C:\Users\NILESH\.gradle\caches\transforms-4\3488749432ee4ea4367438ce42ffc259\transformed\constraintlayout-2.2.0\AndroidManifest.xml:7:5-20
@@ -107,11 +107,11 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\NILESH\.gradle\cac
 	android:name
 		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:10:9-30
 activity#com.sukhayu.patient.ui.login.LoginActivity
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:18:9-26:20
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:18:9-25:20
 	android:exported
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:19:13-36
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:20:13-36
 	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:18:19-76
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:19:13-70
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
 ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:21:13-24:29
 action#android.intent.action.MAIN
@@ -123,69 +123,65 @@ ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManif
 	android:name
 		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:23:27-74
 activity#com.sukhayu.patient.ui.dashboard.DashboardActivity
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:31:9-92
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:28:9-92
 	android:exported
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:31:66-89
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:28:66-89
 	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:31:19-65
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:28:19-65
 activity#com.sukhayu.patient.ui.profile.ProfileActivity
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:32:9-88
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:29:9-88
 	android:exported
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:32:62-85
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:29:62-85
 	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:32:19-61
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:29:19-61
 activity#com.sukhayu.patient.ui.consultation.ConsultDoctorActivity
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:30:9-99
+	android:exported
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:30:73-96
+	android:name
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:30:19-72
+activity#com.sukhayu.patient.ui.consultation.PastConsultationsActivity
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:31:9-103
+	android:exported
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:31:77-100
+	android:name
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:31:19-76
+activity#com.sukhayu.patient.ui.consultation.MedicinesActivity
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:32:9-95
+	android:exported
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:32:69-92
+	android:name
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:32:19-68
+activity#com.sukhayu.patient.ui.consultation.DoctorDetailActivity
 ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:33:9-99
 	android:exported
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:33:73-96
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:33:72-96
 	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:33:19-72
-activity#com.sukhayu.patient.ui.consultation.PastConsultationsActivity
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:34:9-103
-	android:exported
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:34:77-100
-	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:34:19-76
-activity#com.sukhayu.patient.ui.consultation.MedicinesActivity
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:35:9-95
-	android:exported
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:35:69-92
-	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:35:19-68
-activity#com.sukhayu.patient.ui.consultation.DoctorDetailActivity
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:36:9-99
-	android:exported
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:36:72-96
-	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:36:19-71
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:33:19-71
 activity#com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:39:9-95
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:36:9-95
 	android:exported
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:39:69-92
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:36:69-92
 	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:39:19-68
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:36:19-68
 activity#com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:40:9-96
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:37:9-96
 	android:exported
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:40:71-94
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:37:71-94
 	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:40:19-70
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:37:19-70
 activity#com.sukhayu.patient.ui.consultation.PrescriptionActivity
+ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:40:9-98
+	android:exported
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:40:72-95
+	android:name
+		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:40:19-71
+activity#com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity
 ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:43:9-98
 	android:exported
 		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:43:72-95
 	android:name
 		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:43:19-71
-activity#com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:46:9-98
-	android:exported
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:46:72-95
-	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:46:19-71
-activity#com.sukhayu.patient.ProfileActivity
-ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:47:9-53
-	android:name
-		ADDED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml:47:19-50
 uses-sdk
 INJECTED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\NILESH\Desktop\Sukhayu_patient_app\app\src\main\AndroidManifest.xml

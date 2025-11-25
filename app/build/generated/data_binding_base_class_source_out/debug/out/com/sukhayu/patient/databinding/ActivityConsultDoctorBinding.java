@@ -4,6 +4,7 @@ package com.sukhayu.patient.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,16 +26,25 @@ public final class ActivityConsultDoctorBinding implements ViewBinding {
   public final ImageView btnBack;
 
   @NonNull
+  public final Button btnStartQuestionnaire;
+
+  @NonNull
   public final RecyclerView rvDoctors;
+
+  @NonNull
+  public final TextView tvStatus;
 
   @NonNull
   public final TextView tvSubTitle;
 
   private ActivityConsultDoctorBinding(@NonNull LinearLayout rootView, @NonNull ImageView btnBack,
-      @NonNull RecyclerView rvDoctors, @NonNull TextView tvSubTitle) {
+      @NonNull Button btnStartQuestionnaire, @NonNull RecyclerView rvDoctors,
+      @NonNull TextView tvStatus, @NonNull TextView tvSubTitle) {
     this.rootView = rootView;
     this.btnBack = btnBack;
+    this.btnStartQuestionnaire = btnStartQuestionnaire;
     this.rvDoctors = rvDoctors;
+    this.tvStatus = tvStatus;
     this.tvSubTitle = tvSubTitle;
   }
 
@@ -71,9 +81,21 @@ public final class ActivityConsultDoctorBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btnStartQuestionnaire;
+      Button btnStartQuestionnaire = ViewBindings.findChildViewById(rootView, id);
+      if (btnStartQuestionnaire == null) {
+        break missingId;
+      }
+
       id = R.id.rvDoctors;
       RecyclerView rvDoctors = ViewBindings.findChildViewById(rootView, id);
       if (rvDoctors == null) {
+        break missingId;
+      }
+
+      id = R.id.tvStatus;
+      TextView tvStatus = ViewBindings.findChildViewById(rootView, id);
+      if (tvStatus == null) {
         break missingId;
       }
 
@@ -83,8 +105,8 @@ public final class ActivityConsultDoctorBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityConsultDoctorBinding((LinearLayout) rootView, btnBack, rvDoctors,
-          tvSubTitle);
+      return new ActivityConsultDoctorBinding((LinearLayout) rootView, btnBack,
+          btnStartQuestionnaire, rvDoctors, tvStatus, tvSubTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

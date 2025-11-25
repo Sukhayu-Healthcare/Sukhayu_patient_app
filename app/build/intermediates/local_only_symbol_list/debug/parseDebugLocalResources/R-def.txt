@@ -77,6 +77,7 @@ id btnMic
 id btnMute
 id btnSend
 id btnSpeaker
+id btnStartQuestionnaire
 id btnSwitchCamera
 id btn_change_image
 id btn_edit
@@ -128,6 +129,7 @@ id tvInfo
 id tvQuestionCount
 id tvRating
 id tvSpecialty
+id tvStatus
 id tvSubTitle
 id tvSubtitle
 id tvTimer
