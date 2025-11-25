@@ -78,6 +78,7 @@
         <activity
             android:name="com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity"
             android:exported="true" />
+        <activity android:name="com.sukhayu.patient.ProfileActivity" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

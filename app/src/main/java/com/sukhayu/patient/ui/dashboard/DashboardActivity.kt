@@ -7,7 +7,6 @@ import com.google.android.material.card.MaterialCardView
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity
-import com.sukhayu.patient.DoctorDetailActivity
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ConsultDoctorActivity
 import com.sukhayu.patient.PastConsultationsActivity
@@ -23,9 +22,13 @@ class DashboardActivity : AppCompatActivity() {
         // ---------------------------
         //  PROFILE CARD
         // ---------------------------
+        // Make sure to use R.id.cardProfile (not id.cardProfile)
         val cardProfile = findViewById<MaterialCardView>(R.id.cardProfile)
         cardProfile.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra("patientId", "P001") // sample id, change if dynamic
+            intent.putExtra("patientName", "Dummy Patient")
+            startActivity(intent)
         }
 
         // ---------------------------

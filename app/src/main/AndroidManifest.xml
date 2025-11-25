@@ -44,6 +44,7 @@
 
         <!-- 🦠 Health Awareness -->
         <activity android:name=".ui.awareness.DiseaseOutbreakActivity" android:exported="true" />
+        <activity android:name=".ProfileActivity" />
 
         
     </application>

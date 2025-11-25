@@ -76,7 +76,11 @@
                 app:cardElevation="3dp"
                 app:strokeColor="#E2E8F0"
                 app:strokeWidth="1dp"
-                android:backgroundTint="@android:color/white"> <!-- Keep white -->
+                android:backgroundTint="@android:color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">  <!-- ripple -->
+    
 
                 <LinearLayout
                     android:layout_width="match_parent"
