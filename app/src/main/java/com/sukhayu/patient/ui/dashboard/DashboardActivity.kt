@@ -13,9 +13,9 @@ import com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity
 import com.sukhayu.patient.ui.consultation.ConsultDoctorActivity
 import com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity
 import com.sukhayu.patient.ui.login.LoginActivity
-import com.sukhayu.patient.PastConsultationsActivity
-import com.sukhayu.patient.MedicinesActivity
-import com.sukhayu.patient.ProfileActivity
+import com.sukhayu.patient.ui.consultation.PastConsultationsActivity
+import com.sukhayu.patient.ui.consultation.MedicinesActivity
+import com.sukhayu.patient.ui.profile.ProfileActivity
 
 class DashboardActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.sukhayu.patient
+package com.sukhayu.patient.ui.profile
 
 import android.content.Intent
 import android.os.Bundle

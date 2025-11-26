@@ -1,9 +1,11 @@
-package com.sukhayu.patient
+package com.sukhayu.patient.ui.consultation
 
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.sukhayu.patient.R
+import com.sukhayu.patient.DummyData
 
 class MedicinesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
