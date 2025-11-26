@@ -1,0 +1,57 @@
+# ============================
+# ANDROID / GRADLE IGNORE
+# ============================
+
+# Gradle files
+.gradle/
+build/
+*/build/
+
+# Local properties
+local.properties
+gradle.properties
+
+# Log files
+*.log
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.DS_Store
+
+# Generated files
+captures/
+outputs/
+generated/
+navigation.json
+
+# Kotlin/Java files
+*.class
+*.apk
+*.aar
+*.dex
+*.aab
+
+# Cache
+.externalNativeBuild/
+.cxx/
+.cache/
+gradle/
+
+# Signing keys
+*.jks
+*.keystore
+
+# Android test generated
+test-output/
+androidTestResults/
+
+# Avoid committing built artifacts
+app/build/
+app/.cxx/
+app/.gradle/
+
+# OS Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
