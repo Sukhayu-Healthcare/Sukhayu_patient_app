@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             val request = LoginRequest(
-                patient_phone = username,
+                phone = username,
                 password = password
             )
 
@@ -52,13 +52,16 @@ class LoginActivity : AppCompatActivity() {
                         // ---------------------------
                         //  SUCCESSFUL API LOGIN
                         // ---------------------------
-                        if (body?.success == true && body.token != null) {
-
+                        if (response.isSuccessful && body?.token != null) {
                             getSharedPreferences("auth", MODE_PRIVATE)
                                 .edit()
                                 .putString("token", body.token)
                                 .apply()
-
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Logged in using dummy account",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
                             finish()
                             return
@@ -67,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
                         // ---------------------------
                         //  FALLBACK DUMMY LOGIN
                         // ---------------------------
-                        if (username == "Dummy Patient" && password == "123456") {
+                        else if (username == "Dummy Patient" && password == "123456") {
 
                             Toast.makeText(
                                 this@LoginActivity,
@@ -83,11 +86,13 @@ class LoginActivity : AppCompatActivity() {
                         // ---------------------------
                         //  BOTH FAILED
                         // ---------------------------
+                        else{
                         Toast.makeText(
                             this@LoginActivity,
                             body?.message ?: "Login failed",
                             Toast.LENGTH_SHORT
                         ).show()
+                        }
                     }
 
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {

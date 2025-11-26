@@ -6,7 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 data class LoginRequest(
-    val patient_phone: String,
+    val phone: String,      // FIXED → backend expects "phone"
     val password: String
 )
 

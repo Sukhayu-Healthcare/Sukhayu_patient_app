@@ -5,29 +5,40 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imgBanner"
-            android:src="@drawable/ic_health_banner"
+        <!-- Header -->
+        <include
+            android:id="@+id/header"
+            layout="@layout/include_header"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:scaleType="centerCrop" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:text="Disease Outbreak Updates"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:layout_marginVertical="12dp"
+        <!-- Main Content -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAwareness"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvTitle"
+                android:text="Disease Outbreak Updates"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginVertical="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAwareness"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

@@ -31,6 +31,5 @@ class DiseaseOutbreakActivity : AppCompatActivity() {
             AwarenessItem("Flu Season Update", "Get vaccinated and wear masks in crowded areas.")
         )
         adapter.submitList(list)
-    }
-    */
+    }*/
 }

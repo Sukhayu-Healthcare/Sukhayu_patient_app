@@ -1,54 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/commonHeader"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="56dp"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:padding="12dp"
-    android:background="@color/white"
+    android:paddingStart="12dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="@android:color/white"
     android:elevation="2dp">
 
     <ImageView
         android:id="@+id/btnBack"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:src="@drawable/ic_arrow_back_24"
-        android:tint="#0F172A"
+        app:tint="#0F172A"
         android:contentDescription="Back Button"
-        android:padding="4dp" />
+        android:padding="4dp"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"/>
 
     <ImageView
+        android:id="@+id/headerLogo"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/asha_jyoti_logo"
-        android:layout_marginStart="12dp"
-        android:contentDescription="Logo" />
+        android:layout_marginStart="0dp"
+        android:contentDescription="@string/app_name" />
 
     <TextView
         android:id="@+id/headerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sukhayu"
+        android:text="Asha Jyoti"
         android:textColor="#0F172A"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginStart="8dp" />
+        android:layout_marginStart="12dp" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="end|center_vertical">
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:id="@+id/headerLanguageIcon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:src="@drawable/ic_language"
-            android:tint="#0F172A"
-            android:layout_marginEnd="4dp" />
+            app:tint="#0F172A"
+            android:layout_marginEnd="6dp"
+            android:contentDescription="@string/language_icon_desc" />
 
         <TextView
+            android:id="@+id/headerLanguage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="English"

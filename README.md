@@ -109,177 +109,145 @@ This removes the app completely.
 
 Required structure for app
 
-RoleBasedTelemedicinePatient/
+RoleBasedTelemedicinePatient/                 ← Root Android project folder
 │
-├── app/
-│   ├── build.gradle
-│   ├── proguard-rules.pro
+├── app/                                      ← Main Android application module
+│   ├── build.gradle                           ← App-level Gradle config (dependencies, plugins)
+│   ├── proguard-rules.pro                     ← ProGuard/R8 rules for code shrinking/obfuscation
 │   │
 │   ├── src/
 │   │   └── main/
-│   │       ├── AndroidManifest.xml
+│   │       ├── AndroidManifest.xml            ← Declares activities, permissions, app metadata
 │   │       │
 │   │       ├── java/
-│   │       │   └── com/sukhayu/patient/
+│   │       │   └── com/sukhayu/patient/       ← Main application package
 │   │       │       │
-│   │       │       ├── ui/
+│   │       │       ├── ui/                    ← All UI screens & flows
 │   │       │       │   ├── login/
-│   │       │       │   │   └── LoginActivity.kt
+│   │       │       │   │   └── LoginActivity.kt             ← Handles user login UI & logic
 │   │       │       │   │
 │   │       │       │   ├── dashboard/
-│   │       │       │   │   ├── DashboardActivity.kt
-│   │       │       │   │   ├── DashboardAdapter.kt
-│   │       │       │   │   
+│   │       │       │   │   ├── DashboardActivity.kt         ← Main home dashboard for patient
+│   │       │       │   │   ├── DashboardAdapter.kt          ← Adapter for dashboard cards list
 │   │       │       │   │
 │   │       │       │   ├── profile/
-│   │       │       │   │   └── ProfileActivity.kt
+│   │       │       │   │   └── ProfileActivity.kt           ← Displays & edits patient profile
 │   │       │       │   │
 │   │       │       │   ├── ai_symptom/
-|   |       |       |   |   ├──CheckSymptomsActivity.kt
-│   │       │       │   │   ├── SymptomChatActivity.kt
-│   │       │       │   │   ├── SymptomChecker.kt
-│   │       │       │   │   ├── SymptomRules.kt
-│   │       │       │   │   └── SymptomAdapter.kt
+│   │       │       │   │   ├── CheckSymptomsActivity.kt      ← UI for starting symptom checker
+│   │       │       │   │   ├── SymptomChatActivity.kt        ← Chat-style symptom input screen
+│   │       │       │   │   ├── SymptomChecker.kt             ← Logic for analyzing symptoms
+│   │       │       │   │   ├── SymptomRules.kt               ← Symptom decision-tree rules
+│   │       │       │   │   └── SymptomAdapter.kt             ← Adapter for displaying chat messages
 │   │       │       │   │
 │   │       │       │   ├── consultation/
-│   │       │       │   │   ├── ConsultDoctorActivity.kt
-│   │       │       │   │   ├── DoctorDetailActivity.kt
-│   │       │       │   │   ├── PastConsultationsActivity.kt
-│   │       │       │   │   ├── PrescriptionActivity.kt
-│   │       │       │   │   ├── MedicinesActivity.kt
+│   │       │       │   │   ├── ConsultDoctorActivity.kt      ← Shows available doctors for consultation
+│   │       │       │   │   ├── DoctorDetailActivity.kt       ← Displays doctor profile & info
+│   │       │       │   │   ├── PastConsultationsActivity.kt  ← History of past consultations
+│   │       │       │   │   ├── PrescriptionActivity.kt       ← Displays prescriptions
+│   │       │       │   │   ├── MedicinesActivity.kt          ← Shows prescribed medicines list
 │   │       │       │   │   └── adapters/
-│   │       │       │   │       └── DoctorAdapter.kt
+│   │       │       │   │       └── DoctorAdapter.kt          ← Adapter for doctor list UI
 │   │       │       │   │
 │   │       │       │   ├── teleconsult/
-│   │       │       │   │   ├── VideoCallActivity.kt
-│   │       │       │   │   ├── ConsentActivity.kt
-│   │       │       │   │   ├── VoiceCallActivity.kt
-│   │       │       │   │   └── ChatFallbackActivity.kt
+│   │       │       │   │   ├── VideoCallActivity.kt          ← Handles video teleconsultation
+│   │       │       │   │   ├── ConsentActivity.kt            ← Consent screen before teleconsultation
+│   │       │       │   │   ├── VoiceCallActivity.kt          ← Handles audio-only consultation
+│   │       │       │   │   └── ChatFallbackActivity.kt       ← Chat fallback if voice/video fails
 │   │       │       │   │
 │   │       │       │   ├── emergency/
-│   │       │       │   │   ├── EmergencyActivity.kt
-│   │       │       │   │   ├── EmergencyInitActivity.kt
-│   │       │       │   │   └── EmergencyVCActivity.kt
+│   │       │       │   │   ├── EmergencyActivity.kt          ← Emergency request screen
+│   │       │       │   │   ├── EmergencyInitActivity.kt      ← Initial emergency instructions
+│   │       │       │   │   └── EmergencyVCActivity.kt        ← Emergency video consultation
 │   │       │       │   │
 │   │       │       │   ├── awareness/
-│   │       │       │   │   └── DiseaseOutbreakActivity.kt
+│   │       │       │   │   └── DiseaseOutbreakActivity.kt    ← Awareness info about disease outbreaks
 │   │       │       │   │
 │   │       │       │   ├── common/
-│   │       │       │   │   ├── SplashActivity.kt
-│   │       │       │   │   ├── LanguageSelectionDialog.kt
-│   │       │       │   │   └── include_header.xml
+│   │       │       │   │   ├── SplashActivity.kt             ← App splash screen
+│   │       │       │   │   ├── LanguageSelectionDialog.kt    ← Popup for language change
+│   │       │       │   │   └── include_header.xml            ← Reusable app header layout
 │   │       │       │   │
 │   │       │       │   └── adapters/
-│   │       │       │       └── SymptomMessageAdapter.kt
+│   │       │       │       └── SymptomMessageAdapter.kt      ← Adapter for symptom chat messages
 │   │       │       │
-│   │       │       ├── viewmodel/
-│   │       │       │   ├── PatientViewModel.kt
-│   │       │       │   ├── SymptomViewModel.kt
-│   │       │       │   ├── ConsultationViewModel.kt
-│   │       │       │   ├── EmergencyViewModel.kt
-│   │       │       │   ├── TeleconsultViewModel.kt
-│   │       │       │   └── AwarenessViewModel.kt
+│   │       │       ├── viewmodel/                             ← ViewModels for MVVM architecture
+│   │       │       │   ├── PatientViewModel.kt               ← Manages patient-related UI data
+│   │       │       │   ├── SymptomViewModel.kt               ← Handles symptom checker data flow
+│   │       │       │   ├── ConsultationViewModel.kt          ← Manages consultation data
+│   │       │       │   ├── EmergencyViewModel.kt             ← Manages emergency service interactions
+│   │       │       │   ├── TeleconsultViewModel.kt           ← Handles teleconsultation logic
+│   │       │       │   └── AwarenessViewModel.kt             ← Supplies disease awareness data
 │   │       │       │
-│   │       │       ├── data/
+│   │       │       ├── data/                                  ← Data layer (local + remote + repo)
 │   │       │       │   ├── local/
-│   │       │       │   │   ├── AppDatabase.kt
+│   │       │       │   │   ├── AppDatabase.kt                ← Room database configuration
 │   │       │       │   │   ├── dao/
-│   │       │       │   │   │   ├── PatientDao.kt
-│   │       │       │   │   │   ├── ConsultationDao.kt
-│   │       │       │   │   │   ├── MedicineDao.kt
-│   │       │       │   │   │   └── EmergencyDao.kt
+│   │       │       │   │   │   ├── PatientDao.kt             ← Patient table database operations
+│   │       │       │   │   │   ├── ConsultationDao.kt        ← Consultation DB operations
+│   │       │       │   │   │   ├── MedicineDao.kt            ← Medicine DB operations
+│   │       │       │   │   │   └── EmergencyDao.kt           ← Emergency DB operations
 │   │       │       │   │   └── entities/
-│   │       │       │   │       ├── PatientEntity.kt
-│   │       │       │   │       ├── ConsultationEntity.kt
-│   │       │       │   │       ├── MedicineEntity.kt
-│   │       │       │   │       └── EmergencyEntity.kt
+│   │       │       │   │       ├── PatientEntity.kt          ← Patient table schema
+│   │       │       │   │       ├── ConsultationEntity.kt     ← Consultation table schema
+│   │       │       │   │       ├── MedicineEntity.kt         ← Medicine table schema
+│   │       │       │   │       └── EmergencyEntity.kt        ← Emergency table schema
 │   │       │       │   │
 │   │       │       │   ├── remote/
-│   │       │       │   │   ├── ApiClient.kt
-│   │       │       │   │   ├── ApiService.kt
-│   │       │       │   │   ├── SyncService.kt
-│   │       │       │   │   └── SocketManager.kt
+│   │       │       │   │   ├── ApiClient.kt                  ← Retrofit client setup
+│   │       │       │   │   ├── ApiService.kt                 ← Retrofit API endpoints
+│   │       │       │   │   ├── SyncService.kt                ← Background sync API logic
+│   │       │       │   │   └── SocketManager.kt              ← WebSocket/real-time communication manager
 │   │       │       │   │
 │   │       │       │   └── repository/
-│   │       │       │       ├── PatientRepository.kt
-│   │       │       │       ├── ConsultationRepository.kt
-│   │       │       │       ├── SymptomRepository.kt
-│   │       │       │       ├── EmergencyRepository.kt
-│   │       │       │       └── AwarenessRepository.kt
+│   │       │       │       ├── PatientRepository.kt          ← Repository for patient data
+│   │       │       │       ├── ConsultationRepository.kt     ← Repository for consultations
+│   │       │       │       ├── SymptomRepository.kt          ← Repository for symptom checker
+│   │       │       │       ├── EmergencyRepository.kt        ← Repository for emergency services
+│   │       │       │       └── AwarenessRepository.kt        ← Repository for disease awareness
 │   │       │       │
 │   │       │       ├── notification/
-│   │       │       │   ├── NotificationHelper.kt
-│   │       │       │   ├── ReminderScheduler.kt
-│   │       │       │   └── CallNotificationManager.kt
+│   │       │       │   ├── NotificationHelper.kt             ← Notification creation helper
+│   │       │       │   ├── ReminderScheduler.kt              ← Schedules reminders/alarms
+│   │       │       │   └── CallNotificationManager.kt        ← Handles call-style notifications
 │   │       │       │
 │   │       │       ├── sync/
-│   │       │       │   ├── SyncManager.kt
-│   │       │       │   └── SyncWorker.kt
+│   │       │       │   ├── SyncManager.kt                    ← Controls app-wide background sync logic
+│   │       │       │   └── SyncWorker.kt                     ← WorkManager worker for syncing data
 │   │       │       │
 │   │       │       ├── utils/
-│   │       │       │   ├── Constants.kt
-│   │       │       │   ├── NetworkUtils.kt
-│   │       │       │   ├── PermissionUtils.kt
-│   │       │       │   ├── PdfGenerator.kt
-│   │       │       │   ├── LanguageHelper.kt
-│   │       │       │   └── Extensions.kt
+│   │       │       │   ├── Constants.kt                      ← Global constants
+│   │       │       │   ├── NetworkUtils.kt                   ← Network checks & utilities
+│   │       │       │   ├── PermissionUtils.kt                ← Helper for runtime permissions
+│   │       │       │   ├── PdfGenerator.kt                   ← Generates PDFs for prescriptions
+│   │       │       │   ├── LanguageHelper.kt                 ← Multilingual support utilities
+│   │       │       │   └── Extensions.kt                     ← Kotlin extension functions
 │   │       │       │
 │   │       │       └── model/
-│   │       │           ├── Patient.kt
-│   │       │           ├── Consultation.kt
-│   │       │           ├── Medicine.kt
-│   │       │           ├── Emergency.kt
-│   │       │           └── Disease.kt
+│   │       │           ├── Patient.kt                        ← Patient data model
+│   │       │           ├── Consultation.kt                   ← Consultation data model
+│   │       │           ├── Medicine.kt                       ← Medicine data model
+│   │       │           ├── Emergency.kt                      ← Emergency data model
+│   │       │           └── Disease.kt                        ← Disease awareness model
 │   │       │
-│   │       └── res/
-│   │           ├── drawable/
-│   │           ├── layout/
-│   │           │   ├── activity_login.xml
-│   │           │   ├── activity_dashboard.xml
-│   │           │   ├── activity_profile.xml
-│   │           │   ├── activity_symptom_chat.xml
-│   │           │   ├── activity_consult_doctor.xml
-│   │           │   ├── activity_doctor_detail.xml
-│   │           │   ├── activity_video_call.xml
-│   │           │   ├── activity_voice_call.xml
-│   │           │   ├── activity_chat_fallback.xml
-│   │           │   ├── activity_medicines.xml
-│   │           │   ├── activity_prescription.xml
-│   │           │   ├── activity_past_consultations.xml
-│   │           │   ├── activity_disease_outbreak.xml
-│   │           │   ├── activity_emergency.xml
-│   │           │   ├── activity_emergency_init.xml
-│   │           │   ├── activity_emergency_vc.xml
-│   │           │   ├── dialog_language_selector.xml
-│   │           │   ├── include_header.xml
-│   │           │   ├── item_doctor.xml
-│   │           │   ├── item_symptom_message.xml
-│   │           │   └── item_dashboard_card.xml
-│   │           │
-│   │           ├── values/
-│   │           │   ├── colors.xml
-│   │           │   ├── strings.xml
-│   │           │   ├── themes.xml
-│   │           │   └── styles.xml
-│   │           │
-│   │           ├── xml/
-│   │           │   ├── network_security_config.xml
-│   │           │   └── provider_paths.xml
-│   │           │
-│   │           ├── mipmap/
-│   │           └── raw/
-│   │               └── symptom_rules.json
+│   │       └── res/                                           ← XML UI resources
+│   │           ├── drawable/                                  ← App icons, shapes, images
+│   │           ├── layout/                                    ← XML layouts for all screens
+│   │           ├── values/                                    ← Colors, strings, themes, styles
+│   │           ├── xml/                                       ← Network configs, provider paths
+│   │           ├── mipmap/                                    ← Launcher icons
+│   │           └── raw/                                       ← Raw assets (symptom rules JSON)
 │   │
-│   └── test/
+│   └── test/                                                  ← Unit & instrumentation tests
 │
 ├── gradle/
-│   └── wrapper/
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
+│   └── wrapper/                                               ← Gradle wrapper files
+│       ├── gradle-wrapper.jar                                ← Wrapper executable
+│       └── gradle-wrapper.properties                          ← Wrapper config
 │
-├── gradle.properties
-├── settings.gradle
-└── build.gradle
+├── gradle.properties                                          ← Global Gradle build configuration
+├── settings.gradle                                            ← Includes modules in project
+└── build.gradle                                               ← Root-level Gradle config
 
 
 New files to be added list

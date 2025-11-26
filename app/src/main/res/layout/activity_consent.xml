@@ -17,12 +17,14 @@
         android:id="@+id/btnAccept"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#22C55E"
         android:text="Accept" />
 
     <Button
         android:id="@+id/btnDecline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#DC2626"
         android:text="Decline"
         android:layout_marginTop="8dp" />
 </LinearLayout>
