@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
 
-    private const val BASE_URL = "https://sukhayu-backend.onrender.com/api/v1/"
+    private const val BASE_URL = "https://sukhayu-backend.onrender.com/api/v1/v2/"
 
     val retrofit: ApiService by lazy {
         Retrofit.Builder()
