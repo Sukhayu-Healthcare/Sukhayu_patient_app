@@ -10,19 +10,6 @@ data class LoginRequest(
     val password: String
 )
 
-data class UserInfo(
-    val id: String,
-    val name: String,
-    val phone: String
-)
-
-data class PatientInfo(
-    val id: String,
-    val name: String,
-    val phone: String,
-    val supreme_id: String
-)
-
 data class LoginResponseAshaOrSupervisor(
     val message: String,
     val token: String,

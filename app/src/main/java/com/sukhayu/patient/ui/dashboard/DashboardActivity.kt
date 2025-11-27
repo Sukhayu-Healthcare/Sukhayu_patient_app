@@ -3,6 +3,7 @@ package com.sukhayu.patient.ui.dashboard
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -24,9 +25,25 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        // ---------------------------
-        //  RESULT LAUNCHER
-        // ---------------------------
+        // ---------------------------------------------------------
+        // FETCH USER DETAILS FROM SHARED PREFS
+        // ---------------------------------------------------------
+        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+
+        val userName = prefs.getString("user_name", "") ?: ""
+        val userPhone = prefs.getString("user_phone", "") ?: ""
+        val role = prefs.getString("role", "") ?: ""
+
+        // ---------------------------------------------------------
+        // SET VALUES INTO PROFILE CARD
+        // ---------------------------------------------------------
+        findViewById<TextView>(R.id.tvUserName)?.text = userName
+        findViewById<TextView>(R.id.tvUserPhone)?.text = userPhone
+
+
+        // ---------------------------------------------------------
+        //  RESULT LAUNCHER (For AI Symptom → Consult Doctor)
+        // ---------------------------------------------------------
         consultSymptomLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -47,62 +64,64 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        // ---------------------------
-        //  PROFILE
-        // ---------------------------
+
+        // ---------------------------------------------------------
+        //  PROFILE CARD CLICK → OPEN PROFILE PAGE
+        // ---------------------------------------------------------
         val cardProfile = findViewById<MaterialCardView>(R.id.cardProfile)
         cardProfile.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
-            intent.putExtra("patientId", "P001")
-            intent.putExtra("patientName", "Dummy Patient")
+
+            val intent = Intent(this, ProfileActivity::class.java).apply {
+                putExtra("patientId", prefs.getString("user_id", ""))
+                putExtra("patientName", prefs.getString("user_name", ""))
+            }
+
             startActivity(intent)
         }
 
-        // ---------------------------
+
+        // ---------------------------------------------------------
         //  AI SYMPTOM CHECKER
-        // ---------------------------
+        // ---------------------------------------------------------
         findViewById<MaterialCardView>(R.id.cardCheckSymptoms).setOnClickListener {
             startActivity(Intent(this, SymptomChatActivity::class.java))
         }
 
-        // ---------------------------
-        //  CONSULT DOCTOR (Launches questionnaire)
-        // ---------------------------
+        // ---------------------------------------------------------
+        //  CONSULT DOCTOR → ASK QUESTIONS FIRST
+        // ---------------------------------------------------------
         findViewById<MaterialCardView>(R.id.cardConsultDoctor).setOnClickListener {
             val intent = Intent(this, CheckSymptomsActivity::class.java)
             consultSymptomLauncher.launch(intent)
         }
 
-        // ---------------------------
+        // ---------------------------------------------------------
         //  PAST CONSULTATIONS
-        // ---------------------------
+        // ---------------------------------------------------------
         findViewById<MaterialCardView>(R.id.cardPastConsultations).setOnClickListener {
             startActivity(Intent(this, PastConsultationsActivity::class.java))
         }
 
-        // ---------------------------
-        //  DISEASE OUTBREAK
-        // ---------------------------
+        // ---------------------------------------------------------
+        //  DISEASE OUTBREAK AWARENESS
+        // ---------------------------------------------------------
         findViewById<MaterialCardView>(R.id.cardDiseaseOutbreak).setOnClickListener {
             startActivity(Intent(this, DiseaseOutbreakActivity::class.java))
         }
 
-        // ---------------------------
-        //  EMERGENCY BUTTON
-        // ---------------------------
+        // ---------------------------------------------------------
+        //  EMERGENCY
+        // ---------------------------------------------------------
         findViewById<Button>(R.id.btnEmergency).setOnClickListener {
             startActivity(Intent(this, PastConsultationsActivity::class.java))
         }
 
-        // ---------------------------
-        //  LOGOUT BUTTON
-        // ---------------------------
+        // ---------------------------------------------------------
+        //  LOGOUT
+        // ---------------------------------------------------------
         findViewById<Button>(R.id.btnLogout).setOnClickListener {
 
-            getSharedPreferences("auth", MODE_PRIVATE)
-                .edit()
-                .clear()
-                .apply()
+            prefs.edit().clear().apply()
 
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
