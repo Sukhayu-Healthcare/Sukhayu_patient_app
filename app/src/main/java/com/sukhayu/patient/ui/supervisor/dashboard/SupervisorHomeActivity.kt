@@ -1,4 +1,4 @@
-package com.sukhayu.patient.ui.supervisor
+package com.sukhayu.patient.ui.supervisor.dashboard
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.card.MaterialCardView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.login.LoginActivity
+import com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity
+import com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity
 
 class SupervisorHomeActivity : AppCompatActivity() {
 
@@ -22,6 +24,7 @@ class SupervisorHomeActivity : AppCompatActivity() {
     private lateinit var cardViewAsha: MaterialCardView
     private lateinit var cardCreateSurvey: MaterialCardView
     private lateinit var cardCreateDrive: MaterialCardView
+    private lateinit var cardProfile: MaterialCardView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +45,7 @@ class SupervisorHomeActivity : AppCompatActivity() {
         cardViewAsha = findViewById(R.id.cardViewAsha)
         cardCreateSurvey = findViewById(R.id.cardCreateSurvey)
         cardCreateDrive = findViewById(R.id.cardCreateDrive)
+        cardProfile = findViewById(R.id.cardProfile)
     }
 
     private fun loadProfile() {
@@ -56,6 +60,10 @@ class SupervisorHomeActivity : AppCompatActivity() {
     private fun setupListeners() {
         btnLogout.setOnClickListener {
             logout()
+        }
+
+        cardProfile.setOnClickListener {
+            navigateToProfile()
         }
 
         cardRegisterAsha.setOnClickListener {
@@ -81,9 +89,16 @@ class SupervisorHomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun navigateToProfile() {
+        val intent = Intent(this, AshaProfileActivity::class.java)
+        intent.putExtra(AshaProfileActivity.EXTRA_ASHA_ID, "SUP001")
+        intent.putExtra(AshaProfileActivity.EXTRA_ASHA_NAME, "Dummy Supervisor")
+        intent.putExtra(AshaProfileActivity.EXTRA_ROLE, "supervisor")
+        startActivity(intent)
+    }
+
     private fun navigateToRegisterAsha() {
-        // TODO: Replace with actual RegisterAshaActivity
-        // startActivity(Intent(this, RegisterAshaActivity::class.java))
+        startActivity(Intent(this, RegisterAshaActivity::class.java))
     }
 
     private fun navigateToViewAshaData() {

@@ -102,21 +102,35 @@ class ProfileActivity : AppCompatActivity() {
                 etName.requestFocus()
             } else {
                 // Attempt to save: validate
-                val ageText = etAge.text. toString(). trim()
+                val nameText = etName.text.toString().trim()
+                val ageText = etAge.text.toString().trim()
                 val phoneText = etPhone.text.toString().trim()
+
+                if (nameText.isEmpty()) {
+                    Toast.makeText(this, "Please enter name.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (nameText.length < 3) {
+                    Toast.makeText(this, "Name must be at least 3 characters.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
 
                 if (ageText.isEmpty()) {
                     Toast.makeText(this, "Please enter age.", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
                 val age = ageText.toIntOrNull()
-                if (age == null || age <= 0 || age > 130) {
-                    Toast.makeText(this, "Please enter a valid age.", Toast.LENGTH_SHORT).show()
+                if (age == null || age < 18 || age > 130) {
+                    Toast.makeText(this, "Please enter a valid age between 18 and 130.", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
-                if (phoneText.isEmpty() || phoneText.length < 7) {
-                    Toast.makeText(this, "Please enter a valid phone number.", Toast.LENGTH_SHORT).show()
+                if (phoneText.isEmpty()) {
+                    Toast.makeText(this, "Please enter phone number.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (phoneText.length != 10 || !phoneText.all { it.isDigit() }) {
+                    Toast.makeText(this, "Please enter a valid 10-digit phone number.", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 

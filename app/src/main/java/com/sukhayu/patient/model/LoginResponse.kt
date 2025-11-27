@@ -4,5 +4,6 @@ data class LoginResponse(
     val success: Boolean,
     val message: String,
     val token: String?,
-    val patient: Patient?
+    val patient: Patient?,
+    val role: String? // Added role property
 )

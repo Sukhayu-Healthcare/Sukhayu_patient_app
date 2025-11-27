@@ -25,23 +25,28 @@
         </activity>
 
         <!-- 🩺 Core Patient Screens -->
-        <activity android:name=".ui.dashboard.DashboardActivity" android:exported="true" />
-        <activity android:name=".ui.profile.ProfileActivity" android:exported="true" />
-        <activity android:name=".ui.consultation.ConsultDoctorActivity" android:exported="true" />
-        <activity android:name=".ui.consultation.PastConsultationsActivity" android:exported="true" />
-        <activity android:name=".ui.consultation.DoctorDetailActivity" android:exported="false" />
+        <activity android:name="com.sukhayu.patient.ui.dashboard.DashboardActivity" android:exported="true" />
+        <activity android:name="com.sukhayu.patient.ui.profile.ProfileActivity" android:exported="true" />
+        <activity android:name="com.sukhayu.patient.ui.consultation.ConsultDoctorActivity" android:exported="true" />
+        <activity android:name="com.sukhayu.patient.ui.consultation.PastConsultationsActivity" android:exported="true" />
+        <activity android:name="com.sukhayu.patient.ui.consultation.DoctorDetailActivity" android:exported="false" />
 
         <!-- 💬 AI Symptom Checker -->
-        <activity android:name=".ui.ai_symptom.SymptomChatActivity" android:exported="true" />
-        <activity android:name=".ui.ai_symptom.CheckSymptomsActivity" android:exported="true"/>
+        <activity android:name="com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity" android:exported="true" />
+        <activity android:name="com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity" android:exported="true"/>
 
         <!-- 💊 Prescription / Consultation -->
-        <activity android:name=".ui.consultation.PrescriptionActivity" android:exported="true" />
+        <activity android:name="com.sukhayu.patient.ui.consultation.PrescriptionActivity" android:exported="true" />
 
         <!-- 🦠 Health Awareness -->
-        <activity android:name=".ui.awareness.DiseaseOutbreakActivity" android:exported="true" />
+        <activity android:name="com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity" android:exported="true" />
 
-        <activity android:name="ui.supervisor.dashboard.SupervisorHomeActivity" android:exported="true"/>
+        <!-- 👨‍💼 Supervisor -->
+        <activity android:name="com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity" android:exported="true"/>
+        <activity android:name="com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity" android:exported="true"/>
+        <activity
+            android:name="com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity"
+            android:exported="false" />
 
     </application>
 

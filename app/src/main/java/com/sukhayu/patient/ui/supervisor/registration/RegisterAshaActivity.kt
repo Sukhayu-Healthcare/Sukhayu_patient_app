@@ -13,6 +13,9 @@ class RegisterAshaActivity : AppCompatActivity() {
         binding = ActivitySupervisorRegisterAshaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Safe handling for intent extras
+        val role = intent?.getStringExtra("role") ?: "supervisor"
+
         setupClickListeners()
     }
 

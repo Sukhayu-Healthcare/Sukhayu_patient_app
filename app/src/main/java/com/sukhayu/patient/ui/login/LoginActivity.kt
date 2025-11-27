@@ -12,11 +12,22 @@ import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.LoginRequest
 import com.sukhayu.patient.model.LoginResponse
 import com.sukhayu.patient.ui.dashboard.DashboardActivity
+import com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
+
+    companion object {
+        // Dummy credentials for testing
+        const val DUMMY_PATIENT_USERNAME = "patient"
+        const val DUMMY_PATIENT_PASSWORD = "123456"
+        const val DUMMY_SUPERVISOR_USERNAME = "supervisor"
+        const val DUMMY_SUPERVISOR_PASSWORD = "123456"
+        const val DUMMY_ASHA_USERNAME = "asha"
+        const val DUMMY_ASHA_PASSWORD = "123456"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +44,26 @@ class LoginActivity : AppCompatActivity() {
 
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Enter username & password", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Check dummy credentials first and route accordingly
+            if (isDummyCredentialsValid(username, password)) {
+                val role = getDummyRoleByCredentials(username)
+                getSharedPreferences("auth", MODE_PRIVATE)
+                    .edit()
+                    .putString("token", "dummy_token_$role")
+                    .putString("role", role)
+                    .apply()
+
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Logged in as $role (dummy)",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                routeUserByRole(role)
+                finish()
                 return@setOnClickListener
             }
 
@@ -54,32 +85,16 @@ class LoginActivity : AppCompatActivity() {
                         //  SUCCESSFUL API LOGIN
                         // ---------------------------
                         if (response.isSuccessful && body?.token != null) {
-                            Log.d("reponse","${response}")
+                            Log.d("response","${response}")
                             getSharedPreferences("auth", MODE_PRIVATE)
                                 .edit()
                                 .putString("token", body.token)
                                 .apply()
                             Toast.makeText(
                                 this@LoginActivity,
-                                "Logged in using API",
+                                "Logged in",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
-                            finish()
-                            return
-                        }
-
-                        // ---------------------------
-                        //  FALLBACK DUMMY LOGIN
-                        // ---------------------------
-                        else if (username == "Dummy Patient" && password == "123456") {
-
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Logged in using dummy account",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
                             startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
                             finish()
                             return
@@ -88,33 +103,16 @@ class LoginActivity : AppCompatActivity() {
                         // ---------------------------
                         //  BOTH FAILED
                         // ---------------------------
-                        else{
-                        Toast.makeText(
-                            this@LoginActivity,
-                            body?.message ?: "Login failed",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        else {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                body?.message ?: "Login failed",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
 
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-
-                        // ---------------------------
-                        //  API DOWN → USE DUMMY LOGIN
-                        // ---------------------------
-                        if (username == "Dummy Patient" && password == "123456") {
-
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "API unreachable — using dummy login",
-                                Toast.LENGTH_LONG
-                            ).show()
-
-                            startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
-                            finish()
-                            return
-                        }
-
                         Toast.makeText(
                             this@LoginActivity,
                             "Network error: ${t.message}",
@@ -123,5 +121,33 @@ class LoginActivity : AppCompatActivity() {
                     }
                 })
         }
+    }
+
+    private fun isDummyCredentialsValid(username: String, password: String): Boolean {
+        return when {
+            username == DUMMY_PATIENT_USERNAME && password == DUMMY_PATIENT_PASSWORD -> true
+            username == DUMMY_SUPERVISOR_USERNAME && password == DUMMY_SUPERVISOR_PASSWORD -> true
+            username == DUMMY_ASHA_USERNAME && password == DUMMY_ASHA_PASSWORD -> true
+            else -> false
+        }
+    }
+
+    private fun getDummyRoleByCredentials(username: String): String {
+        return when (username) {
+            DUMMY_PATIENT_USERNAME -> "patient"
+            DUMMY_SUPERVISOR_USERNAME -> "supervisor"
+            DUMMY_ASHA_USERNAME -> "asha"
+            else -> "patient"
+        }
+    }
+
+    private fun routeUserByRole(role: String) {
+        val intent = when (role.lowercase()) {
+            "patient" -> Intent(this, DashboardActivity::class.java)
+            "supervisor" -> Intent(this, SupervisorHomeActivity::class.java)
+            "asha" -> Intent(this, DashboardActivity::class.java)
+            else -> Intent(this, DashboardActivity::class.java)
+        }
+        startActivity(intent)
     }
 }
