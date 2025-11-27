@@ -2,13 +2,8 @@ package com.sukhayu.patient.ui.awareness
 
 import android.os.Bundle
 import android.view.View
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.sukhayu.patient.R
 import com.sukhayu.patient.databinding.ActivityDiseaseOutbreakBinding
 
 class DiseaseOutbreakActivity : AppCompatActivity() {
@@ -21,6 +16,9 @@ class DiseaseOutbreakActivity : AppCompatActivity() {
         binding = ActivityDiseaseOutbreakBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initViews()
+
+        // Setup RecyclerView
         adapter = AwarenessAdapter()
         binding.rvAwareness.layoutManager = LinearLayoutManager(this)
         binding.rvAwareness.adapter = adapter
@@ -28,7 +26,13 @@ class DiseaseOutbreakActivity : AppCompatActivity() {
         loadAwarenessItems()
     }
 
+    private fun initViews() {
+        // Views are now initialized through binding
+    }
+
     private fun loadAwarenessItems() {
+
+        // Dummy list (replace with DB later)
         val list = listOf(
             AwarenessItem("Dengue", 124, "Use mosquito repellent, remove standing water."),
             AwarenessItem("Influenza (Flu)", 87, "Get vaccinated, wash hands frequently."),
@@ -37,6 +41,7 @@ class DiseaseOutbreakActivity : AppCompatActivity() {
 
         adapter.submitList(list)
 
+        // Show/Hide empty state and recycler
         if (list.isEmpty()) {
             binding.emptyStateContainer.visibility = View.VISIBLE
             binding.rvAwareness.visibility = View.GONE
@@ -46,16 +51,16 @@ class DiseaseOutbreakActivity : AppCompatActivity() {
         }
     }
 
-    // ------------ data model ------------
+    // Data class for items
     private data class AwarenessItem(
         val title: String,
         val cases: Int,
         val precautions: String
     )
 
-    // ------------ adapter ------------
+    // Adapter
     private class AwarenessAdapter :
-        RecyclerView.Adapter<AwarenessAdapter.VH>() {
+        androidx.recyclerview.widget.RecyclerView.Adapter<AwarenessAdapter.VH>() {
 
         private val items = mutableListOf<AwarenessItem>()
 
@@ -65,27 +70,31 @@ class DiseaseOutbreakActivity : AppCompatActivity() {
             notifyDataSetChanged()
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_awareness, parent, false)
+        override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): VH {
+            val view = android.view.LayoutInflater.from(parent.context)
+                .inflate(com.sukhayu.patient.R.layout.item_awareness, parent, false)
             return VH(view)
         }
 
         override fun onBindViewHolder(holder: VH, position: Int) {
-            holder.bind(items[position])
+            val item = items[position]
+            holder.bind(item)
         }
 
         override fun getItemCount(): Int = items.size
 
-        class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
-            private val tvCases: TextView = itemView.findViewById(R.id.tvCases)
-            private val tvPrecautions: TextView = itemView.findViewById(R.id.tvPrecautions)
+        class VH(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+            private val tvName: android.widget.TextView =
+                view.findViewById(android.R.id.text1)
+            private val tvCases: android.widget.TextView? =
+                view.findViewById(com.sukhayu.patient.R.id.tvCases)
+            private val tvPrecautions: android.widget.TextView? =
+                view.findViewById(com.sukhayu.patient.R.id.tvPrecautions)
 
             fun bind(item: AwarenessItem) {
-                tvTitle.text = item.title
-                tvCases.text = "Cases: ${item.cases}"
-                tvPrecautions.text = item.precautions
+                tvName.text = item.title
+                tvCases?.text = "Cases: ${item.cases}"
+                tvPrecautions?.text = "Precautions: ${item.precautions}"
             }
         }
     }
