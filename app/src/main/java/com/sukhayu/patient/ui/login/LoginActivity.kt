@@ -2,6 +2,7 @@ package com.sukhayu.patient.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -53,6 +54,7 @@ class LoginActivity : AppCompatActivity() {
                         //  SUCCESSFUL API LOGIN
                         // ---------------------------
                         if (response.isSuccessful && body?.token != null) {
+                            Log.d("reponse","${response}")
                             getSharedPreferences("auth", MODE_PRIVATE)
                                 .edit()
                                 .putString("token", body.token)
