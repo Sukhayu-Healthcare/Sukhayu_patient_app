@@ -40,18 +40,9 @@ data class LoginResponsePatient(
 
 interface ApiService {
 
-    @POST("patient/login")
-    fun loginPatient(
+   @POST("login")
+    fun login(
         @Body body: LoginRequest
-    ): Call<LoginResponsePatient>
+    ): Call<Map<String, Any>>
 
-    @POST("asha/login")
-    fun loginAsha(
-        @Body body: LoginRequest
-    ): Call<LoginResponseAshaOrSupervisor>
-
-    @POST("supervisor/login")
-    fun loginSupervisor(
-        @Body body: LoginRequest
-    ): Call<LoginResponseAshaOrSupervisor>
 }
