@@ -113,9 +113,9 @@
                     android:id="@+id/etOtp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textColor="#111827"
-                    android:textSize="16sp" />
+                    android:inputType="numberPassword"
+                    android:textSize="16sp"
+                    android:textColor="#111827"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Login Button -->
