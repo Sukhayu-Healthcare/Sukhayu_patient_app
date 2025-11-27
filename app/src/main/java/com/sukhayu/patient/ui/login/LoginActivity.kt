@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
                                 .apply()
                             Toast.makeText(
                                 this@LoginActivity,
-                                "Logged in using dummy account",
+                                "Logged in using API",
                                 Toast.LENGTH_SHORT
                             ).show()
                             startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
