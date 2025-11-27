@@ -40,17 +40,17 @@ data class LoginResponsePatient(
 
 interface ApiService {
 
-    @POST("patient/login")
+    @POST("login")
     fun loginPatient(
         @Body body: LoginRequest
     ): Call<LoginResponsePatient>
 
-    @POST("asha/login")
+    @POST("login")
     fun loginAsha(
         @Body body: LoginRequest
     ): Call<LoginResponseAshaOrSupervisor>
 
-    @POST("supervisor/login")
+    @POST("login")
     fun loginSupervisor(
         @Body body: LoginRequest
     ): Call<LoginResponseAshaOrSupervisor>

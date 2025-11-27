@@ -6,11 +6,21 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- 🔹 Header Include -->
+    <include
+        android:id="@+id/header"
+        layout="@layout/include_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 🔹 Profile Image Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:padding="12dp">
 
         <ImageView
             android:id="@+id/profile_image"
@@ -28,6 +38,7 @@
             android:src="@android:drawable/ic_menu_camera" />
     </LinearLayout>
 
+    <!-- 🔹 Scrollable Fields -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -37,14 +48,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
 
+            <!-- ASHA ID -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ASHA ID"
                 android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/et_asha_id"
@@ -56,13 +69,14 @@
                 android:padding="12dp"
                 android:background="@drawable/rounded_edittext" />
 
+            <!-- Full Name -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Full Name"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/et_full_name"
@@ -73,13 +87,14 @@
                 android:padding="12dp"
                 android:background="@drawable/rounded_edittext" />
 
+            <!-- Age -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Age"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/et_age"
@@ -90,13 +105,14 @@
                 android:padding="12dp"
                 android:background="@drawable/rounded_edittext" />
 
+            <!-- Gender -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Gender"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="6dp" />
 
             <Spinner
                 android:id="@+id/spinner_gender"
@@ -105,13 +121,14 @@
                 android:padding="12dp"
                 android:background="@drawable/rounded_edittext" />
 
+            <!-- Phone Number -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Phone Number"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/et_phone_no"
@@ -122,13 +139,14 @@
                 android:padding="12dp"
                 android:background="@drawable/rounded_edittext" />
 
+            <!-- Village -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Village"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/et_village"
@@ -139,13 +157,14 @@
                 android:padding="12dp"
                 android:background="@drawable/rounded_edittext" />
 
+            <!-- District -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="District"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/et_district"
@@ -156,13 +175,14 @@
                 android:padding="12dp"
                 android:background="@drawable/rounded_edittext" />
 
+            <!-- Taluka -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Taluka"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/et_taluka"
@@ -173,36 +193,20 @@
                 android:padding="12dp"
                 android:background="@drawable/rounded_edittext" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Aadhar Number"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp" />
-
-            <EditText
-                android:id="@+id/et_aadhar_number"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="Aadhar Number"
-                android:inputType="number"
-                android:padding="12dp"
-                android:background="@drawable/rounded_edittext" />
         </LinearLayout>
     </ScrollView>
 
+    <!-- 🔹 Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        android:spacing="12dp">
+        android:layout_marginTop="20dp">
 
         <Button
             android:id="@+id/btn_edit"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:text="Edit"
             android:layout_marginEnd="8dp"
@@ -212,7 +216,7 @@
         <Button
             android:id="@+id/btn_logout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:text="Logout"
             android:layout_marginStart="8dp"
