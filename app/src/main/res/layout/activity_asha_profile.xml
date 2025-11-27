@@ -39,75 +39,156 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ASHA ID"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
             <EditText
                 android:id="@+id/et_asha_id"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:hint="ASHA ID"
                 android:inputType="text"
-                android:enabled="false" />
+                android:enabled="false"
+                android:padding="12dp"
+                android:background="@drawable/rounded_edittext" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full Name"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/et_full_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:hint="Full Name"
                 android:inputType="text"
-                android:layout_marginTop="12dp" />
+                android:padding="12dp"
+                android:background="@drawable/rounded_edittext" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Age"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/et_age"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:hint="Age"
                 android:inputType="number"
-                android:layout_marginTop="12dp" />
+                android:padding="12dp"
+                android:background="@drawable/rounded_edittext" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gender"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp" />
 
             <Spinner
                 android:id="@+id/spinner_gender"
                 android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:background="@drawable/rounded_edittext" />
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp" />
+                android:text="Phone Number"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/et_phone_no"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:hint="Phone Number"
                 android:inputType="phone"
-                android:layout_marginTop="12dp" />
+                android:padding="12dp"
+                android:background="@drawable/rounded_edittext" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Village"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/et_village"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:hint="Village"
                 android:inputType="text"
-                android:layout_marginTop="12dp" />
+                android:padding="12dp"
+                android:background="@drawable/rounded_edittext" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="District"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/et_district"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:hint="District"
                 android:inputType="text"
-                android:layout_marginTop="12dp" />
+                android:padding="12dp"
+                android:background="@drawable/rounded_edittext" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Taluka"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/et_taluka"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:hint="Taluka"
                 android:inputType="text"
-                android:layout_marginTop="12dp" />
+                android:padding="12dp"
+                android:background="@drawable/rounded_edittext" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aadhar Number"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/et_aadhar_number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:hint="Aadhar Number"
                 android:inputType="number"
-                android:layout_marginTop="12dp" />
+                android:padding="12dp"
+                android:background="@drawable/rounded_edittext" />
         </LinearLayout>
     </ScrollView>
 
@@ -116,21 +197,27 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="16dp"
-        android:spacing="8dp">
+        android:spacing="12dp">
 
         <Button
             android:id="@+id/btn_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Edit" />
+            android:text="Edit"
+            android:layout_marginEnd="8dp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/holo_green_light" />
 
         <Button
             android:id="@+id/btn_logout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Logout" />
+            android:text="Logout"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/holo_red_light" />
     </LinearLayout>
 
 </LinearLayout>

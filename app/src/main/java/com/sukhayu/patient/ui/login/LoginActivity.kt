@@ -10,7 +10,8 @@ import com.sukhayu.patient.R
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.LoginRequest
-import com.sukhayu.patient.model.LoginResponse
+import com.sukhayu.patient.data.remote.LoginResponseAshaOrSupervisor
+import com.sukhayu.patient.data.remote.LoginResponsePatient
 import com.sukhayu.patient.ui.dashboard.DashboardActivity
 import com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity
 import retrofit2.Call
@@ -20,7 +21,6 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     companion object {
-        // Dummy credentials for testing
         const val DUMMY_PATIENT_USERNAME = "patient"
         const val DUMMY_PATIENT_PASSWORD = "123456"
         const val DUMMY_SUPERVISOR_USERNAME = "supervisor"
@@ -38,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
         val btnLogin = findViewById<Button>(R.id.btnLogin)
 
         btnLogin.setOnClickListener {
-
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
@@ -47,7 +46,6 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Check dummy credentials first and route accordingly
             if (isDummyCredentialsValid(username, password)) {
                 val role = getDummyRoleByCredentials(username)
                 getSharedPreferences("auth", MODE_PRIVATE)
@@ -72,55 +70,137 @@ class LoginActivity : AppCompatActivity() {
                 password = password
             )
 
+            // Try patient login first
             ApiClient.retrofit.loginPatient(request)
-                .enqueue(object : Callback<LoginResponse> {
-
+                .enqueue(object : Callback<LoginResponsePatient> {
                     override fun onResponse(
-                        call: Call<LoginResponse>,
-                        response: Response<LoginResponse>
+                        call: Call<LoginResponsePatient>,
+                        response: Response<LoginResponsePatient>
                     ) {
-                        val body = response.body()
-
-                        // ---------------------------
-                        //  SUCCESSFUL API LOGIN
-                        // ---------------------------
-                        if (response.isSuccessful && body?.token != null) {
-                            Log.d("response","${response}")
-                            getSharedPreferences("auth", MODE_PRIVATE)
-                                .edit()
-                                .putString("token", body.token)
-                                .apply()
+                        if (response.isSuccessful && response.body()?.token != null) {
+                            val body = response.body()!!
+                            Log.d("LoginActivity", "Patient login successful: ${body.message}")
+                            
+                            getSharedPreferences("auth", MODE_PRIVATE).edit().apply {
+                                putString("token", body.token)
+                                putString("role", body.role)
+                                putString("user_id", body.patient.id)
+                                putString("user_name", body.patient.name)
+                                putString("user_phone", body.patient.phone)
+                                putString("supreme_id", body.patient.supreme_id)
+                                apply()
+                            }
+                            
                             Toast.makeText(
                                 this@LoginActivity,
-                                "Logged in",
+                                body.message,
                                 Toast.LENGTH_SHORT
                             ).show()
                             startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
                             finish()
                             return
                         }
-
-                        // ---------------------------
-                        //  BOTH FAILED
-                        // ---------------------------
-                        else {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                body?.message ?: "Login failed",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        
+                        // If patient login fails, try ASHA/Supervisor login
+                        loginAsOrSupervisor(request)
                     }
 
-                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Network error: ${t.message}",
-                            Toast.LENGTH_LONG
-                        ).show()
+                    override fun onFailure(call: Call<LoginResponsePatient>, t: Throwable) {
+                        Log.e("LoginActivity", "Patient login error: ${t.message}")
+                        // If patient API fails, try ASHA/Supervisor login
+                        loginAsOrSupervisor(request)
                     }
                 })
         }
+    }
+
+    private fun loginAsOrSupervisor(request: LoginRequest) {
+        // Try ASHA login
+        ApiClient.retrofit.loginAsha(request)
+            .enqueue(object : Callback<LoginResponseAshaOrSupervisor> {
+                override fun onResponse(
+                    call: Call<LoginResponseAshaOrSupervisor>,
+                    response: Response<LoginResponseAshaOrSupervisor>
+                ) {
+                    if (response.isSuccessful && response.body()?.token != null) {
+                        val body = response.body()!!
+                        Log.d("LoginActivity", "ASHA login successful: ${body.message}")
+                        
+                        getSharedPreferences("auth", MODE_PRIVATE).edit().apply {
+                            putString("token", body.token)
+                            putString("role", body.role)
+                            putString("user_id", body.user.id)
+                            putString("user_name", body.user.name)
+                            putString("user_phone", body.user.phone)
+                            apply()
+                        }
+                        
+                        Toast.makeText(
+                            this@LoginActivity,
+                            body.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        routeUserByRole(body.role)
+                        finish()
+                        return
+                    }
+                    
+                    // If ASHA fails, try Supervisor login
+                    loginSupervisor(request)
+                }
+
+                override fun onFailure(call: Call<LoginResponseAshaOrSupervisor>, t: Throwable) {
+                    Log.e("LoginActivity", "ASHA login error: ${t.message}")
+                    loginSupervisor(request)
+                }
+            })
+    }
+
+    private fun loginSupervisor(request: LoginRequest) {
+        ApiClient.retrofit.loginSupervisor(request)
+            .enqueue(object : Callback<LoginResponseAshaOrSupervisor> {
+                override fun onResponse(
+                    call: Call<LoginResponseAshaOrSupervisor>,
+                    response: Response<LoginResponseAshaOrSupervisor>
+                ) {
+                    if (response.isSuccessful && response.body()?.token != null) {
+                        val body = response.body()!!
+                        Log.d("LoginActivity", "Supervisor login successful: ${body.message}")
+                        
+                        getSharedPreferences("auth", MODE_PRIVATE).edit().apply {
+                            putString("token", body.token)
+                            putString("role", body.role)
+                            putString("user_id", body.user.id)
+                            putString("user_name", body.user.name)
+                            putString("user_phone", body.user.phone)
+                            apply()
+                        }
+                        
+                        Toast.makeText(
+                            this@LoginActivity,
+                            body.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        routeUserByRole(body.role)
+                        finish()
+                        return
+                    }
+                    
+                    Toast.makeText(
+                        this@LoginActivity,
+                        response.body()?.message ?: "Login failed",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onFailure(call: Call<LoginResponseAshaOrSupervisor>, t: Throwable) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Network error: ${t.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
     }
 
     private fun isDummyCredentialsValid(username: String, password: String): Boolean {
