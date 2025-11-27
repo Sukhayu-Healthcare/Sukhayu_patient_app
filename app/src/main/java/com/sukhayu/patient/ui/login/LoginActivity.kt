@@ -53,12 +53,30 @@ class LoginActivity : AppCompatActivity() {
                         // ---------------------------
                         //  SUCCESSFUL API LOGIN
                         // ---------------------------
+
                         if (response.isSuccessful && body?.token != null) {
-                            Log.d("reponse","${response}")
-                            getSharedPreferences("auth", MODE_PRIVATE)
+                            Log.d("response", "${response.body()}")
+
+                  val editor = getSharedPreferences("auth", MODE_PRIVATE)
                                 .edit()
                                 .putString("token", body.token)
-                                .apply()
+                                .putString("username", body.patient?.name)
+                                .putInt("id", body.patient?.id?.toInt() ?: -1)
+                                .putLong("phone", body.patient?.phone?.toLong() ?: -1L)
+                            if (body?.familyProfiles != null) {
+                                body?.familyProfiles?.forEachIndexed { index, member ->
+
+                                    editor.putInt("family_${index}_id", member.id)
+                                    editor.putString("family_${index}_name", member.name)
+                                    editor.putString("family_${index}_phone", member.phone)
+                                    editor.putString("family_${index}_supreme_id", member?.supremeId ?: "null")
+                                }
+
+                                editor.putInt("family_count", body?.familyProfiles?.size ?:0)
+                                editor.apply()}
+
+
+
                             Toast.makeText(
                                 this@LoginActivity,
                                 "Logged in using API",
