@@ -1,4 +1,4 @@
-package com.sukhayu.patient.ui.login 
+package com.sukhayu.patient.ui.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
                         if (response.isSuccessful && body?.token != null) {
                             Log.d("response", "${response.body()}")
 
-                  val editor = getSharedPreferences("auth", MODE_PRIVATE)
+                            val editor = getSharedPreferences("auth", MODE_PRIVATE)
                                 .edit()
                                 .putString("token", body.token)
                                 .putString("username", body.patient?.name)
@@ -107,11 +107,11 @@ class LoginActivity : AppCompatActivity() {
                         //  BOTH FAILED
                         // ---------------------------
                         else{
-                        Toast.makeText(
-                            this@LoginActivity,
-                            body?.message ?: "Login failed",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            Toast.makeText(
+                                this@LoginActivity,
+                                body?.message ?: "Login failed",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
 
@@ -141,5 +141,5 @@ class LoginActivity : AppCompatActivity() {
                     }
                 })
         }
-    }
+ }
 }
