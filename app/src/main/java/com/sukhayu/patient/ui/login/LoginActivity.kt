@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.*
+import com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity
 import com.sukhayu.patient.ui.dashboard.DashboardActivity
 import com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity
 import retrofit2.Call
@@ -71,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
                             if (role == "supervisor") {
                                 startActivity(Intent(this@LoginActivity, SupervisorHomeActivity::class.java))
                             } else {
-                                startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
+                                startActivity(Intent(this@LoginActivity, AshaDashboardActivity::class.java))
                             }
                         }
 

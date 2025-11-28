@@ -10,4 +10,22 @@
     <string name="consult_doctor">Consult Doctor Icon</string>
     <string name="past_consultations">Past Consultations Icon</string>
     <string name="medicines">Medicines Icon</string>
+
+    <!-- ASHA dashboard strings -->
+    <string name="asha_dashboard_title">ASHA Dashboard</string>
+    <string name="sample_asha_name">प्रिया पटेल</string>
+
+    <!-- content descriptions -->
+    <string name="desc_total_patients">Total patients count</string>
+    <string name="desc_active_cases">Active cases</string>
+    <string name="desc_completed_today">Completed today</string>
+    <string name="desc_emergency_cases">Emergency cases</string>
+
+    <!-- Quick actions -->
+    <string name="action_view_surveys">View Patient Survey</string>
+    <string name="action_health_drives">Health Drives</string>
+    <string name="action_register_patient">Register New Patient</string>
+    <string name="action_help_login">Help Patient Login</string>
+
+
 </resources>
