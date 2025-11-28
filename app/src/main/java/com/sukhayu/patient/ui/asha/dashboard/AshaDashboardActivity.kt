@@ -8,9 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.asha.registration.RegisterPatientActivity
 import com.sukhayu.patient.ui.asha.nhp.NationalHealthProgramsActivity
-import com.sukhayu.patient.ui.asha.surveys.ChildSurveyActivity
-import com.sukhayu.patient.ui.asha.surveys.MaternalSurveyActivity
-import com.sukhayu.patient.ui.asha.surveys.VaccinationSurveyActivity
 
 class AshaDashboardActivity : AppCompatActivity() {
 
@@ -29,7 +26,8 @@ class AshaDashboardActivity : AppCompatActivity() {
 
         // Quick action button wiring using direct class Intents (compile-safe)
         findViewById<Button>(R.id.btn_view_surveys).setOnClickListener {
-            startActivity(Intent(this, ChildSurveyActivity::class.java))
+            // Open National Health Programs (or change to proper surveys screen if available)
+            startActivity(Intent(this, NationalHealthProgramsActivity::class.java))
         }
 
         findViewById<Button>(R.id.btn_health_drives).setOnClickListener {
@@ -42,14 +40,6 @@ class AshaDashboardActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.btn_help_login).setOnClickListener {
             // TODO: show help dialog/screen
-        }
-
-        // Bottom quick survey buttons
-        findViewById<Button>(R.id.btn_open_maternal).setOnClickListener {
-            startActivity(Intent(this, MaternalSurveyActivity::class.java))
-        }
-        findViewById<Button>(R.id.btn_open_vaccination).setOnClickListener {
-            startActivity(Intent(this, VaccinationSurveyActivity::class.java))
         }
     }
 }

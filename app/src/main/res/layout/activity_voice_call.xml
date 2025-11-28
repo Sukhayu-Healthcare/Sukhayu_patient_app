@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -20,7 +21,9 @@
         android:text="Dr. Mehta"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tvTimer"
@@ -28,14 +31,18 @@
         android:layout_centerHorizontal="true"
         android:text="00:12"
         android:textColor="@color/grey_300"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <ImageButton
             android:id="@+id/btnMute"
@@ -47,11 +54,11 @@
         <ImageButton
             android:id="@+id/btnEndCall"
             android:src="@drawable/ic_call_end"
-            android:tint="@color/red"
             android:layout_marginHorizontal="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_width="80dp"
-            android:layout_height="80dp" />
+            android:layout_height="80dp"
+            app:tint="@color/red" />
 
         <ImageButton
             android:id="@+id/btnSpeaker"

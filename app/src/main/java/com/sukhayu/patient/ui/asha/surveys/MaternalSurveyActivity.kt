@@ -8,5 +8,6 @@ class MaternalSurveyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asha_survey_maternal)
+        // This activity is intentionally simple for now.
     }
 }

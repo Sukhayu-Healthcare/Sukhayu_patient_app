@@ -16,5 +16,21 @@
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="primary_blue">#1E88E5</color>
+    <color name="primary">#2563EB</color>
+
+
+    <color name="asha_blue">#146DF6</color>
+    <color name="asha_teal">#0E9A8A</color>
+    <color name="asha_green">#12B63A</color>
+    <color name="asha_purple">#8A2AF7</color>
+    <color name="asha_red">#E31B23</color>
+
+    <color name="card_border">#ECECEC</color>
+    <color name="muted_text">#6F7377</color>
+
+    <color name="tip_blue">#EAF4FF</color>
+    <color name="tip_green">#E8FAF3</color>
+    <color name="tip_orange">#FFF4EA</color>
+
 
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/videoContainer"
     android:background="@color/black"
     android:layout_width="match_parent"
@@ -35,11 +36,11 @@
         <ImageButton
             android:id="@+id/btnEndCall"
             android:src="@drawable/ic_call_end"
-            android:tint="@color/red"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_marginHorizontal="24dp"
             android:layout_width="72dp"
-            android:layout_height="72dp" />
+            android:layout_height="72dp"
+            app:tint="@color/red" />
 
         <ImageButton
             android:id="@+id/btnSwitchCamera"

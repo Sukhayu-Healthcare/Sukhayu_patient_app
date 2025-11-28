@@ -3,7 +3,7 @@
     <string name="app_logo_desc">App Logo</string>
     <string name="language_icon_desc">Language Icon</string>
     <string name="language_english">English</string>
-    <string name="profile_icon_desc">Profile Icon</string>
+    <string name="profile_icon_desc">Profile icon</string>
     <string name="profile">Profile</string>
     <string name="symptom_icon_desc">Symptom Icon</string>
     <string name="check_symptoms">Check Symptoms</string>
@@ -26,6 +26,24 @@
     <string name="action_health_drives">Health Drives</string>
     <string name="action_register_patient">Register New Patient</string>
     <string name="action_help_login">Help Patient Login</string>
+
+    <!-- Dashboard descriptions -->
+    <string name="desc_patient_services">Patient services section</string>
+    <string name="desc_consult_doctor">Consult doctor</string>
+    <string name="desc_past_consultations">Past consultations</string>
+    <string name="desc_disease_analytics">Disease analytics</string>
+
+    <!-- Program descriptions -->
+    <string name="desc_ayush">AYUSH health mission</string>
+    <string name="desc_idsp">Integrated Disease Surveillance Project</string>
+
+    <!-- Link / Icons -->
+    <string name="desc_open_link">Open link</string>
+
+    <!-- Calendar & metrics -->
+    <string name="desc_calendar">Calendar icon</string>
+
+
 
 
 </resources>

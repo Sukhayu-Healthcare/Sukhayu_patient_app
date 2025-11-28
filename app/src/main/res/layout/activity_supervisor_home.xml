@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidDomInspection -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -147,7 +148,7 @@
                             android:layout_height="40dp"
                             android:src="@drawable/ic_add_user"
                             android:layout_marginBottom="8dp"
-                            android:tint="#059669" />
+                            app:tint="#059669" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -185,7 +186,7 @@
                             android:layout_height="40dp"
                             android:src="@drawable/ic_data"
                             android:layout_marginBottom="8dp"
-                            android:tint="#2563EB" />
+                            app:tint="#2563EB" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -223,7 +224,7 @@
                             android:layout_height="40dp"
                             android:src="@drawable/ic_survey"
                             android:layout_marginBottom="8dp"
-                            android:tint="#dae019ff" />
+                            app:tint="#dae019ff" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -261,7 +262,7 @@
                             android:layout_height="40dp"
                             android:src="@drawable/ic_campaign"
                             android:layout_marginBottom="8dp"
-                            android:tint="#7C3AED" />
+                            app:tint="#7C3AED" />
 
                         <TextView
                             android:layout_width="wrap_content"

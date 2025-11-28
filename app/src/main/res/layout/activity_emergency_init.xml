@@ -10,12 +10,16 @@
         android:textSize="100sp"
         android:textColor="@color/white"
         android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
     <TextView
         android:id="@+id/tvInfo"
         android:text="Connecting to Emergency Doctor..."
         android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/tvCountdown"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
