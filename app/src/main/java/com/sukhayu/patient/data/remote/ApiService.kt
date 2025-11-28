@@ -1,6 +1,8 @@
 package com.sukhayu.patient.data.remote
 
 import com.sukhayu.patient.model.LoginResponse
+import com.sukhayu.patient.model.PatientRegistrationRequest
+import com.sukhayu.patient.model.PatientRegistrationResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -89,4 +91,10 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("supervisorId") supervisorId: String
     ): Call<AshaListResponse>
+
+    @POST("asha/patient/register")
+    fun registerPatient(
+        @Header("Authorization") token: String,
+        @Body body: PatientRegistrationRequest
+    ): Call<PatientRegistrationResponse>
 }
