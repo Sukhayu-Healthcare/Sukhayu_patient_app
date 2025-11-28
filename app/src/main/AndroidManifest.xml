@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sukhayu.patient">
 
-    <!-- 🌐 Network + basic permissions -->
+
+    <!-- Network + basic permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -14,7 +17,7 @@
         android:theme="@style/Theme.RoleBasedTelemedicinePatient"
         android:supportsRtl="true">
 
-        <!-- 🏠 Login: Launcher activity -->
+        <!-- Login: Launcher activity -->
         <activity
             android:name="com.sukhayu.patient.ui.login.LoginActivity"
             android:exported="true">
@@ -24,29 +27,33 @@
             </intent-filter>
         </activity>
 
-        <!-- 🩺 Core Patient Screens -->
+        <!-- Core Patient Screens -->
         <activity android:name="com.sukhayu.patient.ui.dashboard.DashboardActivity" android:exported="true" />
         <activity android:name="com.sukhayu.patient.ui.profile.ProfileActivity" android:exported="true" />
         <activity android:name="com.sukhayu.patient.ui.consultation.ConsultDoctorActivity" android:exported="true" />
         <activity android:name="com.sukhayu.patient.ui.consultation.PastConsultationsActivity" android:exported="true" />
         <activity android:name="com.sukhayu.patient.ui.consultation.DoctorDetailActivity" android:exported="false" />
 
-        <!-- 💬 AI Symptom Checker -->
+        <!-- AI Symptom Checker -->
         <activity android:name="com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity" android:exported="true" />
         <activity android:name="com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity" android:exported="true"/>
 
-        <!-- 💊 Prescription / Consultation -->
+        <!-- Prescription / Consultation -->
         <activity android:name="com.sukhayu.patient.ui.consultation.PrescriptionActivity" android:exported="true" />
 
-        <!-- 🦠 Health Awareness -->
+        <!-- Health Awareness -->
         <activity android:name="com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity" android:exported="true" />
 
-        <!-- 👨‍💼 Supervisor -->
+        <!-- Supervisor -->
         <activity android:name="com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity" android:exported="true"/>
         <activity android:name="com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity" android:exported="true"/>
+        <activity android:name="com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity" android:exported="false" />
+
+        <!-- ASHA Dashboard (non-launcher) -->
         <activity
-            android:name="com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity"
-            android:exported="false" />
+            android:name="com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity"
+            android:exported="true"/>
+
 
     </application>
 

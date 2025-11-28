@@ -34,6 +34,7 @@ class AshaProfileActivity : AppCompatActivity() {
     private lateinit var etVillage: EditText
     private lateinit var etDistrict: EditText
     private lateinit var etTaluka: EditText
+    private lateinit var etAadharNumber: EditText
     private lateinit var btnEdit: Button
     private lateinit var btnLogout: Button
 
@@ -70,11 +71,13 @@ class AshaProfileActivity : AppCompatActivity() {
         etVillage = findViewById(R.id.et_village)
         etDistrict = findViewById(R.id.et_district)
         etTaluka = findViewById(R.id.et_taluka)
+        etAadharNumber = findViewById(R.id.et_aadhar_number)
         btnEdit = findViewById(R.id.btn_edit)
         btnLogout = findViewById(R.id.btn_logout)
 
         etAge.inputType = InputType.TYPE_CLASS_NUMBER
         etPhoneNo.inputType = InputType.TYPE_CLASS_NUMBER
+        etAadharNumber.inputType = InputType.TYPE_CLASS_NUMBER
 
         val genders = listOf("Male", "Female", "Other")
         val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genders)
@@ -94,6 +97,7 @@ class AshaProfileActivity : AppCompatActivity() {
         etVillage.setText("Nashik Village")
         etDistrict.setText("Nashik")
         etTaluka.setText("Nashik Taluka")
+        etAadharNumber.setText("123456789012")
         profileImage.setImageResource(R.drawable.sample_patient)
     }
 
@@ -135,6 +139,7 @@ class AshaProfileActivity : AppCompatActivity() {
         val village = etVillage.text.toString().trim()
         val district = etDistrict.text.toString().trim()
         val taluka = etTaluka.text.toString().trim()
+        val aadharNumber = etAadharNumber.text.toString().trim()
 
         return when {
             fullName.isEmpty() -> {
@@ -173,6 +178,14 @@ class AshaProfileActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please enter taluka.", Toast.LENGTH_SHORT).show()
                 false
             }
+            aadharNumber.isEmpty() -> {
+                Toast.makeText(this, "Please enter Aadhar number.", Toast.LENGTH_SHORT).show()
+                false
+            }
+            aadharNumber.length != 12 || !aadharNumber.all { it.isDigit() } -> {
+                Toast.makeText(this, "Please enter a valid 12-digit Aadhar number.", Toast.LENGTH_SHORT).show()
+                false
+            }
             else -> true
         }
     }
@@ -185,6 +198,7 @@ class AshaProfileActivity : AppCompatActivity() {
         etVillage.isEnabled = enabled
         etDistrict.isEnabled = enabled
         etTaluka.isEnabled = enabled
+        etAadharNumber.isEnabled = enabled
         etAshaId.isEnabled = false
     }
 }

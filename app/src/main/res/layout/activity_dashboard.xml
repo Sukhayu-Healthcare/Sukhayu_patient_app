@@ -68,19 +68,20 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvUserName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Dummy Patient"
-                                android:textColor="#0F172A"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:text="Name" />
 
                             <TextView
+                                android:id="@+id/tvUserPhone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Patient ID: P001"
-                                android:textColor="#475569"
-                                android:textSize="14sp" />
+                                android:textSize="16sp"
+                                android:text="Phone" />
+
                         </LinearLayout>
                     </LinearLayout>
 

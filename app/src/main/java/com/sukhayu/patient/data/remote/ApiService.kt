@@ -10,19 +10,6 @@ data class LoginRequest(
     val password: String
 )
 
-data class UserInfo(
-    val id: String,
-    val name: String,
-    val phone: String
-)
-
-data class PatientInfo(
-    val id: String,
-    val name: String,
-    val phone: String,
-    val supreme_id: String
-)
-
 data class LoginResponseAshaOrSupervisor(
     val message: String,
     val token: String,
@@ -40,18 +27,9 @@ data class LoginResponsePatient(
 
 interface ApiService {
 
-    @POST("login")
-    fun loginPatient(
+   @POST("login")
+    fun login(
         @Body body: LoginRequest
-    ): Call<LoginResponsePatient>
+    ): Call<Map<String, Any>>
 
-    @POST("login")
-    fun loginAsha(
-        @Body body: LoginRequest
-    ): Call<LoginResponseAshaOrSupervisor>
-
-    @POST("login")
-    fun loginSupervisor(
-        @Body body: LoginRequest
-    ): Call<LoginResponseAshaOrSupervisor>
 }
