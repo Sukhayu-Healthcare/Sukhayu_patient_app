@@ -1,7 +1,40 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <size android:width="36dp" android:height="36dp"/>
-    <solid android:color="#F5F5F5"/>
-    <stroke android:width="1dp" android:color="#DDDDDD"/>
-</shape>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
 
+    <!-- Document Outline -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#000"
+        android:strokeWidth="2"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"
+        android:pathData="M14 2H6a2 2 0 0 0 -2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2V8z" />
+
+    <!-- Folded Corner -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#000"
+        android:strokeWidth="2"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"
+        android:pathData="M14 2v6h6" />
+
+    <!-- First Text Line -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#000"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M16 13H8" />
+
+    <!-- Second Text Line -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#000"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M16 17H8" />
+</vector>

@@ -2,12 +2,15 @@ package com.sukhayu.patient.ui.asha.dashboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.asha.registration.RegisterPatientActivity
 import com.sukhayu.patient.ui.asha.nhp.NationalHealthProgramsActivity
+import com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity
 
 class AshaDashboardActivity : AppCompatActivity() {
 
@@ -26,8 +29,21 @@ class AshaDashboardActivity : AppCompatActivity() {
 
         // Quick action button wiring using direct class Intents (compile-safe)
         findViewById<Button>(R.id.btn_view_surveys).setOnClickListener {
-            // Open National Health Programs (or change to proper surveys screen if available)
+            // TODO: Open view/list of past surveys or keep as NHP
             startActivity(Intent(this, NationalHealthProgramsActivity::class.java))
+        }
+
+        // Conduct Survey button navigates to Survey Home
+        findViewById<Button>(R.id.btnSurveys).setOnClickListener {
+            Log.d("AshaDashboard", "Conduct Survey button clicked")
+            try {
+                val intent = Intent(this, AshaSurveyHomeActivity::class.java)
+                startActivity(intent)
+                Log.d("AshaDashboard", "Survey Home Activity started successfully")
+            } catch (e: Exception) {
+                Log.e("AshaDashboard", "Error starting survey activity: ${e.message}")
+                Toast.makeText(this, "Error opening surveys: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
 
         findViewById<Button>(R.id.btn_health_drives).setOnClickListener {

@@ -134,4 +134,10 @@ interface ApiService {
         @Path("ashaId") ashaId: String
     ): Call<AshaDetailsResponse>
 
+    @GET("asha/patients/search")
+    suspend fun searchPatients(
+        @Header("Authorization") token: String,
+        @retrofit2.http.Query("q") query: String
+    ): PatientSearchResponse
+
 }

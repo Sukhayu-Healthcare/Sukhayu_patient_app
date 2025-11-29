@@ -263,6 +263,18 @@
                     android:drawableLeft="@drawable/ic_person_outline"
                     android:drawablePadding="12dp"/>
 
+                <!-- NEW: Surveys button -->
+                <Button
+                    android:id="@+id/btnSurveys"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/quick_btn_blue"
+                    android:text="Conduct Survey"
+                    android:textColor="@android:color/white"
+                    android:drawableLeft="@drawable/ic_document"
+                    android:drawablePadding="12dp"/>
+
                 <Button
                     android:id="@+id/btn_health_drives"
                     android:layout_width="match_parent"

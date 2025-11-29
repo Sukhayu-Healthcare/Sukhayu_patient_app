@@ -51,6 +51,26 @@
         <!-- ASHA Register Patient Activity -->
         <activity android:name="com.sukhayu.patient.ui.asha.registration.RegisterPatientActivity" android:exported="false" android:label="Register Patient" />
 
+        <!-- ASHA Survey Home Activity -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity" android:exported="false" android:label="Surveys" />
+
+        <!-- Pregnancy / ANC Survey Activity -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySurveyActivity" android:exported="false" android:label="Pregnancy / ANC Survey" />
+
+        <!-- First ANC Visit Activity -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.FirstAncVisitActivity" android:exported="false" android:label="First ANC Visit" />
+
+        <!-- Follow-up ANC Visit Activity -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.FollowUpAncVisitActivity" android:exported="false" android:label="Follow-up ANC Visit" />
+
+        <!-- Child Health Survey Activity -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.child.ChildSurveyActivity" android:exported="false" android:label="Child Health &amp; Immunisation" />
+
+        <!-- TB Survey Activity -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.tb.TbSurveyActivity" android:exported="false" android:label="TB Symptoms Survey" />
+
+        <!-- NCD Survey Activity -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.ncd.NcdSurveyActivity" android:exported="false" android:label="NCD Screening" />
 
     </application>
 

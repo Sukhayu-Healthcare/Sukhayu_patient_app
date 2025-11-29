@@ -10,15 +10,17 @@ import com.sukhayu.patient.data.local.entity.*
 @Database(
     entities = [
         ConsultationEntity::class,
-        PrescriptionItemEntity::class
+        PrescriptionItemEntity::class,
+        PatientEntity::class
     ],
-    version = 2,                             // Increment version when adding new tables
+    version = 3,                             // Increment version when adding new tables
     exportSchema = false
 )
 abstract class AshaLocalDatabase : RoomDatabase() {
 
     abstract fun consultationDao(): ConsultationDao
     abstract fun prescriptionDao(): PrescriptionDao
+    abstract fun patientDao(): PatientDao
 
     companion object {
         @Volatile private var INSTANCE: AshaLocalDatabase? = null
