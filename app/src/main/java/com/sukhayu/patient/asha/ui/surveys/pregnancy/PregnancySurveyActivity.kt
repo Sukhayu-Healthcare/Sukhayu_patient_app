@@ -205,17 +205,37 @@ class PregnancySurveyActivity : AppCompatActivity() {
     }
 
     private fun navigateToFirstAncVisit(patientId: String, patientName: String) {
+        // Get current patient details from ViewModel
+        val patient = viewModel.patientDetails.value
+
         val intent = Intent(this, FirstAncVisitActivity::class.java).apply {
             putExtra(FirstAncVisitActivity.EXTRA_PATIENT_ID, patientId)
             putExtra(FirstAncVisitActivity.EXTRA_PATIENT_NAME, patientName)
+            // Add additional patient details if available
+            patient?.let {
+                putExtra(FirstAncVisitActivity.EXTRA_PATIENT_PHONE, it.phone)
+                putExtra(FirstAncVisitActivity.EXTRA_PATIENT_GENDER, it.gender)
+                putExtra(FirstAncVisitActivity.EXTRA_PATIENT_WEIGHT, it.weight)
+            }
         }
         startActivity(intent)
     }
 
     private fun navigateToFollowUpAncVisit(patientId: String, patientName: String) {
+        // Get current patient details from ViewModel
+        val patient = viewModel.patientDetails.value
+
         val intent = Intent(this, FollowUpAncVisitActivity::class.java).apply {
             putExtra(FollowUpAncVisitActivity.EXTRA_PATIENT_ID, patientId)
             putExtra(FollowUpAncVisitActivity.EXTRA_PATIENT_NAME, patientName)
+            // Add additional patient details if available
+            patient?.let {
+                putExtra(FollowUpAncVisitActivity.EXTRA_PATIENT_PHONE, it.phone)
+                putExtra(FollowUpAncVisitActivity.EXTRA_PATIENT_GENDER, it.gender)
+                putExtra(FollowUpAncVisitActivity.EXTRA_PATIENT_WEIGHT, it.weight)
+            }
+            // Use patientId as temporary pregnancyId until real pregnancy tracking is implemented
+            putExtra(FollowUpAncVisitActivity.EXTRA_PREGNANCY_ID, patientId)
         }
         startActivity(intent)
     }
