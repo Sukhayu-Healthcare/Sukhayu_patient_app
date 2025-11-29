@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 
 object TokenManager {
-    private const val PREF_NAME = "sukhayu_prefs"
-    private const val KEY_AUTH_TOKEN = "authToken"
-    private const val KEY_USER_ID = "userId"
-    private const val KEY_SUPERVISOR_ID = "supervisorId"
+    private const val PREF_NAME = "auth"              // MUST MATCH LoginActivity
+    private const val KEY_AUTH_TOKEN = "token"        // MUST MATCH LoginActivity
+    private const val KEY_USER_ID = "user_id"
+    private const val KEY_SUPREME_ID = "supreme_id"
     private const val KEY_ROLE = "role"
 
     private lateinit var sharedPreferences: SharedPreferences
@@ -16,11 +16,11 @@ object TokenManager {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
-    fun saveToken(token: String, userId: String = "", supervisorId: String = "", role: String = "") {
+    fun saveToken(token: String, userId: String = "", supremeId: String = "", role: String = "") {
         sharedPreferences.edit().apply {
             putString(KEY_AUTH_TOKEN, token)
             if (userId.isNotEmpty()) putString(KEY_USER_ID, userId)
-            if (supervisorId.isNotEmpty()) putString(KEY_SUPERVISOR_ID, supervisorId)
+            if (supremeId.isNotEmpty()) putString(KEY_SUPREME_ID, supremeId)
             if (role.isNotEmpty()) putString(KEY_ROLE, role)
             apply()
         }
@@ -30,7 +30,7 @@ object TokenManager {
 
     fun getUserId(): String = sharedPreferences.getString(KEY_USER_ID, "") ?: ""
 
-    fun getSupervisorId(): String = sharedPreferences.getString(KEY_SUPERVISOR_ID, "") ?: ""
+    fun getSupremeId(): String = sharedPreferences.getString(KEY_SUPREME_ID, "") ?: ""
 
     fun getRole(): String = sharedPreferences.getString(KEY_ROLE, "") ?: ""
 

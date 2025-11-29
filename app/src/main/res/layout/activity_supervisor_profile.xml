@@ -15,15 +15,15 @@
 
                 <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/btn_change_image" android:layout_centerHorizontal="true" android:layout_marginTop="8dp" android:text="ASHA Name" android:textSize="18sp" android:textStyle="bold" />
 
-                <TextView android:id="@+id/tvPatientId" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPatientName" android:layout_centerHorizontal="true" android:layout_marginTop="4dp" android:text="ASHA ID: --" android:textSize="14sp" />
+                <TextView android:id="@+id/tvPatientId" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPatientName" android:layout_centerHorizontal="true" android:layout_marginTop="4dp" android:text="Supervisor ID: --" android:textSize="14sp" />
 
             </RelativeLayout>
 
             <LinearLayout android:id="@+id/card_view_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp" android:layout_margin="16dp" android:background="@drawable/rounded_edittext" android:visibility="visible">
 
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="ASHA ID" android:textStyle="bold" android:textSize="16sp" />
-                    <TextView android:id="@+id/tv_asha_id" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="ASHA001" android:textAlignment="textEnd" android:textSize="16sp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Supervisor ID" android:textStyle="bold" android:textSize="16sp" />
+                    <TextView android:id="@+id/tv_asha_id" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="SUPERVISOR001" android:textAlignment="textEnd" android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
@@ -32,7 +32,7 @@
                 </LinearLayout>
 
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Age" android:textStyle="bold" android:textSize="16sp" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Date of Birth" android:textStyle="bold" android:textSize="16sp" />
                     <TextView android:id="@+id/tv_age" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="--" android:textAlignment="textEnd" android:textSize="16sp" />
                 </LinearLayout>
 
@@ -60,27 +60,22 @@
                     <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Taluka" android:textStyle="bold" android:textSize="16sp" />
                     <TextView android:id="@+id/tv_taluka" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="--" android:textAlignment="textEnd" android:textSize="16sp" />
                 </LinearLayout>
-
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="8dp">
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Aadhar Number" android:textStyle="bold" android:textSize="16sp" />
-                    <TextView android:id="@+id/tv_aadhar_number" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="--" android:textAlignment="textEnd" android:textSize="16sp" />
-                </LinearLayout>
             </LinearLayout>
 
             <!-- FORM VIEW FOR EDIT MODE -->
             <LinearLayout android:id="@+id/form_view_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp" android:layout_margin="16dp" android:visibility="gone">
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ASHA ID" android:textStyle="bold" android:textSize="16sp" android:layout_marginBottom="8dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Supervisor ID" android:textStyle="bold" android:textSize="16sp" android:layout_marginBottom="8dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
 
-                <EditText android:id="@+id/et_asha_id" android:layout_width="match_parent" android:layout_height="56dp" android:hint="ASHA ID" android:inputType="text" android:enabled="false" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" />
+                <EditText android:id="@+id/et_asha_id" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Supervisor ID" android:inputType="text" android:enabled="false" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" />
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Full Name" android:textStyle="bold" android:textSize="16sp" android:layout_marginTop="20dp" android:layout_marginBottom="8dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
 
                 <EditText android:id="@+id/et_full_name" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Full Name" android:inputType="text" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" />
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Age" android:textStyle="bold" android:textSize="16sp" android:layout_marginTop="20dp" android:layout_marginBottom="8dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Date of Birth" android:textStyle="bold" android:textSize="16sp" android:layout_marginTop="20dp" android:layout_marginBottom="8dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
 
-                <EditText android:id="@+id/et_age" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Age" android:inputType="number" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" />
+                <EditText android:id="@+id/et_age" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Date of Birth" android:inputType="text" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" android:enabled="false" />
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gender" android:textStyle="bold" android:textSize="16sp" android:layout_marginTop="20dp" android:layout_marginBottom="8dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
 
@@ -101,10 +96,6 @@
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Taluka" android:textStyle="bold" android:textSize="16sp" android:layout_marginTop="20dp" android:layout_marginBottom="8dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
 
                 <EditText android:id="@+id/et_taluka" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Taluka" android:inputType="text" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" />
-
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Aadhar Number" android:textStyle="bold" android:textSize="16sp" android:layout_marginTop="20dp" android:layout_marginBottom="8dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
-
-                <EditText android:id="@+id/et_aadhar_number" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Aadhar Number" android:inputType="number" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

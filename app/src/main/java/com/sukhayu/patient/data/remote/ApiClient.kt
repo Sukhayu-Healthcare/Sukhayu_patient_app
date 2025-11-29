@@ -5,7 +5,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
 
-    private const val BASE_URL = "https://sukhayu-backend.onrender.com/api/v1/patient/v2/"
+    // ✅ Added trailing slash - REQUIRED by Retrofit
+    private const val BASE_URL = "https://sukhayu-backend.onrender.com/api/v1/"
 
     val retrofit: ApiService by lazy {
         Retrofit.Builder()

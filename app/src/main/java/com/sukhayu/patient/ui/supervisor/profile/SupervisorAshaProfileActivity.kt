@@ -1,5 +1,6 @@
 package com.sukhayu.patient.ui.supervisor.profile
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,12 +11,15 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
-import com.sukhayu.patient.data.remote.AshaDetailsResponse
+import com.sukhayu.patient.data.remote.SupervisorProfile
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.ui.login.LoginActivity
+import com.sukhayu.patient.utils.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AshaProfileActivity : AppCompatActivity() {
 
@@ -40,7 +44,6 @@ class AshaProfileActivity : AppCompatActivity() {
     private lateinit var tvVillage: TextView
     private lateinit var tvDistrict: TextView
     private lateinit var tvTaluka: TextView
-    private lateinit var tvAadhar: TextView
 
     // Form Fields
     private lateinit var etFullName: EditText
@@ -51,7 +54,6 @@ class AshaProfileActivity : AppCompatActivity() {
     private lateinit var etVillage: EditText
     private lateinit var etDistrict: EditText
     private lateinit var etTaluka: EditText
-    private lateinit var etAadhar: EditText
 
     // Buttons
     private lateinit var btnEdit: Button
@@ -66,9 +68,14 @@ class AshaProfileActivity : AppCompatActivity() {
         }
     }
 
+    private var selectedDateOfBirth: String? = null  // Store selected DOB in yyyy-MM-dd format
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_supervisor_profile)
+
+        // Initialize TokenManager
+        TokenManager.init(this)
 
         initViews()
         setFieldsEnabled(false)
@@ -94,7 +101,6 @@ class AshaProfileActivity : AppCompatActivity() {
         tvVillage = findViewById(R.id.tv_village)
         tvDistrict = findViewById(R.id.tv_district)
         tvTaluka = findViewById(R.id.tv_taluka)
-        tvAadhar = findViewById(R.id.tv_aadhar_number)
 
         etFullName = findViewById(R.id.et_full_name)
         etAge = findViewById(R.id.et_age)
@@ -104,14 +110,14 @@ class AshaProfileActivity : AppCompatActivity() {
         etVillage = findViewById(R.id.et_village)
         etDistrict = findViewById(R.id.et_district)
         etTaluka = findViewById(R.id.et_taluka)
-        etAadhar = findViewById(R.id.et_aadhar_number)
 
         btnEdit = findViewById(R.id.btn_edit)
         btnLogout = findViewById(R.id.btn_logout)
 
-        etAge.inputType = InputType.TYPE_CLASS_NUMBER
+        etAge.inputType = InputType.TYPE_NULL  // Disable keyboard input
+        etAge.isFocusable = false
+        etAge.isClickable = true
         etPhoneNo.inputType = InputType.TYPE_CLASS_NUMBER
-        etAadhar.inputType = InputType.TYPE_CLASS_NUMBER
 
         val genders = listOf("Male", "Female", "Other")
         spinnerGender.adapter = ArrayAdapter(
@@ -119,92 +125,228 @@ class AshaProfileActivity : AppCompatActivity() {
             android.R.layout.simple_spinner_item,
             genders
         )
+        
+        // Set default to Female and disable
+        spinnerGender.setSelection(1) // Index 1 = "Female"
+        spinnerGender.isEnabled = false
+
+        // Set click listener for date picker
+        etAge.setOnClickListener {
+            if (etAge.isEnabled) {
+                showDatePicker()
+            }
+        }
+    }
+
+    // Show date picker dialog with spinner mode for easier year selection
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        
+        // If there's a selected date, use it, otherwise default to 30 years ago
+        if (selectedDateOfBirth != null) {
+            try {
+                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val date = sdf.parse(selectedDateOfBirth!!)
+                if (date != null) {
+                    calendar.time = date
+                }
+            } catch (e: Exception) {
+                Log.e("AshaProfile", "Error parsing selected date", e)
+            }
+        } else {
+            // Default to 30 years ago for easier selection
+            calendar.add(Calendar.YEAR, -30)
+        }
+
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        // Use DatePickerDialog with spinner style
+        val datePickerDialog = DatePickerDialog(
+            this,
+            android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+            { _, selectedYear, selectedMonth, selectedDay ->
+                // Format selected date as yyyy-MM-dd for backend
+                selectedDateOfBirth = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
+                
+                // Format for display as "15 May 1990"
+                val displayCalendar = Calendar.getInstance()
+                displayCalendar.set(selectedYear, selectedMonth, selectedDay)
+                val displayFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                etAge.setText(displayFormat.format(displayCalendar.time))
+                
+                Log.d("AshaProfile", "Selected DOB: $selectedDateOfBirth")
+            },
+            year,
+            month,
+            day
+        )
+
+        // Set date range: min 100 years ago, max today
+        val minDate = Calendar.getInstance()
+        minDate.add(Calendar.YEAR, -100)
+        datePickerDialog.datePicker.minDate = minDate.timeInMillis
+        datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
+        
+        // Use spinner mode instead of calendar for easier year selection
+        try {
+            datePickerDialog.datePicker.calendarViewShown = false
+            datePickerDialog.datePicker.spinnersShown = true
+        } catch (e: Exception) {
+            Log.e("AshaProfile", "Could not set spinner mode", e)
+        }
+        
+        datePickerDialog.show()
     }
 
     // ------------------ LOAD DATA ------------------
     private fun loadData() {
-        val ashaId = intent.getStringExtra("ashaId")
-        val token = getSharedPreferences("auth", MODE_PRIVATE)
-            .getString("token", null)
+        // Get token from TokenManager (initialized in onCreate)
+        val token = TokenManager.getToken()
 
         Log.d("AshaProfile", "=== API CALL DEBUG ===")
-        Log.d("AshaProfile", "ASHA ID: $ashaId")
-        Log.d("AshaProfile", "Token exists: ${token != null}")
+        Log.d("AshaProfile", "Token exists: ${token.isNotEmpty()}")
         Log.d("AshaProfile", "Token value: $token")
-        Log.d("AshaProfile", "Full URL will be: ${ApiClient.retrofit.javaClass.name}")
 
-        if (ashaId == null || token == null) {
-            toast("Missing ASHA ID or authentication token")
+        if (token.isEmpty()) {
+            toast("Missing authentication token")
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
             return
         }
 
-        val call = ApiClient.retrofit.getAshaDetails("Bearer $token", ashaId)
+        // Call GET /asha/profile (returns profile of logged-in user)
+        val authHeader = "Bearer $token"
+        val call = ApiClient.retrofit.getSupervisorProfile(authHeader)
+
         Log.d("AshaProfile", "Request URL: ${call.request().url}")
+        Log.d("AshaProfile", "Authorization header: $authHeader")
 
-        call.enqueue(object : Callback<AshaDetailsResponse> {
+        call.enqueue(object : Callback<SupervisorProfile> {
+            override fun onResponse(
+                call: Call<SupervisorProfile>,
+                response: Response<SupervisorProfile>
+            ) {
+                Log.d("AshaProfile", "=== RESPONSE DEBUG ===")
+                Log.d("AshaProfile", "Response code: ${response.code()}")
+                Log.d("AshaProfile", "Response message: ${response.message()}")
+                Log.d("AshaProfile", "Response body: ${response.body()}")
 
-                override fun onResponse(
-                    call: Call<AshaDetailsResponse>,
-                    response: Response<AshaDetailsResponse>
-                ) {
-                    Log.d("AshaProfile", "=== RESPONSE DEBUG ===")
-                    Log.d("AshaProfile", "Response code: ${response.code()}")
-                    Log.d("AshaProfile", "Response message: ${response.message()}")
-                    Log.d("AshaProfile", "Response body: ${response.body()}")
-                    
-                    val errorBody = response.errorBody()?.string()
-                    Log.d("AshaProfile", "Error body: $errorBody")
+                val errorBody = response.errorBody()?.string()
+                Log.d("AshaProfile", "Error body: $errorBody")
 
-                    val body = response.body()
-                    if (response.isSuccessful && body != null) {
-                        displayAshaData(body)
-                        toast("Profile loaded successfully")
-                    } else {
-                        toast("Failed: ${response.code()} - $errorBody")
+                val body = response.body()
+                if (response.isSuccessful && body != null) {
+                    displayProfileData(body)
+                    toast("Profile loaded successfully")
+                } else {
+                    toast("Failed: ${response.code()} - $errorBody")
+                    if (response.code() == 401) {
+                        // Token invalid, redirect to login
+                        TokenManager.clearToken()
+                        startActivity(Intent(this@AshaProfileActivity, LoginActivity::class.java))
+                        finish()
                     }
                 }
+            }
 
-                override fun onFailure(call: Call<AshaDetailsResponse>, t: Throwable) {
-                    Log.e("AshaProfile", "=== API FAILURE ===", t)
-                    toast("Error: ${t.message}")
-                }
-            })
+            override fun onFailure(call: Call<SupervisorProfile>, t: Throwable) {
+                Log.e("AshaProfile", "=== API FAILURE ===", t)
+                toast("Error: ${t.message}")
+            }
+        })
     }
 
     // ------------------ DISPLAY IN UI ------------------
-    private fun displayAshaData(a: AshaDetailsResponse) {
-        tvName.text = a.user_name
-        tvId.text = "ASHA ID: ${a.asha_id}"
+    private fun displayProfileData(profile: SupervisorProfile) {
+        Log.d("AshaProfile", "=== DISPLAYING PROFILE ===")
+        Log.d("AshaProfile", "Full profile object: $profile")
+        Log.d("AshaProfile", "Date of Birth value: '${profile.date_of_birth}'")
+        Log.d("AshaProfile", "Date of Birth is null: ${profile.date_of_birth == null}")
+        Log.d("AshaProfile", "Date of Birth is empty: ${profile.date_of_birth?.isEmpty()}")
+        
+        tvName.text = profile.user_name
+        tvId.text = "Supervisor ID: ${profile.asha_id}"
 
-        tvAshaId.text = a.asha_id
-        tvFullName.text = a.user_name
-        tvPhoneNo.text = a.phone
-        tvVillage.text = a.village
-        tvDistrict.text = a.district
-        tvTaluka.text = a.taluka
+        // Display in card view
+        tvAshaId.text = profile.asha_id
+        tvFullName.text = profile.user_name
+        tvPhoneNo.text = profile.phone
+        tvVillage.text = profile.village
+        tvDistrict.text = profile.district
+        tvTaluka.text = profile.taluka
 
-        tvAge.text = "--"
-        tvGender.text = "--"
-        tvAadhar.text = "--"
+        // Show date of birth instead of age
+        val dob = if (profile.date_of_birth != null && profile.date_of_birth.isNotEmpty()) {
+            selectedDateOfBirth = profile.date_of_birth  // Store original format
+            formatDateOfBirth(profile.date_of_birth)
+        } else {
+            // Fallback: show account creation date
+            Log.d("AshaProfile", "No DOB found, using account creation date")
+            selectedDateOfBirth = null
+            formatDateOfBirth(profile.user_created_at)
+        }
+        
+        tvAge.text = dob  // Display DOB (field is named tvAge but shows DOB)
+        tvGender.text = "Female"    // Always show Female
+        
+        Log.d("AshaProfile", "Formatted DOB: '$dob'")
 
-        etAshaId.setText(a.asha_id)
-        etFullName.setText(a.user_name)
-        etPhoneNo.setText(a.phone)
-        etVillage.setText(a.village)
-        etDistrict.setText(a.district)
-        etTaluka.setText(a.taluka)
+        // Fill edit form fields
+        etAshaId.setText(profile.asha_id)
+        etFullName.setText(profile.user_name)
+        etPhoneNo.setText(profile.phone)
+        etVillage.setText(profile.village)
+        etDistrict.setText(profile.district)
+        etTaluka.setText(profile.taluka)
+        etAge.setText(dob)  // Show DOB in edit field too
+        
+        // Set gender to Female
+        spinnerGender.setSelection(1) // Index 1 = "Female"
 
-        // -------- NO GLIDE, NO NETWORK IMAGE LOADING --------
+        // Handle profile picture
         when {
-            a.profile_pic == null ->
+            profile.profile_pic == null ->
                 profileImage.setImageResource(R.drawable.sample_patient)
 
-            a.profile_pic.startsWith("content://", true) ||
-                    a.profile_pic.startsWith("file://", true) ->
-                profileImage.setImageURI(Uri.parse(a.profile_pic))
+            profile.profile_pic.startsWith("content://", true) ||
+                    profile.profile_pic.startsWith("file://", true) ->
+                profileImage.setImageURI(Uri.parse(profile.profile_pic))
 
             else ->
                 profileImage.setImageResource(R.drawable.sample_patient)
+        }
+    }
+
+    // Format date of birth for display - returns "15 May 1990" format
+    private fun formatDateOfBirth(dateString: String?): String {
+        if (dateString.isNullOrEmpty()) {
+            return "--"
+        }
+
+        try {
+            // Parse ISO date format: "1990-05-15" or "1990-05-15T00:00:00.000Z"
+            val sdf = if (dateString.contains("T")) {
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+            } else {
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            }
+            
+            val cleanDate = if (dateString.contains("T")) {
+                dateString.substring(0, 19)
+            } else {
+                dateString
+            }
+            
+            val birthDate = sdf.parse(cleanDate) ?: return "--"
+
+            // Format DOB for display as "15 May 1990"
+            val displayFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            return displayFormat.format(birthDate)
+        } catch (e: Exception) {
+            Log.e("AshaProfile", "Error formatting date: ${e.message}", e)
+            return "--"
         }
     }
 
@@ -216,12 +358,10 @@ class AshaProfileActivity : AppCompatActivity() {
 
         btnEdit.setOnClickListener {
             if (etFullName.isEnabled) {
-                updateCardViewData()
-                cardViewContainer.visibility = View.VISIBLE
-                formViewContainer.visibility = View.GONE
-                setFieldsEnabled(false)
-                btnEdit.text = "Edit"
+                // Save changes - call API
+                saveProfileChanges()
             } else {
+                // Switch to editable form
                 cardViewContainer.visibility = View.GONE
                 formViewContainer.visibility = View.VISIBLE
                 setFieldsEnabled(true)
@@ -230,11 +370,86 @@ class AshaProfileActivity : AppCompatActivity() {
         }
 
         btnLogout.setOnClickListener {
-            getSharedPreferences("auth", MODE_PRIVATE)
-                .edit().clear().apply()
+            TokenManager.clearToken()
+            getSharedPreferences("auth", MODE_PRIVATE).edit().clear().apply()
+
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
+    }
+
+    private fun saveProfileChanges() {
+        val token = TokenManager.getToken()
+        if (token.isEmpty()) {
+            toast("Authentication token missing")
+            return
+        }
+
+        // Disable button while saving
+        btnEdit.isEnabled = false
+        btnEdit.text = "Saving..."
+
+        // Prepare update data - send only non-empty fields
+        val updateData = mutableMapOf<String, Any?>()
+        
+        val newPhone = etPhoneNo.text.toString().trim()
+
+        // Only send phone if changed (other fields blocked by backend)
+        if (newPhone.isNotEmpty()) {
+            updateData["asha_phone"] = newPhone
+        }
+        
+        // Always send date_of_birth if selected
+        if (selectedDateOfBirth != null) {
+            updateData["date_of_birth"] = selectedDateOfBirth
+        }
+
+        Log.d("AshaProfile", "Sending update: $updateData")
+
+        if (updateData.isEmpty()) {
+            btnEdit.isEnabled = true
+            btnEdit.text = "Save"
+            toast("No changes to save")
+            return
+        }
+
+        val authHeader = "Bearer $token"
+        ApiClient.retrofit.updateSupervisorProfile(authHeader, updateData)
+            .enqueue(object : Callback<Map<String, Any>> {
+                override fun onResponse(
+                    call: Call<Map<String, Any>>,
+                    response: Response<Map<String, Any>>
+                ) {
+                    btnEdit.isEnabled = true
+                    
+                    Log.d("AshaProfile", "Update response code: ${response.code()}")
+                    Log.d("AshaProfile", "Update response body: ${response.body()}")
+                    
+                    if (response.isSuccessful) {
+                        toast("Profile updated successfully")
+                        
+                        // Refresh profile data
+                        cardViewContainer.visibility = View.VISIBLE
+                        formViewContainer.visibility = View.GONE
+                        setFieldsEnabled(false)
+                        btnEdit.text = "Edit"
+                        
+                        loadData()
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        Log.e("AshaProfile", "Update failed: $errorBody")
+                        toast("Failed to update: ${response.code()}")
+                        btnEdit.text = "Save"
+                    }
+                }
+
+                override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
+                    btnEdit.isEnabled = true
+                    btnEdit.text = "Save"
+                    Log.e("AshaProfile", "Update error", t)
+                    toast("Error: ${t.message}")
+                }
+            })
     }
 
     private fun updateCardViewData() {
@@ -245,19 +460,17 @@ class AshaProfileActivity : AppCompatActivity() {
         tvVillage.text = etVillage.text
         tvDistrict.text = etDistrict.text
         tvTaluka.text = etTaluka.text
-        tvAadhar.text = etAadhar.text
     }
 
-    private fun setFieldsEnabled(b: Boolean) {
-        etFullName.isEnabled = b
-        etAge.isEnabled = b
-        spinnerGender.isEnabled = b
-        etPhoneNo.isEnabled = b
-        etVillage.isEnabled = b
-        etDistrict.isEnabled = b
-        etTaluka.isEnabled = b
-        etAadhar.isEnabled = b
-        etAshaId.isEnabled = false
+    private fun setFieldsEnabled(enabled: Boolean) {
+        etFullName.isEnabled = false  // Name can't be edited (blocked by backend)
+        etAge.isEnabled = enabled     // DOB picker
+        spinnerGender.isEnabled = false  // Gender always disabled
+        etPhoneNo.isEnabled = enabled    // Phone can be edited
+        etVillage.isEnabled = false      // Village can't be edited (blocked by backend)
+        etDistrict.isEnabled = false     // District can't be edited (blocked by backend)
+        etTaluka.isEnabled = false       // Taluka can't be edited (blocked by backend)
+        etAshaId.isEnabled = false       // ID never editable
     }
 
     private fun toast(msg: String) {
