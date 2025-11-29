@@ -73,6 +73,18 @@ data class AshaListResponse(
     val ashaWorkers: List<AshaWorker>
 )
 
+data class SupervisorProfile(
+    val user_id: String,
+    val user_name: String,
+    val phone: String,
+    val user_role: String,
+    val asha_id: String,
+    val village: String,
+    val district: String,
+    val taluka: String,
+    val profile_pic: String?
+)
+
 interface ApiService {
 
     @POST("login")
@@ -97,4 +109,9 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body body: PatientRegistrationRequest
     ): Call<PatientRegistrationResponse>
+
+    @GET("asha/profile")
+    fun getSupervisorProfile(
+        @Header("Authorization") token: String
+    ): Call<SupervisorProfile>
 }

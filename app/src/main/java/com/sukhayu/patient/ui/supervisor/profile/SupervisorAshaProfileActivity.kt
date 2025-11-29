@@ -21,6 +21,11 @@ class AshaProfileActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_ASHA_ID = "ashaId"
         const val EXTRA_ASHA_NAME = "ashaName"
+        const val EXTRA_USER_ID = "userId"
+        const val EXTRA_PHONE = "phone"
+        const val EXTRA_VILLAGE = "village"
+        const val EXTRA_DISTRICT = "district"
+        const val EXTRA_TALUKA = "taluka"
         const val EXTRA_ROLE = "role"
     }
 
@@ -88,15 +93,20 @@ class AshaProfileActivity : AppCompatActivity() {
     private fun loadSampleData() {
         val ashaId = intent.getStringExtra(EXTRA_ASHA_ID) ?: "ASHA001"
         val ashaName = intent.getStringExtra(EXTRA_ASHA_NAME) ?: "Priya Sharma"
+        val userId = intent.getStringExtra(EXTRA_USER_ID) ?: "USR001"
+        val phone = intent.getStringExtra(EXTRA_PHONE) ?: "9876543210"
+        val village = intent.getStringExtra(EXTRA_VILLAGE) ?: "Nashik Village"
+        val district = intent.getStringExtra(EXTRA_DISTRICT) ?: "Nashik"
+        val taluka = intent.getStringExtra(EXTRA_TALUKA) ?: "Nashik Taluka"
 
         etAshaId.setText(ashaId)
         etFullName.setText(ashaName)
+        etPhoneNo.setText(phone)
+        etVillage.setText(village)
+        etDistrict.setText(district)
+        etTaluka.setText(taluka)
         etAge.setText("28")
-        spinnerGender.setSelection(0) // Male
-        etPhoneNo.setText("9876543210")
-        etVillage.setText("Nashik Village")
-        etDistrict.setText("Nashik")
-        etTaluka.setText("Nashik Taluka")
+        spinnerGender.setSelection(0)
         etAadharNumber.setText("123456789012")
         profileImage.setImageResource(R.drawable.sample_patient)
     }

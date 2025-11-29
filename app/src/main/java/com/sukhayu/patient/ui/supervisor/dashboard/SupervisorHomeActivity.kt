@@ -5,12 +5,18 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.card.MaterialCardView
 import com.sukhayu.patient.R
+import com.sukhayu.patient.data.remote.ApiClient
+import com.sukhayu.patient.data.remote.SupervisorProfile
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity
 import com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SupervisorHomeActivity : AppCompatActivity() {
 
@@ -25,6 +31,8 @@ class SupervisorHomeActivity : AppCompatActivity() {
     private lateinit var cardCreateSurvey: MaterialCardView
     private lateinit var cardCreateDrive: MaterialCardView
     private lateinit var cardProfile: MaterialCardView
+
+    private var supervisorProfile: SupervisorProfile? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +57,47 @@ class SupervisorHomeActivity : AppCompatActivity() {
     }
 
     private fun loadProfile() {
-        val name = "Dummy Supervisor"
-        val id = "SUP001"
+        val sharedPref = getSharedPreferences("auth", MODE_PRIVATE)
+        val token = sharedPref.getString("token", null)
+        val userName = sharedPref.getString("user_name", "Supervisor")
 
-        tvPatientName.text = name
-        tvPatientId.text = "Supervisor ID: $id"
+        if (token != null) {
+            ApiClient.retrofit.getSupervisorProfile("Bearer $token")
+                .enqueue(object : Callback<SupervisorProfile> {
+                    override fun onResponse(
+                        call: Call<SupervisorProfile>,
+                        response: Response<SupervisorProfile>
+                    ) {
+                        if (response.isSuccessful && response.body() != null) {
+                            supervisorProfile = response.body()!!
+                            val profile = supervisorProfile!!
+                            tvPatientName.text = profile.user_name
+                            tvPatientId.text = "Supervisor ID: ${profile.asha_id}"
+                            if (profile.profile_pic.isNullOrEmpty()) {
+                                imgProfile.setImageResource(R.drawable.sample_patient)
+                            }
+                        } else {
+                            setDefaultProfile(userName)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<SupervisorProfile>, t: Throwable) {
+                        Toast.makeText(
+                            this@SupervisorHomeActivity,
+                            "Failed to load profile",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        setDefaultProfile(userName)
+                    }
+                })
+        } else {
+            setDefaultProfile(userName)
+        }
+    }
+
+    private fun setDefaultProfile(name: String?) {
+        tvPatientName.text = name ?: "Supervisor"
+        tvPatientId.text = "Supervisor ID: N/A"
         imgProfile.setImageResource(R.drawable.sample_patient)
     }
 
@@ -91,9 +135,16 @@ class SupervisorHomeActivity : AppCompatActivity() {
 
     private fun navigateToProfile() {
         val intent = Intent(this, AshaProfileActivity::class.java)
-        intent.putExtra(AshaProfileActivity.EXTRA_ASHA_ID, "SUP001")
-        intent.putExtra(AshaProfileActivity.EXTRA_ASHA_NAME, "Dummy Supervisor")
-        intent.putExtra(AshaProfileActivity.EXTRA_ROLE, "supervisor")
+        if (supervisorProfile != null) {
+            intent.putExtra(AshaProfileActivity.EXTRA_ASHA_ID, supervisorProfile!!.asha_id)
+            intent.putExtra(AshaProfileActivity.EXTRA_ASHA_NAME, supervisorProfile!!.user_name)
+            intent.putExtra(AshaProfileActivity.EXTRA_USER_ID, supervisorProfile!!.user_id)
+            intent.putExtra(AshaProfileActivity.EXTRA_PHONE, supervisorProfile!!.phone)
+            intent.putExtra(AshaProfileActivity.EXTRA_VILLAGE, supervisorProfile!!.village)
+            intent.putExtra(AshaProfileActivity.EXTRA_DISTRICT, supervisorProfile!!.district)
+            intent.putExtra(AshaProfileActivity.EXTRA_TALUKA, supervisorProfile!!.taluka)
+            intent.putExtra(AshaProfileActivity.EXTRA_ROLE, "supervisor")
+        }
         startActivity(intent)
     }
 

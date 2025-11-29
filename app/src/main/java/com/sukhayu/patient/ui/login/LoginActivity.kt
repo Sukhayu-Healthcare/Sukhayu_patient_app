@@ -2,6 +2,8 @@ package com.sukhayu.patient.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.InputType
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -28,6 +30,10 @@ class LoginActivity : AppCompatActivity() {
         val etUsername = findViewById<EditText>(R.id.etUsername)
         val etPassword = findViewById<EditText>(R.id.etOtp)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
+
+        // Set username field to number input with 10 digit limit
+        etUsername.inputType = InputType.TYPE_CLASS_NUMBER
+        etUsername.filters = arrayOf(InputFilter.LengthFilter(10))
 
         btnLogin.setOnClickListener {
             val username = etUsername.text.toString().trim()
