@@ -60,6 +60,7 @@ class SupervisorHomeActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("auth", MODE_PRIVATE)
         val token = sharedPref.getString("token", null)
         val userName = sharedPref.getString("user_name", "Supervisor")
+        val userId = sharedPref.getString("user_id", "N/A")
 
         if (token != null) {
             ApiClient.retrofit.getSupervisorProfile("Bearer $token")
@@ -77,7 +78,7 @@ class SupervisorHomeActivity : AppCompatActivity() {
                                 imgProfile.setImageResource(R.drawable.sample_patient)
                             }
                         } else {
-                            setDefaultProfile(userName)
+                            setDefaultProfile(userName, userId)
                         }
                     }
 
@@ -87,17 +88,17 @@ class SupervisorHomeActivity : AppCompatActivity() {
                             "Failed to load profile",
                             Toast.LENGTH_SHORT
                         ).show()
-                        setDefaultProfile(userName)
+                        setDefaultProfile(userName, userId)
                     }
                 })
         } else {
-            setDefaultProfile(userName)
+            setDefaultProfile(userName, userId)
         }
     }
 
-    private fun setDefaultProfile(name: String?) {
+    private fun setDefaultProfile(name: String?, id: String?) {
         tvPatientName.text = name ?: "Supervisor"
-        tvPatientId.text = "Supervisor ID: N/A"
+        tvPatientId.text = "Supervisor ID: ${id ?: "N/A"}"
         imgProfile.setImageResource(R.drawable.sample_patient)
     }
 
@@ -136,14 +137,14 @@ class SupervisorHomeActivity : AppCompatActivity() {
     private fun navigateToProfile() {
         val intent = Intent(this, AshaProfileActivity::class.java)
         if (supervisorProfile != null) {
-            intent.putExtra(AshaProfileActivity.EXTRA_ASHA_ID, supervisorProfile!!.asha_id)
-            intent.putExtra(AshaProfileActivity.EXTRA_ASHA_NAME, supervisorProfile!!.user_name)
-            intent.putExtra(AshaProfileActivity.EXTRA_USER_ID, supervisorProfile!!.user_id)
-            intent.putExtra(AshaProfileActivity.EXTRA_PHONE, supervisorProfile!!.phone)
-            intent.putExtra(AshaProfileActivity.EXTRA_VILLAGE, supervisorProfile!!.village)
-            intent.putExtra(AshaProfileActivity.EXTRA_DISTRICT, supervisorProfile!!.district)
-            intent.putExtra(AshaProfileActivity.EXTRA_TALUKA, supervisorProfile!!.taluka)
-            intent.putExtra(AshaProfileActivity.EXTRA_ROLE, "supervisor")
+            intent.putExtra("ashaId", supervisorProfile!!.asha_id)
+            intent.putExtra("ashaName", supervisorProfile!!.user_name)
+            intent.putExtra("userId", supervisorProfile!!.user_id)
+            intent.putExtra("phone", supervisorProfile!!.phone)
+            intent.putExtra("village", supervisorProfile!!.village)
+            intent.putExtra("district", supervisorProfile!!.district)
+            intent.putExtra("taluka", supervisorProfile!!.taluka)
+            intent.putExtra("role", "supervisor")
         }
         startActivity(intent)
     }

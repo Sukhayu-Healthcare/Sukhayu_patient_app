@@ -4,33 +4,45 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.Toast
+import android.util.Log
+import android.view.View
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
+import com.sukhayu.patient.data.remote.AshaDetailsResponse
+import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.ui.login.LoginActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class AshaProfileActivity : AppCompatActivity() {
 
-    companion object {
-        const val EXTRA_ASHA_ID = "ashaId"
-        const val EXTRA_ASHA_NAME = "ashaName"
-        const val EXTRA_USER_ID = "userId"
-        const val EXTRA_PHONE = "phone"
-        const val EXTRA_VILLAGE = "village"
-        const val EXTRA_DISTRICT = "district"
-        const val EXTRA_TALUKA = "taluka"
-        const val EXTRA_ROLE = "role"
-    }
+    private var selectedImageUri: Uri? = null
 
+    // Header Views
+    private lateinit var tvName: TextView
+    private lateinit var tvId: TextView
     private lateinit var profileImage: ImageView
     private lateinit var btnChangeImage: ImageButton
+
+    // View containers
+    private lateinit var cardViewContainer: LinearLayout
+    private lateinit var formViewContainer: LinearLayout
+
+    // Display TextViews
+    private lateinit var tvAshaId: TextView
+    private lateinit var tvFullName: TextView
+    private lateinit var tvAge: TextView
+    private lateinit var tvGender: TextView
+    private lateinit var tvPhoneNo: TextView
+    private lateinit var tvVillage: TextView
+    private lateinit var tvDistrict: TextView
+    private lateinit var tvTaluka: TextView
+    private lateinit var tvAadhar: TextView
+
+    // Form Fields
     private lateinit var etFullName: EditText
     private lateinit var etAge: EditText
     private lateinit var spinnerGender: Spinner
@@ -39,35 +51,51 @@ class AshaProfileActivity : AppCompatActivity() {
     private lateinit var etVillage: EditText
     private lateinit var etDistrict: EditText
     private lateinit var etTaluka: EditText
-    private lateinit var etAadharNumber: EditText
+    private lateinit var etAadhar: EditText
+
+    // Buttons
     private lateinit var btnEdit: Button
     private lateinit var btnLogout: Button
 
-    private var selectedImageUri: Uri? = null
-
-    private val imagePickerLauncher = registerForActivityResult(
+    private val imagePicker = registerForActivityResult(
         ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let {
-            selectedImageUri = it
-            profileImage.setImageURI(it)
-            Toast.makeText(this, "Profile picture updated (not saved to DB)", Toast.LENGTH_SHORT).show()
+    ) { uri ->
+        if (uri != null) {
+            selectedImageUri = uri
+            profileImage.setImageURI(uri)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_asha_profile)
+        setContentView(R.layout.activity_supervisor_profile)
 
         initViews()
-        loadSampleData()
         setFieldsEnabled(false)
+        loadData()
         setupListeners()
     }
 
     private fun initViews() {
+        tvName = findViewById(R.id.tvPatientName)
+        tvId = findViewById(R.id.tvPatientId)
+
         profileImage = findViewById(R.id.profile_image)
         btnChangeImage = findViewById(R.id.btn_change_image)
+
+        cardViewContainer = findViewById(R.id.card_view_container)
+        formViewContainer = findViewById(R.id.form_view_container)
+
+        tvAshaId = findViewById(R.id.tv_asha_id)
+        tvFullName = findViewById(R.id.tv_full_name)
+        tvAge = findViewById(R.id.tv_age)
+        tvGender = findViewById(R.id.tv_gender)
+        tvPhoneNo = findViewById(R.id.tv_phone_no)
+        tvVillage = findViewById(R.id.tv_village)
+        tvDistrict = findViewById(R.id.tv_district)
+        tvTaluka = findViewById(R.id.tv_taluka)
+        tvAadhar = findViewById(R.id.tv_aadhar_number)
+
         etFullName = findViewById(R.id.et_full_name)
         etAge = findViewById(R.id.et_age)
         spinnerGender = findViewById(R.id.spinner_gender)
@@ -76,139 +104,163 @@ class AshaProfileActivity : AppCompatActivity() {
         etVillage = findViewById(R.id.et_village)
         etDistrict = findViewById(R.id.et_district)
         etTaluka = findViewById(R.id.et_taluka)
-        etAadharNumber = findViewById(R.id.et_aadhar_number)
+        etAadhar = findViewById(R.id.et_aadhar_number)
+
         btnEdit = findViewById(R.id.btn_edit)
         btnLogout = findViewById(R.id.btn_logout)
 
         etAge.inputType = InputType.TYPE_CLASS_NUMBER
         etPhoneNo.inputType = InputType.TYPE_CLASS_NUMBER
-        etAadharNumber.inputType = InputType.TYPE_CLASS_NUMBER
+        etAadhar.inputType = InputType.TYPE_CLASS_NUMBER
 
         val genders = listOf("Male", "Female", "Other")
-        val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genders)
-        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerGender.adapter = genderAdapter
+        spinnerGender.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            genders
+        )
     }
 
-    private fun loadSampleData() {
-        val ashaId = intent.getStringExtra(EXTRA_ASHA_ID) ?: "ASHA001"
-        val ashaName = intent.getStringExtra(EXTRA_ASHA_NAME) ?: "Priya Sharma"
-        val userId = intent.getStringExtra(EXTRA_USER_ID) ?: "USR001"
-        val phone = intent.getStringExtra(EXTRA_PHONE) ?: "9876543210"
-        val village = intent.getStringExtra(EXTRA_VILLAGE) ?: "Nashik Village"
-        val district = intent.getStringExtra(EXTRA_DISTRICT) ?: "Nashik"
-        val taluka = intent.getStringExtra(EXTRA_TALUKA) ?: "Nashik Taluka"
+    // ------------------ LOAD DATA ------------------
+    private fun loadData() {
+        val ashaId = intent.getStringExtra("ashaId")
+        val token = getSharedPreferences("auth", MODE_PRIVATE)
+            .getString("token", null)
 
-        etAshaId.setText(ashaId)
-        etFullName.setText(ashaName)
-        etPhoneNo.setText(phone)
-        etVillage.setText(village)
-        etDistrict.setText(district)
-        etTaluka.setText(taluka)
-        etAge.setText("28")
-        spinnerGender.setSelection(0)
-        etAadharNumber.setText("123456789012")
-        profileImage.setImageResource(R.drawable.sample_patient)
+        Log.d("AshaProfile", "=== API CALL DEBUG ===")
+        Log.d("AshaProfile", "ASHA ID: $ashaId")
+        Log.d("AshaProfile", "Token exists: ${token != null}")
+        Log.d("AshaProfile", "Token value: $token")
+        Log.d("AshaProfile", "Full URL will be: ${ApiClient.retrofit.javaClass.name}")
+
+        if (ashaId == null || token == null) {
+            toast("Missing ASHA ID or authentication token")
+            return
+        }
+
+        val call = ApiClient.retrofit.getAshaDetails("Bearer $token", ashaId)
+        Log.d("AshaProfile", "Request URL: ${call.request().url}")
+
+        call.enqueue(object : Callback<AshaDetailsResponse> {
+
+                override fun onResponse(
+                    call: Call<AshaDetailsResponse>,
+                    response: Response<AshaDetailsResponse>
+                ) {
+                    Log.d("AshaProfile", "=== RESPONSE DEBUG ===")
+                    Log.d("AshaProfile", "Response code: ${response.code()}")
+                    Log.d("AshaProfile", "Response message: ${response.message()}")
+                    Log.d("AshaProfile", "Response body: ${response.body()}")
+                    
+                    val errorBody = response.errorBody()?.string()
+                    Log.d("AshaProfile", "Error body: $errorBody")
+
+                    val body = response.body()
+                    if (response.isSuccessful && body != null) {
+                        displayAshaData(body)
+                        toast("Profile loaded successfully")
+                    } else {
+                        toast("Failed: ${response.code()} - $errorBody")
+                    }
+                }
+
+                override fun onFailure(call: Call<AshaDetailsResponse>, t: Throwable) {
+                    Log.e("AshaProfile", "=== API FAILURE ===", t)
+                    toast("Error: ${t.message}")
+                }
+            })
     }
 
+    // ------------------ DISPLAY IN UI ------------------
+    private fun displayAshaData(a: AshaDetailsResponse) {
+        tvName.text = a.user_name
+        tvId.text = "ASHA ID: ${a.asha_id}"
+
+        tvAshaId.text = a.asha_id
+        tvFullName.text = a.user_name
+        tvPhoneNo.text = a.phone
+        tvVillage.text = a.village
+        tvDistrict.text = a.district
+        tvTaluka.text = a.taluka
+
+        tvAge.text = "--"
+        tvGender.text = "--"
+        tvAadhar.text = "--"
+
+        etAshaId.setText(a.asha_id)
+        etFullName.setText(a.user_name)
+        etPhoneNo.setText(a.phone)
+        etVillage.setText(a.village)
+        etDistrict.setText(a.district)
+        etTaluka.setText(a.taluka)
+
+        // -------- NO GLIDE, NO NETWORK IMAGE LOADING --------
+        when {
+            a.profile_pic == null ->
+                profileImage.setImageResource(R.drawable.sample_patient)
+
+            a.profile_pic.startsWith("content://", true) ||
+                    a.profile_pic.startsWith("file://", true) ->
+                profileImage.setImageURI(Uri.parse(a.profile_pic))
+
+            else ->
+                profileImage.setImageResource(R.drawable.sample_patient)
+        }
+    }
+
+    // ------------------ BUTTON LISTENERS ------------------
     private fun setupListeners() {
         btnChangeImage.setOnClickListener {
-            imagePickerLauncher.launch("image/*")
+            imagePicker.launch("image/*")
         }
 
         btnEdit.setOnClickListener {
-            val enteringEditMode = !etFullName.isEnabled
-
-            if (enteringEditMode) {
+            if (etFullName.isEnabled) {
+                updateCardViewData()
+                cardViewContainer.visibility = View.VISIBLE
+                formViewContainer.visibility = View.GONE
+                setFieldsEnabled(false)
+                btnEdit.text = "Edit"
+            } else {
+                cardViewContainer.visibility = View.GONE
+                formViewContainer.visibility = View.VISIBLE
                 setFieldsEnabled(true)
                 btnEdit.text = "Save"
-                etFullName.requestFocus()
-            } else {
-                if (validateInputs()) {
-                    // TODO: persist changes to DB or API
-                    setFieldsEnabled(false)
-                    btnEdit.text = "Edit"
-                    Toast.makeText(this, "Profile saved (not persisted yet)", Toast.LENGTH_SHORT).show()
-                }
             }
         }
 
         btnLogout.setOnClickListener {
-            getSharedPreferences("auth", MODE_PRIVATE).edit().clear().apply()
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            getSharedPreferences("auth", MODE_PRIVATE)
+                .edit().clear().apply()
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
     }
 
-    private fun validateInputs(): Boolean {
-        val fullName = etFullName.text.toString().trim()
-        val age = etAge.text.toString().trim()
-        val phoneNo = etPhoneNo.text.toString().trim()
-        val village = etVillage.text.toString().trim()
-        val district = etDistrict.text.toString().trim()
-        val taluka = etTaluka.text.toString().trim()
-        val aadharNumber = etAadharNumber.text.toString().trim()
-
-        return when {
-            fullName.isEmpty() -> {
-                Toast.makeText(this, "Please enter full name.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            fullName.length < 3 -> {
-                Toast.makeText(this, "Name must be at least 3 characters.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            age.isEmpty() -> {
-                Toast.makeText(this, "Please enter age.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            age.toIntOrNull() == null || age.toInt() < 18 -> {
-                Toast.makeText(this, "Please enter a valid age (18+).", Toast.LENGTH_SHORT).show()
-                false
-            }
-            phoneNo.isEmpty() -> {
-                Toast.makeText(this, "Please enter phone number.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            phoneNo.length != 10 || !phoneNo.all { it.isDigit() } -> {
-                Toast.makeText(this, "Please enter a valid 10-digit phone number.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            village.isEmpty() -> {
-                Toast.makeText(this, "Please enter village.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            district.isEmpty() -> {
-                Toast.makeText(this, "Please enter district.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            taluka.isEmpty() -> {
-                Toast.makeText(this, "Please enter taluka.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            aadharNumber.isEmpty() -> {
-                Toast.makeText(this, "Please enter Aadhar number.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            aadharNumber.length != 12 || !aadharNumber.all { it.isDigit() } -> {
-                Toast.makeText(this, "Please enter a valid 12-digit Aadhar number.", Toast.LENGTH_SHORT).show()
-                false
-            }
-            else -> true
-        }
+    private fun updateCardViewData() {
+        tvFullName.text = etFullName.text
+        tvAge.text = etAge.text
+        tvGender.text = spinnerGender.selectedItem.toString()
+        tvPhoneNo.text = etPhoneNo.text
+        tvVillage.text = etVillage.text
+        tvDistrict.text = etDistrict.text
+        tvTaluka.text = etTaluka.text
+        tvAadhar.text = etAadhar.text
     }
 
-    private fun setFieldsEnabled(enabled: Boolean) {
-        etFullName.isEnabled = enabled
-        etAge.isEnabled = enabled
-        spinnerGender.isEnabled = enabled
-        etPhoneNo.isEnabled = enabled
-        etVillage.isEnabled = enabled
-        etDistrict.isEnabled = enabled
-        etTaluka.isEnabled = enabled
-        etAadharNumber.isEnabled = enabled
+    private fun setFieldsEnabled(b: Boolean) {
+        etFullName.isEnabled = b
+        etAge.isEnabled = b
+        spinnerGender.isEnabled = b
+        etPhoneNo.isEnabled = b
+        etVillage.isEnabled = b
+        etDistrict.isEnabled = b
+        etTaluka.isEnabled = b
+        etAadhar.isEnabled = b
         etAshaId.isEnabled = false
+    }
+
+    private fun toast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }

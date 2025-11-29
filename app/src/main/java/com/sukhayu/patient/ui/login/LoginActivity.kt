@@ -31,20 +31,20 @@ class LoginActivity : AppCompatActivity() {
         val etPassword = findViewById<EditText>(R.id.etOtp)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
 
-        // Set username field to number input with 10 digit limit
+        // Set phone number field to number input with 10 digit limit
         etUsername.inputType = InputType.TYPE_CLASS_NUMBER
         etUsername.filters = arrayOf(InputFilter.LengthFilter(10))
 
         btnLogin.setOnClickListener {
-            val username = etUsername.text.toString().trim()
+            val phoneNumber = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Enter username & password", Toast.LENGTH_SHORT).show()
+            if (phoneNumber.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Enter phone number & password", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val request = LoginRequest(username, password)
+            val request = LoginRequest(phoneNumber, password)
 
             ApiClient.retrofit.login(request).enqueue(object : Callback<Map<String, Any>> {
                 override fun onResponse(

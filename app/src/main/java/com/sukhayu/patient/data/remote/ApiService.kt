@@ -85,6 +85,19 @@ data class SupervisorProfile(
     val profile_pic: String?
 )
 
+data class AshaDetailsResponse(
+    val user_id: String,
+    val user_name: String,
+    val phone: String,
+    val user_role: String,
+    val asha_id: String,
+    val village: String,
+    val district: String,
+    val taluka: String,
+    val profile_pic: String?,
+    val supervisor_id: String?
+)
+
 interface ApiService {
 
     @POST("login")
@@ -114,4 +127,11 @@ interface ApiService {
     fun getSupervisorProfile(
         @Header("Authorization") token: String
     ): Call<SupervisorProfile>
+
+    @GET("asha/details/{ashaId}")
+    fun getAshaDetails(
+        @Header("Authorization") token: String,
+        @Path("ashaId") ashaId: String
+    ): Call<AshaDetailsResponse>
+
 }
