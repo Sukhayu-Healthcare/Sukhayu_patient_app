@@ -8,39 +8,35 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.AshaWorker
 
-class AshaAdapter(private var ashaWorkers: List<AshaWorker>) : RecyclerView.Adapter<AshaAdapter.AshaViewHolder>() {
+class AshaAdapter(private var ashaList: List<AshaWorker>) : RecyclerView.Adapter<AshaAdapter.AshaViewHolder>() {
+
+    class AshaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val tvAshaName: TextView = view.findViewById(R.id.tvAshaName)
+        val tvAshaPhone: TextView = view.findViewById(R.id.tvAshaPhone)
+        val tvAshaEmail: TextView = view.findViewById(R.id.tvAshaEmail)
+        val tvAshaArea: TextView = view.findViewById(R.id.tvAshaArea)
+        val tvAshaStatus: TextView = view.findViewById(R.id.tvAshaStatus)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AshaViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_asha_worker, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_asha_card, parent, false)
         return AshaViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: AshaViewHolder, position: Int) {
-        holder.bind(ashaWorkers[position])
+        val asha = ashaList[position]
+        holder.tvAshaName.text = asha.asha_name
+        holder.tvAshaPhone.text = "Phone: ${asha.asha_phone}"
+        holder.tvAshaEmail.text = "ID: ${asha.asha_id}"
+        holder.tvAshaArea.text = "Village: ${asha.village} | District: ${asha.district}"
+        holder.tvAshaStatus.text = "Active"
+        holder.tvAshaStatus.setBackgroundColor(android.graphics.Color.parseColor("#4CAF50"))
     }
 
-    override fun getItemCount(): Int = ashaWorkers.size
+    override fun getItemCount() = ashaList.size
 
-    fun updateData(newData: List<AshaWorker>) {
-        ashaWorkers = newData
+    fun updateData(newList: List<AshaWorker>) {
+        ashaList = newList
         notifyDataSetChanged()
-    }
-
-    inner class AshaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvName: TextView = itemView.findViewById(R.id.tvName)
-        private val tvPhone: TextView = itemView.findViewById(R.id.tvPhone)
-        private val tvVillage: TextView = itemView.findViewById(R.id.tvVillage)
-        private val tvDistrict: TextView = itemView.findViewById(R.id.tvDistrict)
-        private val tvTaluka: TextView = itemView.findViewById(R.id.tvTaluka)
-        private val tvRole: TextView = itemView.findViewById(R.id.tvRole)
-
-        fun bind(asha: AshaWorker) {
-            tvName.text = asha.name
-            tvPhone.text = "📱 ${asha.phone}"
-            tvVillage.text = "Village: ${asha.village}"
-            tvDistrict.text = "District: ${asha.district}"
-            tvTaluka.text = "Taluka: ${asha.taluka}"
-            tvRole.text = "Role: ${asha.role}"
-        }
     }
 }

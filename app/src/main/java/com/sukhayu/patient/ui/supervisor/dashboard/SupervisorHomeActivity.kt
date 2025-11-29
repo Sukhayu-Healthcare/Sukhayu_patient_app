@@ -14,6 +14,7 @@ import com.sukhayu.patient.data.remote.SupervisorProfile
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity
 import com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity
+import com.sukhayu.patient.ui.supervisor.ViewAshaDataActivity
 import com.sukhayu.patient.utils.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -161,8 +162,11 @@ class SupervisorHomeActivity : AppCompatActivity() {
     }
 
     private fun navigateToViewAshaData() {
-        // TODO: Replace with actual ViewAshaDataActivity
-        // startActivity(Intent(this, ViewAshaDataActivity::class.java))
+        val intent = Intent(this, ViewAshaDataActivity::class.java)
+        if (supervisorProfile != null) {
+            intent.putExtra("supervisor_id", supervisorProfile!!.asha_id)
+        }
+        startActivity(intent)
     }
 
     private fun navigateToCreateSurvey() {

@@ -1,6 +1,5 @@
 package com.sukhayu.patient.data.remote
 
-import com.sukhayu.patient.model.LoginResponse
 import com.sukhayu.patient.model.PatientRegistrationRequest
 import com.sukhayu.patient.model.PatientRegistrationResponse
 import retrofit2.Call
@@ -10,9 +9,10 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.PUT
+import retrofit2.http.Query
 
 data class LoginRequest(
-    val phone: String,      // FIXED → backend expects "phone"
+    val phone: String,
     val password: String
 )
 
@@ -31,17 +31,6 @@ data class LoginResponsePatient(
     val familyProfiles: List<Any>? = null
 )
 
-data class RegisterAshaRequest(
-    val name: String,
-    val password: String,
-    val phone: String,
-    val village: String,
-    val district: String,
-    val taluka: String,
-    val profilePic: String? = null,
-    val supervisorId: String
-)
-
 data class AshaInfo(
     val userId: String,
     val ashaId: String,
@@ -58,20 +47,16 @@ data class RegisterAshaResponse(
 
 data class AshaWorker(
     val asha_id: String,
-    val user_id: String,
-    val name: String,
-    val phone: String,
+    val asha_name: String,
+    val asha_phone: String,
     val village: String,
     val district: String,
     val taluka: String,
-    val profile_pic: String?,
-    val role: String,
-    val created_at: String
+    val profile_pic: String?
 )
 
 data class AshaListResponse(
-    val message: String,
-    val ashaWorkers: List<AshaWorker>
+    val ashas: List<AshaWorker>
 )
 
 data class SupervisorProfile(
@@ -79,13 +64,14 @@ data class SupervisorProfile(
     val user_name: String,
     val phone: String,
     val user_role: String,
+    val date_of_birth: String?,
+    val user_created_at: String,
     val asha_id: String,
     val village: String,
     val district: String,
     val taluka: String,
     val profile_pic: String?,
-    val date_of_birth: String?,  // ✅ This field receives DOB from backend
-    val user_created_at: String?  // Added to calculate age
+    val supervisor_id: String?
 )
 
 data class AshaDetailsResponse(
@@ -108,24 +94,6 @@ interface ApiService {
         @Body body: LoginRequest
     ): Call<Map<String, Any>>
 
-    @POST("asha/register-asha")
-    fun registerAsha(
-        @Header("Authorization") token: String,
-        @Body body: RegisterAshaRequest
-    ): Call<RegisterAshaResponse>
-
-    @GET("asha/list/{supervisorId}")
-    fun getAshaList(
-        @Header("Authorization") token: String,
-        @Path("supervisorId") supervisorId: String
-    ): Call<AshaListResponse>
-
-    @POST("asha/patient/register")
-    fun registerPatient(
-        @Header("Authorization") token: String,
-        @Body body: PatientRegistrationRequest
-    ): Call<PatientRegistrationResponse>
-
     @GET("asha/profile")
     fun getSupervisorProfile(
         @Header("Authorization") token: String
@@ -137,6 +105,23 @@ interface ApiService {
         @Body updateData: Map<String, Any?>
     ): Call<Map<String, Any>>
 
+    @POST("asha/register-asha")
+    fun registerAsha(
+        @Header("Authorization") token: String,
+        @Body body: RegisterAshaRequest
+    ): Call<RegisterAshaResponse>
+
+    @GET("asha/all-ashas")
+    fun getAshaList(
+        @Header("Authorization") token: String
+    ): Call<AshaListResponse>
+
+    @POST("asha/patient/register")
+    fun registerPatient(
+        @Header("Authorization") token: String,
+        @Body body: PatientRegistrationRequest
+    ): Call<PatientRegistrationResponse>
+
     @GET("asha/details/{ashaId}")
     fun getAshaDetails(
         @Header("Authorization") token: String,
@@ -146,7 +131,6 @@ interface ApiService {
     @GET("asha/patients/search")
     suspend fun searchPatients(
         @Header("Authorization") token: String,
-        @retrofit2.http.Query("q") query: String
+        @Query("q") query: String
     ): PatientSearchResponse
-
 }

@@ -389,44 +389,68 @@ class AshaProfileActivity : AppCompatActivity() {
         btnEdit.isEnabled = false
         btnEdit.text = "Saving..."
 
-        // Prepare update data - send only non-empty fields
+        // Prepare update data - phone, date_of_birth, and profile_pic are allowed
         val updateData = mutableMapOf<String, Any?>()
         
         val newPhone = etPhoneNo.text.toString().trim()
 
-        // Only send phone if changed (other fields blocked by backend)
-        if (newPhone.isNotEmpty()) {
-            updateData["asha_phone"] = newPhone
-        }
-        
-        // Always send date_of_birth if selected
-        if (selectedDateOfBirth != null) {
-            updateData["date_of_birth"] = selectedDateOfBirth
-        }
-
-        Log.d("AshaProfile", "Sending update: $updateData")
-
-        if (updateData.isEmpty()) {
+        // Validate phone
+        if (newPhone.isEmpty()) {
             btnEdit.isEnabled = true
             btnEdit.text = "Save"
-            toast("No changes to save")
+            toast("Phone number is required")
             return
         }
 
+        // Send allowed fields: asha_phone, date_of_birth, and asha_profile_pic
+        updateData["asha_phone"] = newPhone
+        
+        // Include date of birth if selected/changed
+        if (selectedDateOfBirth != null) {
+            updateData["date_of_birth"] = selectedDateOfBirth
+            Log.d("AshaProfile", "Including DOB in update: $selectedDateOfBirth")
+        }
+        
+        // Include profile pic if changed
+        if (selectedImageUri != null) {
+            updateData["asha_profile_pic"] = selectedImageUri.toString()
+        }
+
+        Log.d("AshaProfile", "=== SAVE DEBUG ===")
+        Log.d("AshaProfile", "Update data: $updateData")
+        Log.d("AshaProfile", "Token: $token")
+
         val authHeader = "Bearer $token"
-        ApiClient.retrofit.updateSupervisorProfile(authHeader, updateData)
-            .enqueue(object : Callback<Map<String, Any>> {
-                override fun onResponse(
-                    call: Call<Map<String, Any>>,
-                    response: Response<Map<String, Any>>
-                ) {
-                    btnEdit.isEnabled = true
-                    
-                    Log.d("AshaProfile", "Update response code: ${response.code()}")
-                    Log.d("AshaProfile", "Update response body: ${response.body()}")
-                    
-                    if (response.isSuccessful) {
+        val call = ApiClient.retrofit.updateSupervisorProfile(authHeader, updateData)
+        
+        Log.d("AshaProfile", "Request URL: ${call.request().url}")
+        Log.d("AshaProfile", "Request method: ${call.request().method}")
+        Log.d("AshaProfile", "Request headers: ${call.request().headers}")
+        
+        call.enqueue(object : Callback<Map<String, Any>> {
+            override fun onResponse(
+                call: Call<Map<String, Any>>,
+                response: Response<Map<String, Any>>
+            ) {
+                btnEdit.isEnabled = true
+                
+                Log.d("AshaProfile", "=== RESPONSE DEBUG ===")
+                Log.d("AshaProfile", "Response code: ${response.code()}")
+                Log.d("AshaProfile", "Response message: ${response.message()}")
+                Log.d("AshaProfile", "Response headers: ${response.headers()}")
+                Log.d("AshaProfile", "Response body: ${response.body()}")
+                
+                val errorBody = response.errorBody()?.string()
+                Log.d("AshaProfile", "Error body: $errorBody")
+                
+                when {
+                    response.isSuccessful -> {
+                        val responseBody = response.body()
+                        Log.d("AshaProfile", "Success response: $responseBody")
                         toast("Profile updated successfully")
+                        
+                        // Clear selected image
+                        selectedImageUri = null
                         
                         // Refresh profile data
                         cardViewContainer.visibility = View.VISIBLE
@@ -435,21 +459,34 @@ class AshaProfileActivity : AppCompatActivity() {
                         btnEdit.text = "Edit"
                         
                         loadData()
-                    } else {
-                        val errorBody = response.errorBody()?.string()
-                        Log.e("AshaProfile", "Update failed: $errorBody")
+                    }
+                    response.code() == 403 -> {
+                        Log.e("AshaProfile", "403 Forbidden: $errorBody")
+                        toast("Only phone, DOB and profile picture can be updated")
+                        btnEdit.text = "Save"
+                    }
+                    response.code() == 500 -> {
+                        Log.e("AshaProfile", "500 Internal Server Error: $errorBody")
+                        toast("Server error. Please try again later.")
+                        btnEdit.text = "Save"
+                    }
+                    else -> {
+                        Log.e("AshaProfile", "HTTP ${response.code()}: $errorBody")
                         toast("Failed to update: ${response.code()}")
                         btnEdit.text = "Save"
                     }
                 }
+            }
 
-                override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
-                    btnEdit.isEnabled = true
-                    btnEdit.text = "Save"
-                    Log.e("AshaProfile", "Update error", t)
-                    toast("Error: ${t.message}")
-                }
-            })
+            override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
+                btnEdit.isEnabled = true
+                btnEdit.text = "Save"
+                Log.e("AshaProfile", "=== API FAILURE ===", t)
+                Log.e("AshaProfile", "Error message: ${t.message}")
+                Log.e("AshaProfile", "Error cause: ${t.cause}")
+                toast("Network error: ${t.message}")
+            }
+        })
     }
 
     private fun updateCardViewData() {
@@ -463,14 +500,17 @@ class AshaProfileActivity : AppCompatActivity() {
     }
 
     private fun setFieldsEnabled(enabled: Boolean) {
-        etFullName.isEnabled = false  // Name can't be edited (blocked by backend)
-        etAge.isEnabled = enabled     // DOB picker
-        spinnerGender.isEnabled = false  // Gender always disabled
+        etFullName.isEnabled = false     // Name cannot be edited by ASHA
+        etAge.isEnabled = enabled        // DOB can be edited
         etPhoneNo.isEnabled = enabled    // Phone can be edited
-        etVillage.isEnabled = false      // Village can't be edited (blocked by backend)
-        etDistrict.isEnabled = false     // District can't be edited (blocked by backend)
-        etTaluka.isEnabled = false       // Taluka can't be edited (blocked by backend)
-        etAshaId.isEnabled = false       // ID never editable
+        etVillage.isEnabled = false      // Village cannot be edited by ASHA
+        etDistrict.isEnabled = false     // District cannot be edited by ASHA
+        etTaluka.isEnabled = false       // Taluka cannot be edited by ASHA
+        etAshaId.isEnabled = false       // Supervisor ID is never editable
+        spinnerGender.isEnabled = false  // Gender is always Female
+        
+        // Enable/disable profile image change button
+        btnChangeImage.isEnabled = enabled
     }
 
     private fun toast(msg: String) {

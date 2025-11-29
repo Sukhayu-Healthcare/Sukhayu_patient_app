@@ -17,12 +17,14 @@ class RegisterAshaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySupervisorRegisterAshaBinding
     private val TAG = "RegisterAshaActivity"
-    private val SUPERVISOR_ID = "SUP001" // Fixed supervisor ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySupervisorRegisterAshaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Initialize TokenManager
+        TokenManager.init(this)
 
         setupClickListeners()
     }
@@ -43,9 +45,8 @@ class RegisterAshaActivity : AppCompatActivity() {
         val phoneNo = binding.etPhoneNo.text.toString().trim()
         val district = binding.etDistrict.text.toString().trim()
         val taluka = binding.etTaluka.text.toString().trim()
-        val aadharNumber = binding.etAadharNumber.text.toString().trim()
+        val password = binding.etPassword.text.toString().trim()
         val age = binding.etAge.text.toString().trim()
-        val password = aadharNumber // Using aadhar as password or add etPassword to layout
 
         val token = TokenManager.getToken()
         if (token.isEmpty()) {
@@ -54,11 +55,15 @@ class RegisterAshaActivity : AppCompatActivity() {
             return
         }
 
-        Log.d(TAG, "Using Supervisor ID: $SUPERVISOR_ID")
-        Log.d(TAG, "Using Bearer Token: ${token.take(20)}...")
+        Log.d(TAG, "=== REGISTRATION REQUEST DEBUG ===")
+        Log.d(TAG, "Token exists: ${token.isNotEmpty()}")
+        Log.d(TAG, "Token preview: ${token.take(30)}...")
+        Log.d(TAG, "Request data - Name: $fullName, Phone: $phoneNo, Village: $village, District: $district, Taluka: $taluka")
 
-        if (validateInputs(fullName, village, phoneNo, district, taluka, aadharNumber, age)) {
-            Log.d(TAG, "Request data - Name: $fullName, Phone: $phoneNo, Village: $village")
+        if (validateInputs(fullName, village, phoneNo, district, taluka, password, age)) {
+            // Disable button while processing
+            binding.btnRegister.isEnabled = false
+            binding.btnRegister.text = "Registering..."
             
             val registerRequest = RegisterAshaRequest(
                 name = fullName,
@@ -67,32 +72,61 @@ class RegisterAshaActivity : AppCompatActivity() {
                 village = village,
                 district = district,
                 taluka = taluka,
-                profilePic = null,
-                supervisorId = SUPERVISOR_ID
+                profilePic = null
+                // Remove supervisorId - backend gets it from token
             )
 
-            ApiClient.retrofit.registerAsha("Bearer $token", registerRequest).enqueue(object : Callback<RegisterAshaResponse> {
+            Log.d(TAG, "Request object: $registerRequest")
+
+            val authHeader = "Bearer $token"
+            val call = ApiClient.retrofit.registerAsha(authHeader, registerRequest)
+            
+            Log.d(TAG, "Request URL: ${call.request().url}")
+            Log.d(TAG, "Request method: ${call.request().method}")
+            Log.d(TAG, "Request headers: ${call.request().headers}")
+
+            call.enqueue(object : Callback<RegisterAshaResponse> {
                 override fun onResponse(call: Call<RegisterAshaResponse>, response: Response<RegisterAshaResponse>) {
+                    binding.btnRegister.isEnabled = true
+                    binding.btnRegister.text = "Register"
+                    
+                    Log.d(TAG, "=== RESPONSE DEBUG ===")
                     Log.d(TAG, "Response code: ${response.code()}")
+                    Log.d(TAG, "Response message: ${response.message()}")
+                    Log.d(TAG, "Response headers: ${response.headers()}")
                     
                     if (response.isSuccessful) {
-                        Log.d(TAG, "Registration successful: ${response.body()}")
+                        val responseBody = response.body()
+                        Log.d(TAG, "Registration successful: $responseBody")
                         Toast.makeText(this@RegisterAshaActivity, "ASHA registered successfully", Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
                         try {
                             val errorBody = response.errorBody()?.string()
-                            Log.e(TAG, "Registration failed - Code: ${response.code()}, Error: $errorBody")
-                            Toast.makeText(this@RegisterAshaActivity, "Failed: $errorBody", Toast.LENGTH_LONG).show()
+                            Log.e(TAG, "Registration failed - Code: ${response.code()}")
+                            Log.e(TAG, "Error body: $errorBody")
+                            
+                            when (response.code()) {
+                                400 -> Toast.makeText(this@RegisterAshaActivity, "Invalid input: $errorBody", Toast.LENGTH_LONG).show()
+                                403 -> Toast.makeText(this@RegisterAshaActivity, "Not authorized: Only supervisors can register ASHA", Toast.LENGTH_LONG).show()
+                                404 -> Toast.makeText(this@RegisterAshaActivity, "Supervisor profile not found", Toast.LENGTH_LONG).show()
+                                409 -> Toast.makeText(this@RegisterAshaActivity, "Phone number already registered", Toast.LENGTH_LONG).show()
+                                500 -> Toast.makeText(this@RegisterAshaActivity, "Server error. Please try again.", Toast.LENGTH_LONG).show()
+                                else -> Toast.makeText(this@RegisterAshaActivity, "Failed: ${response.code()} - $errorBody", Toast.LENGTH_LONG).show()
+                            }
                         } catch (e: Exception) {
-                            Log.e(TAG, "Error parsing error body: ${e.message}")
+                            Log.e(TAG, "Error parsing error body: ${e.message}", e)
                             Toast.makeText(this@RegisterAshaActivity, "Registration failed: ${response.message()}", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<RegisterAshaResponse>, t: Throwable) {
-                    Log.e(TAG, "Network error: ${t.message}", t)
+                    binding.btnRegister.isEnabled = true
+                    binding.btnRegister.text = "Register"
+                    Log.e(TAG, "=== API FAILURE ===", t)
+                    Log.e(TAG, "Error message: ${t.message}")
+                    Log.e(TAG, "Error cause: ${t.cause}")
                     Toast.makeText(this@RegisterAshaActivity, "Network Error: ${t.message}", Toast.LENGTH_LONG).show()
                 }
             })
@@ -105,7 +139,7 @@ class RegisterAshaActivity : AppCompatActivity() {
         phoneNo: String,
         district: String,
         taluka: String,
-        aadharNumber: String,
+        password: String,
         age: String
     ): Boolean {
         return when {
@@ -131,6 +165,14 @@ class RegisterAshaActivity : AppCompatActivity() {
             }
             taluka.isEmpty() -> {
                 binding.etTaluka.error = "Taluka is required"
+                false
+            }
+            password.isEmpty() -> {
+                binding.etPassword.error = "Password is required"
+                false
+            }
+            password.length < 6 -> {
+                binding.etPassword.error = "Password must be at least 6 characters"
                 false
             }
             age.isEmpty() -> {

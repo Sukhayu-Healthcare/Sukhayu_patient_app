@@ -19,7 +19,7 @@ object DummyData {
             name = name ?: "Dummy Patient",
             phone = "+91-9876543210",
             gender = "Female",
-            weightKg = 55.0f,
+            weightKg = 55.0,
             supremeId = "SUP_DUMMY_001",
             lastUpdated = System.currentTimeMillis()
         )
@@ -35,7 +35,7 @@ object DummyData {
                 name = "Priya Sharma",
                 phone = "+91-9876543210",
                 gender = "Female",
-                weightKg = 55.0f,
+                weightKg = 55.0,
                 supremeId = "SUP_001",
                 lastUpdated = System.currentTimeMillis()
             ),
@@ -44,7 +44,7 @@ object DummyData {
                 name = "Sunita Devi",
                 phone = "+91-9876543211",
                 gender = "Female",
-                weightKg = 60.0f,
+                weightKg = 60.0,
                 supremeId = "SUP_002",
                 lastUpdated = System.currentTimeMillis()
             ),
@@ -53,7 +53,7 @@ object DummyData {
                 name = "Lakshmi Patel",
                 phone = "+91-9876543212",
                 gender = "Female",
-                weightKg = 52.0f,
+                weightKg = 52.0,
                 supremeId = "SUP_003",
                 lastUpdated = System.currentTimeMillis()
             )

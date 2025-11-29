@@ -106,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
             putString("user_id", data.patient.id)
             putString("user_name", data.patient.name)
             putString("user_phone", data.patient.phone)
-            putString("supreme_id", data.patient.supreme_id)
+            putString("supreme_id", data.patient.supreme_id ?: "")
             apply()
         }
 
@@ -114,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
         TokenManager.saveToken(
             token = data.token,
             userId = data.patient.id,
-            supremeId = data.patient.supreme_id,
+            supremeId = data.patient.supreme_id ?: "",
             role = data.role
         )
     }

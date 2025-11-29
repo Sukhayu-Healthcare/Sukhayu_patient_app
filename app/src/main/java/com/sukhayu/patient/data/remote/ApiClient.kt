@@ -1,7 +1,11 @@
 package com.sukhayu.patient.data.remote
 
+import com.sukhayu.patient.data.remote.AshaListResponse
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Header
 
 object ApiClient {
 

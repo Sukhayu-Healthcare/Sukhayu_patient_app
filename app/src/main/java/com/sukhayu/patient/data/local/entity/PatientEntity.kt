@@ -10,7 +10,7 @@ data class PatientEntity(
     val name: String,
     val phone: String?,
     val gender: String?,
-    val weightKg: Float?,
+    val weightKg: Double?,
     val supremeId: String?,
     val lastUpdated: Long = System.currentTimeMillis()
 )
