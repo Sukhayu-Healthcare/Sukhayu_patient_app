@@ -15,6 +15,7 @@ import com.sukhayu.patient.data.remote.*
 import com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity
 import com.sukhayu.patient.ui.dashboard.DashboardActivity
 import com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity
+import com.sukhayu.patient.utils.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +27,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        // Initialize TokenManager
+        TokenManager.init(this)
 
         val etUsername = findViewById<EditText>(R.id.etUsername)
         val etPassword = findViewById<EditText>(R.id.etOtp)
@@ -105,6 +109,14 @@ class LoginActivity : AppCompatActivity() {
             putString("supreme_id", data.patient.supreme_id)
             apply()
         }
+
+        // Also update TokenManager
+        TokenManager.saveToken(
+            token = data.token,
+            userId = data.patient.id,
+            supremeId = data.patient.supreme_id,
+            role = data.role
+        )
     }
 
     private fun saveAshaOrSupervisorLogin(data: LoginResponseAshaOrSupervisor) {
@@ -116,5 +128,13 @@ class LoginActivity : AppCompatActivity() {
             putString("user_phone", data.user.phone)
             apply()
         }
+
+        // Also update TokenManager
+        TokenManager.saveToken(
+            token = data.token,
+            userId = data.user.id,
+            supremeId = "",
+            role = data.role
+        )
     }
 }

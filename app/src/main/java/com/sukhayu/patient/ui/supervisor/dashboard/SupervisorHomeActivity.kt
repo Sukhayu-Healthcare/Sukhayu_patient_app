@@ -14,6 +14,7 @@ import com.sukhayu.patient.data.remote.SupervisorProfile
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity
 import com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity
+import com.sukhayu.patient.utils.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,6 +38,9 @@ class SupervisorHomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_supervisor_home)
+
+        // Initialize TokenManager
+        TokenManager.init(this)
 
         initViews()
         loadProfile()
@@ -129,6 +133,9 @@ class SupervisorHomeActivity : AppCompatActivity() {
     }
 
     private fun logout() {
+        // Clear TokenManager
+        TokenManager.clearToken()
+        
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)

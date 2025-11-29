@@ -9,6 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.PUT
 
 data class LoginRequest(
     val phone: String,      // FIXED → backend expects "phone"
@@ -82,7 +83,9 @@ data class SupervisorProfile(
     val village: String,
     val district: String,
     val taluka: String,
-    val profile_pic: String?
+    val profile_pic: String?,
+    val date_of_birth: String?,  // ✅ This field receives DOB from backend
+    val user_created_at: String?  // Added to calculate age
 )
 
 data class AshaDetailsResponse(
@@ -100,7 +103,7 @@ data class AshaDetailsResponse(
 
 interface ApiService {
 
-    @POST("login")
+    @POST("patient/v2/login")
     fun login(
         @Body body: LoginRequest
     ): Call<Map<String, Any>>
@@ -127,6 +130,12 @@ interface ApiService {
     fun getSupervisorProfile(
         @Header("Authorization") token: String
     ): Call<SupervisorProfile>
+
+    @PUT("asha/profile")
+    fun updateSupervisorProfile(
+        @Header("Authorization") token: String,
+        @Body updateData: Map<String, Any?>
+    ): Call<Map<String, Any>>
 
     @GET("asha/details/{ashaId}")
     fun getAshaDetails(
