@@ -87,6 +87,11 @@ data class AshaDetailsResponse(
     val supervisor_id: String?
 )
 
+data class UpdateProfileResponse(
+    val message: String,
+    val profile: SupervisorProfile
+)
+
 interface ApiService {
 
     @POST("patient/v2/login")
@@ -103,7 +108,7 @@ interface ApiService {
     fun updateSupervisorProfile(
         @Header("Authorization") token: String,
         @Body updateData: Map<String, Any?>
-    ): Call<Map<String, Any>>
+    ): Call<UpdateProfileResponse>
 
     @POST("asha/register-asha")
     fun registerAsha(

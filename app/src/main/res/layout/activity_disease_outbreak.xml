@@ -1,82 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@android:color/white">
 
-    <!-- Header Section -->
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp">
+    <!-- Tabs -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:background="@android:color/white" android:elevation="2dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Disease Outbreak Updates"
-            android:textStyle="bold"
-            android:textSize="28sp"
-            android:textColor="@color/white"
-            android:layout_marginBottom="8dp" />
+        <TextView android:id="@+id/tabCurrentOutbreaks" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Current Outbreaks" android:textSize="16sp" android:textStyle="bold" android:textColor="#000000" android:gravity="center" android:padding="16dp" android:background="@android:color/white"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Stay informed about health alerts in your area"
-            android:textSize="14sp"
-            android:textColor="@color/white"
-            android:alpha="0.9" />
+        <TextView android:id="@+id/tabPrevention" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Prevention" android:textSize="16sp" android:textColor="#999999" android:gravity="center" android:padding="16dp" android:background="#F5F5F5"/>
 
     </LinearLayout>
 
-    <!-- Empty State -->
-    <LinearLayout
-        android:id="@+id/emptyStateContainer"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="32dp">
+    <!-- Empty State Container -->
+    <LinearLayout android:id="@+id/emptyStateContainer" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="32dp" android:visibility="gone">
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_health_banner"
-            android:contentDescription="No data"
-            android:layout_marginBottom="16dp"
-            app:tint="@color/black" />
+        <ImageView android:layout_width="100dp" android:layout_height="100dp" android:src="@drawable/ic_warning" android:tint="#CCCCCC" android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:id="@+id/tvEmpty"
-            android:text="No Outbreak Data Available"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No Outbreak Data Available" android:textSize="18sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Check back soon for health alerts and outbreak information"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:textColor="@color/black" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Check back soon for health alerts and outbreak information" android:textSize="14sp" android:textColor="#666666" android:gravity="center"/>
 
     </LinearLayout>
 
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAwareness"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="16dp" />
+    <!-- RecyclerView for dynamic content -->
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvAwareness" android:layout_width="match_parent" android:layout_height="match_parent" android:clipToPadding="false" android:padding="16dp"/>
 
 </LinearLayout>

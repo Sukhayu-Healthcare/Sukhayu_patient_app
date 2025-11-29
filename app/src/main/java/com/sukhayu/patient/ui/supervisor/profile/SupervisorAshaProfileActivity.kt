@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.SupervisorProfile
+import com.sukhayu.patient.data.remote.UpdateProfileResponse
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
@@ -389,7 +390,7 @@ class AshaProfileActivity : AppCompatActivity() {
         btnEdit.isEnabled = false
         btnEdit.text = "Saving..."
 
-        // Prepare update data - phone, date_of_birth, and profile_pic are allowed
+        // Prepare update data - password, phone, and profile_pic are allowed
         val updateData = mutableMapOf<String, Any?>()
         
         val newPhone = etPhoneNo.text.toString().trim()
@@ -402,14 +403,8 @@ class AshaProfileActivity : AppCompatActivity() {
             return
         }
 
-        // Send allowed fields: asha_phone, date_of_birth, and asha_profile_pic
+        // Send allowed fields: asha_phone and asha_profile_pic (backend field names)
         updateData["asha_phone"] = newPhone
-        
-        // Include date of birth if selected/changed
-        if (selectedDateOfBirth != null) {
-            updateData["date_of_birth"] = selectedDateOfBirth
-            Log.d("AshaProfile", "Including DOB in update: $selectedDateOfBirth")
-        }
         
         // Include profile pic if changed
         if (selectedImageUri != null) {
@@ -427,10 +422,10 @@ class AshaProfileActivity : AppCompatActivity() {
         Log.d("AshaProfile", "Request method: ${call.request().method}")
         Log.d("AshaProfile", "Request headers: ${call.request().headers}")
         
-        call.enqueue(object : Callback<Map<String, Any>> {
+        call.enqueue(object : Callback<UpdateProfileResponse> {
             override fun onResponse(
-                call: Call<Map<String, Any>>,
-                response: Response<Map<String, Any>>
+                call: Call<UpdateProfileResponse>,
+                response: Response<UpdateProfileResponse>
             ) {
                 btnEdit.isEnabled = true
                 
@@ -447,22 +442,28 @@ class AshaProfileActivity : AppCompatActivity() {
                     response.isSuccessful -> {
                         val responseBody = response.body()
                         Log.d("AshaProfile", "Success response: $responseBody")
-                        toast("Profile updated successfully")
+                        toast(responseBody?.message ?: "Profile updated successfully")
                         
                         // Clear selected image
                         selectedImageUri = null
                         
-                        // Refresh profile data
+                        // Display updated profile from response
+                        responseBody?.profile?.let { displayProfileData(it) }
+                        
+                        // Switch back to view mode
                         cardViewContainer.visibility = View.VISIBLE
                         formViewContainer.visibility = View.GONE
                         setFieldsEnabled(false)
                         btnEdit.text = "Edit"
-                        
-                        loadData()
                     }
                     response.code() == 403 -> {
                         Log.e("AshaProfile", "403 Forbidden: $errorBody")
-                        toast("Only phone, DOB and profile picture can be updated")
+                        toast("Only phone and profile picture can be updated")
+                        btnEdit.text = "Save"
+                    }
+                    response.code() == 400 -> {
+                        Log.e("AshaProfile", "400 Bad Request: $errorBody")
+                        toast("Please provide valid data to update")
                         btnEdit.text = "Save"
                     }
                     response.code() == 500 -> {
@@ -478,7 +479,7 @@ class AshaProfileActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
+            override fun onFailure(call: Call<UpdateProfileResponse>, t: Throwable) {
                 btnEdit.isEnabled = true
                 btnEdit.text = "Save"
                 Log.e("AshaProfile", "=== API FAILURE ===", t)
@@ -501,7 +502,7 @@ class AshaProfileActivity : AppCompatActivity() {
 
     private fun setFieldsEnabled(enabled: Boolean) {
         etFullName.isEnabled = false     // Name cannot be edited by ASHA
-        etAge.isEnabled = enabled        // DOB can be edited
+        etAge.isEnabled = false          // DOB cannot be edited (not supported by backend)
         etPhoneNo.isEnabled = enabled    // Phone can be edited
         etVillage.isEnabled = false      // Village cannot be edited by ASHA
         etDistrict.isEnabled = false     // District cannot be edited by ASHA
