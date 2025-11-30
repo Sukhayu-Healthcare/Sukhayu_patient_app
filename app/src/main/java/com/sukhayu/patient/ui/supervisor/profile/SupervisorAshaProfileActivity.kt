@@ -1,6 +1,8 @@
 package com.sukhayu.patient.ui.supervisor.profile
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
@@ -14,11 +16,14 @@ import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.*
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
+import com.sukhayu.utils.VoiceInputHelper
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AshaProfileActivity : AppCompatActivity() {
+class SupervisorAshaProfileActivity : AppCompatActivity() {
 
     private var selectedImageUri: Uri? = null
 
@@ -50,6 +55,8 @@ class AshaProfileActivity : AppCompatActivity() {
     private lateinit var btnEdit: Button
     private lateinit var btnLogout: Button
 
+    private lateinit var voiceHelper: VoiceInputHelper
+
     private val imagePicker = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri ->
@@ -70,6 +77,10 @@ class AshaProfileActivity : AppCompatActivity() {
             setFieldsEnabled(false)
             loadData()
             setupListeners()
+
+            requestAudioPermission()
+            voiceHelper = VoiceInputHelper(this)
+            VoiceInputHelper.attachToAllEditTexts(this)
         } catch (e: Exception) {
             Log.e("AshaProfile", "Error in onCreate", e)
             toast("Error initializing profile: ${e.message}")
@@ -158,7 +169,7 @@ class AshaProfileActivity : AppCompatActivity() {
                         
                         if (response.code() == 401) {
                             TokenManager.clearToken()
-                            startActivity(Intent(this@AshaProfileActivity, LoginActivity::class.java))
+                            startActivity(Intent(this@SupervisorAshaProfileActivity, LoginActivity::class.java))
                             finish()
                         }
                     }
@@ -299,6 +310,18 @@ class AshaProfileActivity : AppCompatActivity() {
         etTaluka.isEnabled = false
         etAshaId.isEnabled = false
         spinnerGender.isEnabled = false
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 
     private fun toast(msg: String) {

@@ -1,6 +1,8 @@
 package com.sukhayu.patient.ui.supervisor
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +11,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.R
@@ -16,6 +20,7 @@ import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.AshaListResponse
 import com.sukhayu.patient.data.remote.AshaWorker
 import com.sukhayu.patient.utils.TokenManager
+import com.sukhayu.utils.VoiceInputHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +33,7 @@ class ViewAshaDataActivity : AppCompatActivity() {
     private lateinit var tvAshaCount: TextView
     private var ashaListFull: List<AshaWorker> = emptyList() // Keep full list for filtering
     private val TAG = "ViewAshaDataActivity"
+    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +52,10 @@ class ViewAshaDataActivity : AppCompatActivity() {
 
         setupSearchFilter()
         fetchAshaList()
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun setupSearchFilter() {
@@ -159,5 +169,17 @@ class ViewAshaDataActivity : AppCompatActivity() {
                 Toast.makeText(this@ViewAshaDataActivity, "Network error: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 }

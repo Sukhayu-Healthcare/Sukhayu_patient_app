@@ -1,17 +1,24 @@
 package com.sukhayu.patient.asha.ui
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
+import com.sukhayu.utils.VoiceInputHelper
 
 class AshaDashboardActivity : AppCompatActivity() {
+
+    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +41,9 @@ class AshaDashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity::class.java))
         }
 
-        // ...other button click listeners as needed
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun setupHeader() {
@@ -63,6 +72,18 @@ class AshaDashboardActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 
     override fun onSupportNavigateUp(): Boolean {

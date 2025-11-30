@@ -10,6 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.repository.AncVisitRepository
 import com.sukhayu.patient.databinding.ActivityFollowUpAncVisitBinding
+import com.sukhayu.utils.VoiceInputHelper
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,6 +40,8 @@ class FollowUpAncVisitActivity : AppCompatActivity() {
     private var patientWeight: String? = null
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +79,22 @@ class FollowUpAncVisitActivity : AppCompatActivity() {
 
         // 7) Setup save button with validation
         setupSaveButton()
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 
     override fun onSupportNavigateUp(): Boolean {

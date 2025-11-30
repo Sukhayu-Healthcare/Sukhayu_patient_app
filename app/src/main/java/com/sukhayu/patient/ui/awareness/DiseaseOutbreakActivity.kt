@@ -1,15 +1,21 @@
 package com.sukhayu.patient.ui.awareness
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sukhayu.patient.databinding.ActivityDiseaseOutbreakBinding
+import com.sukhayu.utils.VoiceInputHelper
 
 class DiseaseOutbreakActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDiseaseOutbreakBinding
     private lateinit var adapter: AwarenessAdapter
+    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +30,10 @@ class DiseaseOutbreakActivity : AppCompatActivity() {
         binding.rvAwareness.adapter = adapter
 
         loadAwarenessItems()
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun initViews() {
@@ -49,6 +59,18 @@ class DiseaseOutbreakActivity : AppCompatActivity() {
             binding.emptyStateContainer.visibility = View.GONE
             binding.rvAwareness.visibility = View.VISIBLE
         }
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 
     // Data class for items

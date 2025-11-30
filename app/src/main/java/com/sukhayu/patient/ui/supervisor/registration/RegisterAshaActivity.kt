@@ -1,14 +1,19 @@
 package com.sukhayu.patient.ui.supervisor.registration
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.RegisterAshaRequest
 import com.sukhayu.patient.data.remote.RegisterAshaResponse
 import com.sukhayu.patient.databinding.ActivitySupervisorRegisterAshaBinding
 import com.sukhayu.patient.utils.TokenManager
+import com.sukhayu.utils.VoiceInputHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,6 +21,7 @@ import retrofit2.Response
 class RegisterAshaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySupervisorRegisterAshaBinding
+    private lateinit var voiceHelper: VoiceInputHelper
     private val TAG = "RegisterAshaActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +32,22 @@ class RegisterAshaActivity : AppCompatActivity() {
         // Initialize TokenManager
         TokenManager.init(this)
 
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
+
         setupClickListeners()
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                200
+            )
+        }
     }
 
     private fun setupClickListeners() {
@@ -185,5 +206,10 @@ class RegisterAshaActivity : AppCompatActivity() {
             }
             else -> true
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 }

@@ -1,6 +1,8 @@
 package com.sukhayu.patient.ui.login
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
@@ -9,6 +11,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.*
@@ -16,6 +20,7 @@ import com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity
 import com.sukhayu.patient.ui.dashboard.DashboardActivity
 import com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity
 import com.sukhayu.patient.utils.TokenManager
+import com.sukhayu.utils.VoiceInputHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +28,7 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     private val gson = Gson()
+    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +44,10 @@ class LoginActivity : AppCompatActivity() {
         // Set phone number field to number input with 10 digit limit
         etUsername.inputType = InputType.TYPE_CLASS_NUMBER
         etUsername.filters = arrayOf(InputFilter.LengthFilter(10))
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
 
         btnLogin.setOnClickListener {
             val phoneNumber = etUsername.text.toString().trim()
@@ -99,6 +109,13 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
     private fun savePatientLogin(data: LoginResponsePatient) {
         getSharedPreferences("auth", MODE_PRIVATE).edit().apply {
             putString("token", data.token)
@@ -136,5 +153,10 @@ class LoginActivity : AppCompatActivity() {
             supremeId = "",
             role = data.role
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 }

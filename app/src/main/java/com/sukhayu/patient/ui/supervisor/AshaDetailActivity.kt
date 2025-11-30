@@ -1,5 +1,6 @@
 package com.sukhayu.patient.ui.supervisor
 
+import android.Manifest
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -13,6 +14,10 @@ import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.UpdateAshaRequest
 import com.sukhayu.patient.data.remote.UpdateAshaResponse
 import com.sukhayu.patient.utils.TokenManager
+import com.sukhayu.utils.VoiceInputHelper
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +31,9 @@ class AshaDetailActivity : AppCompatActivity() {
     private lateinit var tvDistrict: TextView
     private lateinit var tvTaluka: TextView
     private lateinit var btnEdit: Button
-    
+
+    private lateinit var voiceHelper: VoiceInputHelper
+
     private var ashaId: String = ""
     private val TAG = "AshaDetailActivity"
 
@@ -36,7 +43,11 @@ class AshaDetailActivity : AppCompatActivity() {
 
         initViews()
         loadAshaData()
-        
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
+
         btnEdit.setOnClickListener {
             showEditDialog()
         }
@@ -91,7 +102,7 @@ class AshaDetailActivity : AppCompatActivity() {
 
     private fun updateAshaProfile(name: String, village: String, district: String, taluka: String) {
         val token = TokenManager.getToken()
-        
+
         if (token.isEmpty()) {
             Toast.makeText(this, "Session expired", Toast.LENGTH_SHORT).show()
             return
@@ -128,5 +139,17 @@ class AshaDetailActivity : AppCompatActivity() {
                     Toast.makeText(this@AshaDetailActivity, "Network error", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 }

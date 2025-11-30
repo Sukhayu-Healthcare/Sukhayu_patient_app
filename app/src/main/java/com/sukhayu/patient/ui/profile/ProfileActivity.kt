@@ -1,6 +1,8 @@
 package com.sukhayu.patient. ui. profile
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net. Uri
 import android.os.Bundle
 import android.text.InputType
@@ -13,8 +15,11 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
 import com.sukhayu. patient.ui.login.LoginActivity
+import com.sukhayu.utils.VoiceInputHelper
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -46,6 +51,8 @@ class ProfileActivity : AppCompatActivity() {
             // TODO: When DB is added, persist the image URI or upload to server
         }
     }
+
+    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super. onCreate(savedInstanceState)
@@ -149,6 +156,17 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
     }
 
     private fun setFieldsEnabled(enabled: Boolean) {
@@ -158,5 +176,10 @@ class ProfileActivity : AppCompatActivity() {
         etPhone. isEnabled = enabled
         // patient id remains read-only
         etPatientId.isEnabled = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 }

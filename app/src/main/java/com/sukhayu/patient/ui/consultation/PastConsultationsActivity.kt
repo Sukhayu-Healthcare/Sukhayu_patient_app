@@ -1,14 +1,19 @@
 package com.sukhayu.patient.ui.consultation
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.repository.ConsultationRepository
 import com.sukhayu.patient.utils.NetworkUtils
+import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.utils.formatDate
 import kotlinx.coroutines.launch
 import com.sukhayu.patient.utils.formatDate
@@ -17,6 +22,7 @@ import com.sukhayu.patient.utils.formatDate
 class PastConsultationsActivity : AppCompatActivity() {
 
     private lateinit var repository: ConsultationRepository
+    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,5 +49,21 @@ class PastConsultationsActivity : AppCompatActivity() {
                 ll.addView(card)
             }
         }
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 }

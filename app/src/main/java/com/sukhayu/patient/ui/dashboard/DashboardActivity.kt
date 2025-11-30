@@ -1,12 +1,16 @@
 package com.sukhayu.patient.ui.dashboard
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.card.MaterialCardView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity
@@ -16,10 +20,12 @@ import com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity
 import com.sukhayu.patient.ui.consultation.PastConsultationsActivity
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ui.profile.ProfileActivity
+import com.sukhayu.utils.VoiceInputHelper
 
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var consultSymptomLauncher: ActivityResultLauncher<Intent>
+    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,5 +135,21 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 }

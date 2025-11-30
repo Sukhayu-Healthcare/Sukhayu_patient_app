@@ -6,10 +6,16 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.databinding.ActivitySymptomChatBinding
+import com.sukhayu.utils.VoiceInputHelper
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 class CheckSymptomsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySymptomChatBinding
+    private lateinit var voiceHelper: VoiceInputHelper
 
     companion object {
         const val EXTRA_SYMPTOM_TEXT = "extra_symptom_text"
@@ -22,6 +28,10 @@ class CheckSymptomsActivity : AppCompatActivity() {
 
         binding = ActivitySymptomChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
 
         // Back button
         binding.backButton.setOnClickListener {
@@ -55,5 +65,17 @@ class CheckSymptomsActivity : AppCompatActivity() {
         binding.btnMic.setOnClickListener {
             // future: start speech-to-text
         }
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 }

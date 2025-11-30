@@ -10,6 +10,11 @@ import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.PregnancyEntity
 import com.sukhayu.patient.data.repository.PregnancyRepository
 import com.sukhayu.patient.databinding.ActivityFirstAncVisitBinding
+import com.sukhayu.utils.VoiceInputHelper
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,6 +35,7 @@ class FirstAncVisitActivity : AppCompatActivity() {
     private var patientPhone: String? = null
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +67,10 @@ class FirstAncVisitActivity : AppCompatActivity() {
 
         // 5) Basic validation on Save
         setupSaveButton()
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun observeViewModel() {
@@ -295,6 +305,18 @@ class FirstAncVisitActivity : AppCompatActivity() {
             binding.rbDeliveryPlaceNotDecided.id -> "NOT_DECIDED"
             else -> "NOT_DECIDED"
         }
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 
     override fun onSupportNavigateUp(): Boolean {

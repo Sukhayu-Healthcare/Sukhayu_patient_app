@@ -1,18 +1,24 @@
 package com.sukhayu.patient.ui.supervisor.dashboard
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.card.MaterialCardView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.SupervisorProfile
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ui.supervisor.ViewAshaDataActivity
-import com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity
+import com.sukhayu.patient.ui.asha.profile.AshaProfileActivity
+import com.sukhayu.patient.ui.supervisor.profile.SupervisorAshaProfileActivity
 import com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity
 import com.sukhayu.patient.utils.TokenManager
+import com.sukhayu.utils.VoiceInputHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +38,8 @@ class SupervisorHomeActivity : AppCompatActivity() {
 
     private var supervisorProfile: SupervisorProfile? = null
 
+    private lateinit var voiceHelper: VoiceInputHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_supervisor_home)
@@ -41,6 +49,9 @@ class SupervisorHomeActivity : AppCompatActivity() {
         initViews()
         loadProfile()
         setupListeners()
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun initViews() {
@@ -116,11 +127,23 @@ class SupervisorHomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
     private fun logout() {
         TokenManager.clearToken()
 
         val i = Intent(this, LoginActivity::class.java)
         i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(i)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 }

@@ -1,6 +1,8 @@
 package com.sukhayu.patient.asha.ui.surveys.pregnancy
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -12,6 +14,8 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.card.MaterialCardView
 import com.sukhayu.patient.R
@@ -19,6 +23,7 @@ import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.PatientEntity
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.repository.PatientRepository
+import com.sukhayu.utils.VoiceInputHelper
 
 class PregnancySurveyActivity : AppCompatActivity() {
 
@@ -36,6 +41,8 @@ class PregnancySurveyActivity : AppCompatActivity() {
 
     private lateinit var viewModel: PregnancySurveyViewModel
 
+    private lateinit var voiceHelper: VoiceInputHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pregnancy_survey)
@@ -51,6 +58,10 @@ class PregnancySurveyActivity : AppCompatActivity() {
         setupSurveyTypeSpinner()
         setupListeners()
         observeViewModel()
+
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun initializeViewModel() {
@@ -245,6 +256,18 @@ class PregnancySurveyActivity : AppCompatActivity() {
         // For now, return null - the repository will handle offline-first search
         val sharedPrefs = getSharedPreferences("sukhayu_prefs", MODE_PRIVATE)
         return sharedPrefs.getString("auth_token", null)
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 
     override fun onSupportNavigateUp(): Boolean {

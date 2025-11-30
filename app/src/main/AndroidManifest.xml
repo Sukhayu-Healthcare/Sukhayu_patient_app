@@ -12,7 +12,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <application android:name=".MyApp" android:allowBackup="true" android:icon="@drawable/asha_jyoti_app_logo" android:label="@string/app_name" android:theme="@style/Theme.RoleBasedTelemedicinePatient" android:supportsRtl="true">
+    <!-- Additions for audio recording -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <application android:name="com.sukhayu.SukhayuApplication" android:allowBackup="true" android:icon="@drawable/asha_jyoti_app_logo" android:label="@string/app_name" android:theme="@style/Theme.RoleBasedTelemedicinePatient" android:supportsRtl="true">
 
         <!-- Login: Launcher activity -->
         <activity android:name="com.sukhayu.patient.ui.login.LoginActivity" android:exported="true">

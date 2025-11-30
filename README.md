@@ -205,3 +205,6 @@ RoleBasedTelemedicinePatient/                 ← Root Android project folder
             gradle-wrapper.properties    # Wrapper configuration
             gradle.properties            # Gradle environment config
                                                ← Root-level Gradle config
+
+
+i use github copilot , give me a complete prompt to use voice input in each normal input(no password/ choice based input) in english and marathi. 

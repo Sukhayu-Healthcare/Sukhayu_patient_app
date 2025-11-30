@@ -1,5 +1,6 @@
 package com.sukhayu.patient.ui.asha.registration
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,6 +20,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.ApiService
@@ -27,15 +29,16 @@ import com.sukhayu.patient.model.PatientRegistrationRequest
 import com.sukhayu.patient.model.PatientRegistrationResponse
 import com.sukhayu.patient.utils.NetworkUtils
 import com.sukhayu.patient.utils.TokenManager
+import com.sukhayu.utils.VoiceInputHelper
+import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.InputStream
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 class RegisterPatientActivity : AppCompatActivity() {
 
@@ -96,6 +99,8 @@ class RegisterPatientActivity : AppCompatActivity() {
         }
     }
 
+    private lateinit var voiceHelper: VoiceInputHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asha_register_patient)
@@ -113,6 +118,13 @@ class RegisterPatientActivity : AppCompatActivity() {
         setupImagePicker()
         setupDynamicHistoryContainer()
         setupRegisterButton()
+
+        // Request audio permission
+        requestAudioPermission()
+
+        // Initialize voice helper and attach to all EditTexts
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun initRetrofit() {
@@ -521,5 +533,17 @@ class RegisterPatientActivity : AppCompatActivity() {
         profilePicBase64 = null
         selectedImageUri = null
         isPasswordVisible = false
+    }
+
+    private fun requestAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        voiceHelper.destroy()
     }
 }
