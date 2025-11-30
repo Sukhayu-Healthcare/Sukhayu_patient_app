@@ -3,13 +3,18 @@ package com.sukhayu.patient.asha.ui.surveys
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.card.MaterialCardView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySurveyActivity
 import com.sukhayu.patient.asha.ui.surveys.child.ChildSurveyActivity
 import com.sukhayu.patient.asha.ui.surveys.tb.TbSurveyActivity
-import com.sukhayu.patient.asha.ui.surveys.ncd.NcdSurveyActivity // Fixed import
+import com.sukhayu.patient.asha.ui.surveys.ncd.NcdSurveyActivity
+import com.sukhayu.patient.ui.login.LoginActivity
+import com.sukhayu.patient.utils.TokenManager
 
 class AshaSurveyHomeActivity : AppCompatActivity() {
 
@@ -18,10 +23,15 @@ class AshaSurveyHomeActivity : AppCompatActivity() {
         Log.d("AshaSurveyHome", "Activity onCreate called")
         setContentView(R.layout.activity_asha_survey_home)
 
-        // Set toolbar title
-        supportActionBar?.apply {
-            title = "Surveys"
-            setDisplayHomeAsUpEnabled(true)
+        // Setup header
+        setupHeader()
+
+        // Load profile data
+        loadProfileData()
+
+        // Setup logout button
+        findViewById<Button>(R.id.btnLogout).setOnClickListener {
+            logout()
         }
 
         // Wire survey button clicks
@@ -40,6 +50,37 @@ class AshaSurveyHomeActivity : AppCompatActivity() {
         findViewById<MaterialCardView>(R.id.btnNcdSurvey).setOnClickListener {
             startActivity(Intent(this, NcdSurveyActivity::class.java))
         }
+    }
+
+    private fun setupHeader() {
+        findViewById<ImageView>(R.id.btnBack)?.apply {
+            visibility = android.view.View.VISIBLE
+            setOnClickListener { finish() }
+        }
+        findViewById<TextView>(R.id.headerTitle)?.text = "Surveys"
+    }
+
+    private fun loadProfileData() {
+        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+        val ashaName = prefs.getString("user_name", "ASHA Worker") ?: "ASHA Worker"
+        val ashaId = prefs.getString("user_id", "N/A") ?: "N/A"
+
+        findViewById<TextView>(R.id.tvAshaName).text = ashaName
+        findViewById<TextView>(R.id.tvAshaId).text = "ID: $ashaId"
+    }
+
+    private fun logout() {
+        // Clear shared preferences
+        getSharedPreferences("auth", MODE_PRIVATE).edit().clear().apply()
+
+        // Clear TokenManager
+        TokenManager.clearToken()
+
+        // Navigate to login
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
