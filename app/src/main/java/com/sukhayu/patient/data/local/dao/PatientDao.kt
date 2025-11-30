@@ -9,7 +9,12 @@ import com.sukhayu.patient.data.local.entity.PatientEntity
 @Dao
 interface PatientDao {
 
-    @Query("SELECT * FROM patients WHERE name LIKE :query OR phone LIKE :query LIMIT 10")
+    /**
+     * Search patients by name or phone with flexible LIKE pattern matching.
+     * The query parameter should be passed as-is (e.g., "Sunita" or "9876543210")
+     * and the query will automatically wrap it with wildcards.
+     */
+    @Query("SELECT * FROM patients WHERE name LIKE '%' || :query || '%' OR phone LIKE '%' || :query || '%' LIMIT 10")
     suspend fun searchPatients(query: String): List<PatientEntity>
 
     @Query("SELECT * FROM patients WHERE id = :patientId LIMIT 1")
