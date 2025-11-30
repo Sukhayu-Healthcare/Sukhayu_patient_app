@@ -92,6 +92,19 @@ data class UpdateProfileResponse(
     val profile: SupervisorProfile
 )
 
+data class UpdateAshaResponse(
+    val message: String,
+    val updatedAsha: AshaWorker
+)
+
+data class UpdateAshaRequest(
+    val asha_name: String?,
+    val asha_village: String?,
+    val asha_district: String?,
+    val asha_taluka: String?,
+    val supervisor_id: String?
+)
+
 interface ApiService {
 
     @POST("patient/v2/login")
@@ -138,4 +151,11 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("q") query: String
     ): PatientSearchResponse
+
+    @PUT("asha/supervisor/update-asha/{id}")
+    fun updateAsha(
+        @Header("Authorization") token: String,
+        @Path("id") ashaId: String,
+        @Body body: UpdateAshaRequest
+    ): Call<UpdateAshaResponse>
 }

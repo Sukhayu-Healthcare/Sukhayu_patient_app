@@ -71,6 +71,7 @@
 
         <!-- NCD Survey Activity -->
         <activity android:name="com.sukhayu.patient.asha.ui.surveys.ncd.NcdSurveyActivity" android:exported="false" android:label="NCD Screening" />
+        <activity android:name="com.sukhayu.patient.ui.supervisor.AshaDetailActivity" android:exported="true" />
 
     </application>
 

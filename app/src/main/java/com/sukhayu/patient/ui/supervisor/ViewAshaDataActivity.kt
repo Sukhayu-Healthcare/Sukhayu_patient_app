@@ -1,5 +1,6 @@
 package com.sukhayu.patient.ui.supervisor
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.AshaListResponse
+import com.sukhayu.patient.data.remote.AshaWorker
 import com.sukhayu.patient.utils.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,10 +29,25 @@ class ViewAshaDataActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerViewAsha)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        ashaAdapter = AshaAdapter(emptyList())
+        ashaAdapter = AshaAdapter(emptyList()) { ashaWorker ->
+            navigateToAshaDetails(ashaWorker)
+        }
         recyclerView.adapter = ashaAdapter
 
         fetchAshaList()
+    }
+
+    private fun navigateToAshaDetails(ashaWorker: AshaWorker) {
+        val intent = Intent(this, AshaDetailActivity::class.java).apply {
+            putExtra("ASHA_ID", ashaWorker.asha_id)
+            putExtra("ASHA_NAME", ashaWorker.asha_name)
+            putExtra("ASHA_PHONE", ashaWorker.asha_phone)
+            putExtra("VILLAGE", ashaWorker.village)
+            putExtra("DISTRICT", ashaWorker.district)
+            putExtra("TALUKA", ashaWorker.taluka)
+            putExtra("PROFILE_PIC", ashaWorker.profile_pic)
+        }
+        startActivity(intent)
     }
 
     private fun fetchAshaList() {

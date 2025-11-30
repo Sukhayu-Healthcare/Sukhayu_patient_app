@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/white">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+
+        <include layout="@layout/include_header" />
+
+        <TextView android:id="@+id/tvAshaId" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="ID: " android:textSize="14sp" android:layout_marginTop="16dp" />
+
+        <TextView android:id="@+id/tvAshaName" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Name" android:textSize="20sp" android:textStyle="bold" android:layout_marginTop="8dp" />
+
+        <TextView android:id="@+id/tvAshaPhone" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Phone" android:textSize="16sp" android:layout_marginTop="8dp" />
+
+        <TextView android:id="@+id/tvVillage" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Village" android:textSize="16sp" android:layout_marginTop="8dp" />
+
+        <TextView android:id="@+id/tvDistrict" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="District" android:textSize="16sp" android:layout_marginTop="8dp" />
+
+        <TextView android:id="@+id/tvTaluka" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Taluka" android:textSize="16sp" android:layout_marginTop="8dp" />
+
+        <Button android:id="@+id/btnEditAsha" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Edit Profile" android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+</ScrollView>
