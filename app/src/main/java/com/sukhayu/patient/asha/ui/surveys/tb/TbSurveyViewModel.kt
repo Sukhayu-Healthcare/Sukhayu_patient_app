@@ -1,15 +1,29 @@
-package com.sukhayu.patient.asha.ui.surveys.pregnancy
+package com.sukhayu.patient.asha.ui.surveys.tb
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sukhayu.patient.DummyData
 import com.sukhayu.patient.data.local.entity.PatientEntity
 import com.sukhayu.patient.data.repository.PatientRepository
 import kotlinx.coroutines.launch
 
-class PregnancySurveyViewModel(
+/**
+ * ViewModel for TB Survey screen
+ * Handles patient search and form navigation for TB Screening and TB Treatment Follow-up
+ *
+ * Key Features:
+ * - Uses shared PatientRepository.searchPatients() for offline-first patient search
+ * - Supports multiple patient selection via dialog when search returns multiple results
+ * - Maintains selected patient state and exposes patient details for UI display
+ * - Provides navigation events for TB Screening and TB Treatment Follow-up forms
+ * - Template IDs: "tb_screening_template" and "tb_follow_up_template"
+ *
+ * Pattern:
+ * This ViewModel follows the same architecture as PregnancySurveyViewModel,
+ * ensuring consistency across the ASHA workflows.
+ */
+class TbSurveyViewModel(
     private val patientRepository: PatientRepository
 ) : ViewModel() {
 
@@ -19,9 +33,6 @@ class PregnancySurveyViewModel(
     private val _patientDetails = MutableLiveData<PatientUiModel?>()
     val patientDetails: LiveData<PatientUiModel?> = _patientDetails
 
-    private val _selectedSurveyType = MutableLiveData<SurveyType?>()
-    val selectedSurveyType: LiveData<SurveyType?> = _selectedSurveyType
-
     private val _navigationEvent = MutableLiveData<Event<NavigationEvent>>()
     val navigationEvent: LiveData<Event<NavigationEvent>> = _navigationEvent
 
@@ -30,14 +41,12 @@ class PregnancySurveyViewModel(
 
     private var selectedPatient: PatientEntity? = null
 
-    // TODO: Deprecated - Dummy data is now automatically seeded into the local DB on first run.
-    //       The patientRepository.searchPatients() will return DB-backed dummy data even when offline.
-    //       This flag can be removed once fully migrated to DB-first approach.
-    var useDummyData: Boolean = false
-
     var isPatientLoaded: Boolean = false
         private set
 
+    /**
+     * Search for patients using the shared PatientRepository (offline-first)
+     */
     fun onLoadPatientClicked(query: String, token: String?) {
         if (query.isBlank()) {
             _uiState.value = UiState.Error("Please enter patient name or phone")
@@ -48,22 +57,9 @@ class PregnancySurveyViewModel(
             try {
                 _uiState.value = UiState.Loading
 
-                val results = if (useDummyData) {
-                    // DEPRECATED: Direct dummy data access
-                    // TODO: Remove this branch - use patientRepository.searchPatients() instead,
-                    //       which now searches the local DB (already seeded with dummy patients)
-                    val dummyResults = DummyData.searchDummyPatients(query)
-                    if (dummyResults.isEmpty()) {
-                        // If no match, create dummy patient with entered name
-                        listOf(DummyData.getDummyPatient(query))
-                    } else {
-                        dummyResults
-                    }
-                } else {
-                    // RECOMMENDED: Use repository which searches local DB first (offline-first)
-                    // This works for both Pregnancy/ANC and TB modules
-                    patientRepository.searchPatients(query, token)
-                }
+                // Use repository which searches local DB first (offline-first)
+                // This works for both Pregnancy/ANC and TB modules
+                val results = patientRepository.searchPatients(query, token)
 
                 when {
                     results.isEmpty() -> {
@@ -90,6 +86,9 @@ class PregnancySurveyViewModel(
         }
     }
 
+    /**
+     * Select a patient from search results
+     */
     fun selectPatient(patient: PatientEntity) {
         selectedPatient = patient
         isPatientLoaded = true
@@ -102,33 +101,63 @@ class PregnancySurveyViewModel(
         )
     }
 
-    fun onSurveyTypeSelected(type: SurveyType) {
-        _selectedSurveyType.value = type
-    }
-
-    fun onContinueClicked() {
+    /**
+     * Navigate to TB Screening form
+     */
+    fun onTbScreeningClicked() {
         val patient = selectedPatient
-        val surveyType = _selectedSurveyType.value
+        val patientUi = _patientDetails.value
 
         when {
-            !isPatientLoaded || patient == null -> {
+            !isPatientLoaded || patient == null || patientUi == null -> {
                 _uiState.value = UiState.Error("Please load patient details first")
             }
-            surveyType == null -> {
-                _uiState.value = UiState.Error("Please select survey type")
-            }
             else -> {
-                val event = when (surveyType) {
-                    SurveyType.FIRST_ANC_VISIT ->
-                        NavigationEvent.NavigateToFirstAncVisit(patient.id, patient.name)
-                    SurveyType.FOLLOW_UP_ANC_VISIT ->
-                        NavigationEvent.NavigateToFollowUpAncVisit(patient.id, patient.name)
-                }
+                // TODO: Replace with actual TB Screening form activity once JSON template is ready
+                // For now, navigate to FirstAncVisitActivity as placeholder
+                val event = NavigationEvent.NavigateToTbScreening(
+                    patientId = patient.id,
+                    patientName = patientUi.name,
+                    patientPhone = patientUi.phone,
+                    patientGender = patientUi.gender,
+                    patientWeight = patientUi.weight,
+                    templateId = TbFormType.TB_SCREENING.templateId
+                )
                 _navigationEvent.value = Event(event)
             }
         }
     }
 
+    /**
+     * Navigate to TB Treatment Follow-up (DOTS) form
+     */
+    fun onTbFollowUpClicked() {
+        val patient = selectedPatient
+        val patientUi = _patientDetails.value
+
+        when {
+            !isPatientLoaded || patient == null || patientUi == null -> {
+                _uiState.value = UiState.Error("Please load patient details first")
+            }
+            else -> {
+                // TODO: Replace with actual TB Follow-up form activity once JSON template is ready
+                // For now, navigate to FollowUpAncVisitActivity as placeholder
+                val event = NavigationEvent.NavigateToTbFollowUp(
+                    patientId = patient.id,
+                    patientName = patientUi.name,
+                    patientPhone = patientUi.phone,
+                    patientGender = patientUi.gender,
+                    patientWeight = patientUi.weight,
+                    templateId = TbFormType.TB_TREATMENT_FOLLOWUP.templateId
+                )
+                _navigationEvent.value = Event(event)
+            }
+        }
+    }
+
+    /**
+     * Clear error state
+     */
     fun clearError() {
         if (_uiState.value is UiState.Error) {
             _uiState.value = UiState.Idle

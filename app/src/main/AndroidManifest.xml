@@ -72,8 +72,17 @@
         <!-- TB Survey Activity -->
         <activity android:name="com.sukhayu.patient.asha.ui.surveys.tb.TbSurveyActivity" android:exported="false" android:label="TB Symptoms Survey" />
 
-        <!-- NCD Survey Activity -->
-        <activity android:name="com.sukhayu.patient.asha.ui.surveys.ncd.NcdSurveyActivity" android:exported="false" android:label="NCD Screening" />
+        <!-- TB Screening Form Activity -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.tb.TbScreeningActivity" android:exported="false" android:label="TB Screening / Suspect Form" />
+
+        <!-- TB Treatment Follow-up (DOTS) Activity -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.tb.TbFollowUpActivity" android:exported="false" android:label="TB Treatment Follow-up (DOTS)" />
+
+        <!-- Patient Search for General Survey -->
+        <activity android:name="com.sukhayu.patient.ui.asha.search.PatientSearchForGeneralSurveyActivity" android:exported="false" android:label="Search Patient - General Survey" />
+
+        <!-- General Survey Activity -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyActivity" android:exported="false" android:label="General Screening" />
         <activity android:name="com.sukhayu.patient.ui.supervisor.AshaDetailActivity" android:exported="true" />
 
     </application>

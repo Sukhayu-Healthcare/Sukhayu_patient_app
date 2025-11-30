@@ -86,16 +86,16 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- NCD Screening Card -->
-            <com.google.android.material.card.MaterialCardView android:id="@+id/btnNcdSurvey" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp" android:clickable="true" android:focusable="true" app:cardCornerRadius="12dp" app:cardElevation="2dp" app:strokeWidth="0dp" app:cardBackgroundColor="#D1FAE5">
+            <!-- General Screening Card -->
+            <com.google.android.material.card.MaterialCardView android:id="@+id/btnGeneralSurvey" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp" android:clickable="true" android:focusable="true" app:cardCornerRadius="12dp" app:cardElevation="2dp" app:strokeWidth="0dp" app:cardBackgroundColor="#D1FAE5">
 
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
 
-                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_heart" app:tint="#047857" android:contentDescription="NCD Survey" android:layout_marginEnd="16dp"/>
+                    <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_heart" app:tint="#047857" android:contentDescription="General Survey" android:layout_marginEnd="16dp"/>
 
                     <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NCD Screening" android:textSize="16sp" android:textStyle="bold" android:textColor="#065F46"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="General Screening" android:textSize="16sp" android:textStyle="bold" android:textColor="#065F46"/>
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="BP / Diabetes screening" android:textSize="13sp" android:textColor="#047857" android:layout_marginTop="4dp"/>
                     </LinearLayout>

@@ -9,11 +9,15 @@ import com.sukhayu.patient.data.local.dao.ConsultationDao
 import com.sukhayu.patient.data.local.dao.PatientDao
 import com.sukhayu.patient.data.local.dao.PregnancyDao
 import com.sukhayu.patient.data.local.dao.PrescriptionDao
+import com.sukhayu.patient.data.local.dao.TbFollowUpDao
+import com.sukhayu.patient.data.local.dao.TbScreeningDao
 import com.sukhayu.patient.data.local.entity.AncVisitEntity
 import com.sukhayu.patient.data.local.entity.ConsultationEntity
 import com.sukhayu.patient.data.local.entity.PatientEntity
 import com.sukhayu.patient.data.local.entity.PregnancyEntity
 import com.sukhayu.patient.data.local.entity.PrescriptionItemEntity
+import com.sukhayu.patient.data.local.entity.TbFollowUpEntity
+import com.sukhayu.patient.data.local.entity.TbScreeningEntity
 
 @Database(
     entities = [
@@ -21,9 +25,11 @@ import com.sukhayu.patient.data.local.entity.PrescriptionItemEntity
         PrescriptionItemEntity::class,
         PatientEntity::class,
         PregnancyEntity::class,
-        AncVisitEntity::class
+        AncVisitEntity::class,
+        TbScreeningEntity::class,
+        TbFollowUpEntity::class
     ],
-    version = 5,                             // Incremented for ANC visits table
+    version = 7,                             // Incremented for TB follow-ups table
     exportSchema = false
 )
 abstract class AshaLocalDatabase : RoomDatabase() {
@@ -33,6 +39,9 @@ abstract class AshaLocalDatabase : RoomDatabase() {
     abstract fun patientDao(): PatientDao
     abstract fun pregnancyDao(): PregnancyDao
     abstract fun ancVisitDao(): AncVisitDao
+    abstract fun tbScreeningDao(): TbScreeningDao
+    abstract fun tbFollowUpDao(): TbFollowUpDao
+    abstract fun generalSurveyDao(): GeneralSurveyDao
 
     companion object {
         @Volatile private var INSTANCE: AshaLocalDatabase? = null

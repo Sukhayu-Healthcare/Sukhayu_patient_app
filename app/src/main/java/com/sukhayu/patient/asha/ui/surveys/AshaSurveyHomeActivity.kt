@@ -14,9 +14,10 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.card.MaterialCardView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.asha.ui.surveys.child.ChildSurveyActivity
-import com.sukhayu.patient.asha.ui.surveys.ncd.NcdSurveyActivity
+import com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyActivity
 import com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySurveyActivity
 import com.sukhayu.patient.asha.ui.surveys.tb.TbSurveyActivity
+import com.sukhayu.patient.ui.asha.search.PatientSearchForGeneralSurveyActivity
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
@@ -54,8 +55,9 @@ class AshaSurveyHomeActivity : AppCompatActivity() {
             startActivity(Intent(this, TbSurveyActivity::class.java))
         }
 
-        findViewById<MaterialCardView>(R.id.btnNcdSurvey).setOnClickListener {
-            startActivity(Intent(this, NcdSurveyActivity::class.java))
+        findViewById<MaterialCardView>(R.id.btnGeneralSurvey).setOnClickListener {
+            // Navigate to patient search first, then to General Survey form
+            startActivity(Intent(this, PatientSearchForGeneralSurveyActivity::class.java))
         }
 
         requestAudioPermission()

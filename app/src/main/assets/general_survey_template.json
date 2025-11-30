@@ -1,0 +1,245 @@
+{
+  "templateId": "general_survey_template",
+  "templateName": "General Health Survey",
+  "version": "1.0",
+  "description": "Community health screening for chronic conditions, symptoms, risk factors, and service utilization",
+  "sections": [
+    {
+      "sectionId": "identification",
+      "sectionName": "Identification",
+      "fields": [
+        {
+          "key": "visit_date",
+          "label": "Visit Date",
+          "type": "date",
+          "required": true,
+          "format": "dd/MM/yyyy"
+        },
+        {
+          "key": "location",
+          "label": "Location/Village",
+          "type": "text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "sectionId": "existing_conditions",
+      "sectionName": "Existing Conditions",
+      "fields": [
+        {
+          "key": "diabetes",
+          "label": "Diabetes",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "hypertension",
+          "label": "Hypertension (High BP)",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "heart_disease",
+          "label": "Heart Disease",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "stroke",
+          "label": "Stroke",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "kidney_disease",
+          "label": "Kidney Disease",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "other_conditions",
+          "label": "Other Conditions (if any)",
+          "type": "text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "sectionId": "symptoms",
+      "sectionName": "Current Symptoms",
+      "fields": [
+        {
+          "key": "frequent_urination",
+          "label": "Frequent Urination",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "excessive_thirst",
+          "label": "Excessive Thirst",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "weight_loss",
+          "label": "Unexplained Weight Loss",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "blurred_vision",
+          "label": "Blurred Vision",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "chest_pain",
+          "label": "Chest Pain",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "shortness_of_breath",
+          "label": "Shortness of Breath",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "fatigue",
+          "label": "Fatigue/Weakness",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        }
+      ]
+    },
+    {
+      "sectionId": "risk_factors",
+      "sectionName": "Risk Factors",
+      "fields": [
+        {
+          "key": "family_history",
+          "label": "Family History of Diabetes/BP",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "tobacco_use",
+          "label": "Tobacco Use",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "alcohol_use",
+          "label": "Alcohol Use",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "physical_activity",
+          "label": "Physical Activity Level",
+          "type": "select",
+          "options": ["Active", "Moderate", "Sedentary"],
+          "required": false
+        },
+        {
+          "key": "unhealthy_diet",
+          "label": "Diet (High Salt/Sugar/Oil)",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        }
+      ]
+    },
+    {
+      "sectionId": "service_use",
+      "sectionName": "Service Use",
+      "fields": [
+        {
+          "key": "regular_checkups",
+          "label": "Regular Health Check-ups",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "current_medication",
+          "label": "Currently on Medication",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "medication_details",
+          "label": "Medication Details (if yes)",
+          "type": "text",
+          "required": false,
+          "conditional": {
+            "dependsOn": "current_medication",
+            "showWhen": "Yes"
+          }
+        },
+        {
+          "key": "recent_bp_check",
+          "label": "Last BP Check (within 6 months)",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "recent_sugar_check",
+          "label": "Last Blood Sugar Check (within 6 months)",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        }
+      ]
+    },
+    {
+      "sectionId": "asha_assessment",
+      "sectionName": "ASHA Assessment",
+      "fields": [
+        {
+          "key": "referral_needed",
+          "label": "Referral Needed",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "required": false
+        },
+        {
+          "key": "referral_facility",
+          "label": "Referral Facility",
+          "type": "select",
+          "options": ["PHC", "CHC", "District Hospital", "Other"],
+          "required": false,
+          "conditional": {
+            "dependsOn": "referral_needed",
+            "showWhen": "Yes"
+          }
+        },
+        {
+          "key": "remarks",
+          "label": "Remarks/Notes",
+          "type": "textarea",
+          "required": false
+        }
+      ]
+    }
+  ]
+}
+

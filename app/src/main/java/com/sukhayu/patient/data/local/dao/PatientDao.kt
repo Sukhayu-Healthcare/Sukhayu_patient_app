@@ -15,6 +15,9 @@ interface PatientDao {
     @Query("SELECT * FROM patients WHERE id = :patientId LIMIT 1")
     suspend fun getPatientById(patientId: String): PatientEntity?
 
+    @Query("SELECT COUNT(*) FROM patients")
+    suspend fun getPatientCount(): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPatients(patients: List<PatientEntity>)
 
