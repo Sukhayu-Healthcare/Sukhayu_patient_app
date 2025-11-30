@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.*
 import com.sukhayu.patient.ui.login.LoginActivity
@@ -26,8 +27,8 @@ class AshaProfileActivity : AppCompatActivity() {
     private lateinit var profileImage: ImageView
     private lateinit var btnChangeImage: ImageButton
 
-    private lateinit var cardViewContainer: LinearLayout
-    private lateinit var formViewContainer: LinearLayout
+    private lateinit var cardViewContainer: View
+    private lateinit var formViewContainer: View
 
     private lateinit var tvAshaId: TextView
     private lateinit var tvFullName: TextView

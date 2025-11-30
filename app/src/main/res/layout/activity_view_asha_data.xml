@@ -11,6 +11,9 @@
         <EditText android:id="@+id/etSearchAsha" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Search by name, ID, or phone" android:padding="12dp" android:drawableStart="@android:drawable/ic_menu_search" android:drawablePadding="8dp" android:background="@android:color/white" android:inputType="text" android:maxLines="1" />
     </androidx.cardview.widget.CardView>
 
+    <!-- ASHA Count -->
+    <TextView android:id="@+id/tvAshaCount" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="8dp" android:text="Total ASHA Workers: 0" android:textSize="14sp" android:textStyle="bold" android:textColor="#333333" />
+
     <!-- RecyclerView for ASHA list -->
     <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerViewAsha" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="16dp" android:clipToPadding="false" />
 

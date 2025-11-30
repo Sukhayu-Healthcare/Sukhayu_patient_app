@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ class ViewAshaDataActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var ashaAdapter: AshaAdapter
     private lateinit var etSearchAsha: EditText
+    private lateinit var tvAshaCount: TextView
     private var ashaListFull: List<AshaWorker> = emptyList() // Keep full list for filtering
     private val TAG = "ViewAshaDataActivity"
 
@@ -35,6 +37,7 @@ class ViewAshaDataActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         
         etSearchAsha = findViewById(R.id.etSearchAsha)
+        tvAshaCount = findViewById(R.id.tvAshaCount)
 
         ashaAdapter = AshaAdapter(emptyList()) { ashaWorker ->
             navigateToAshaDetails(ashaWorker)
@@ -69,9 +72,18 @@ class ViewAshaDataActivity : AppCompatActivity() {
         }
         
         ashaAdapter.updateData(filteredList)
+        updateAshaCount(filteredList.size, ashaListFull.size)
         
         if (filteredList.isEmpty() && query.isNotEmpty()) {
             Toast.makeText(this, "No ASHA workers found matching '$query'", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateAshaCount(displayedCount: Int, totalCount: Int) {
+        tvAshaCount.text = if (displayedCount == totalCount) {
+            "Total ASHA Workers: $totalCount"
+        } else {
+            "Showing $displayedCount of $totalCount ASHA Workers"
         }
     }
 
@@ -118,6 +130,7 @@ class ViewAshaDataActivity : AppCompatActivity() {
                     
                     ashaListFull = ashaWorkers // Store full list
                     ashaAdapter.updateData(ashaWorkers)
+                    updateAshaCount(ashaWorkers.size, ashaWorkers.size)
                     
                     if (ashaWorkers.isEmpty()) {
                         Toast.makeText(this@ViewAshaDataActivity, "No ASHA workers registered yet", Toast.LENGTH_SHORT).show()
