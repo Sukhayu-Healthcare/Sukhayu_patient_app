@@ -1,118 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/white">
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F5F5F5">
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-        <!-- Include Header -->
         <include layout="@layout/include_header" />
 
-        <!-- Profile Image Section -->
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="16dp" android:gravity="center">
+        <!-- Profile Header Card -->
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:layout_marginBottom="20dp" app:cardCornerRadius="12dp" app:cardElevation="4dp">
 
-            <ImageView android:id="@+id/profile_image" android:layout_width="80dp" android:layout_height="80dp" android:scaleType="centerCrop" android:src="@drawable/sample_patient" android:layout_centerHorizontal="true" />
+            <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="24dp" android:gravity="center">
 
-            <ImageButton android:id="@+id/btn_change_image" android:layout_width="32dp" android:layout_height="32dp" android:layout_below="@id/profile_image" android:layout_centerHorizontal="true" android:layout_marginTop="8dp" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Change Image" android:src="@android:drawable/ic_menu_camera" />
+                <ImageView android:id="@+id/profile_image" android:layout_width="100dp" android:layout_height="100dp" android:layout_centerHorizontal="true" android:scaleType="centerCrop" android:src="@drawable/sample_patient" />
 
-            <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/btn_change_image" android:layout_centerHorizontal="true" android:layout_marginTop="8dp" android:text="ASHA Name" android:textSize="18sp" android:textStyle="bold" />
+                <ImageButton android:id="@+id/btn_change_image" android:layout_width="40dp" android:layout_height="40dp" android:layout_below="@id/profile_image" android:layout_centerHorizontal="true" android:layout_marginTop="12dp" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Change profile picture" android:src="@android:drawable/ic_menu_camera" />
 
-            <TextView android:id="@+id/tvPatientId" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPatientName" android:layout_centerHorizontal="true" android:layout_marginTop="4dp" android:text="Supervisor ID: --" android:textSize="14sp" />
+                <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/btn_change_image" android:layout_centerHorizontal="true" android:layout_marginTop="12dp" android:text="ASHA Name" android:textSize="22sp" android:textStyle="bold" android:textColor="#212121" />
 
-        </RelativeLayout>
+                <TextView android:id="@+id/tvPatientId" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPatientName" android:layout_centerHorizontal="true" android:layout_marginTop="6dp" android:text="Supervisor ID: --" android:textSize="16sp" android:textColor="#757575" />
 
-        <!-- Card View Container (Read-only display) -->
-        <LinearLayout android:id="@+id/card_view_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="16dp" android:visibility="visible">
+            </RelativeLayout>
 
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Supervisor ID" android:textStyle="bold" android:textSize="16sp" />
-                <TextView android:id="@+id/tv_asha_id" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="SUPERVISOR001" android:textAlignment="textEnd" android:textSize="16sp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- CARD VIEW container -->
+        <androidx.cardview.widget.CardView android:id="@+id/card_view_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" app:cardCornerRadius="12dp" app:cardElevation="4dp">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+
+                <!-- ID -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
+
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Supervisor ID" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+
+                    <TextView android:id="@+id/tv_asha_id" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
+
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" />
+
+                <!-- NAME -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
+
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Full Name" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+
+                    <TextView android:id="@+id/tv_full_name" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
+
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" />
+
+                <!-- Gender -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
+
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Gender" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+
+                    <TextView android:id="@+id/tv_gender" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Female" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
+
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" />
+
+                <!-- Phone -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
+
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Phone Number" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+
+                    <TextView android:id="@+id/tv_phone_no" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
+
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" />
+
+                <!-- Village -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
+
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Village" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+
+                    <TextView android:id="@+id/tv_village" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
+
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" />
+
+                <!-- District -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
+
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="District" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+
+                    <TextView android:id="@+id/tv_district" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
+
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" />
+
+                <!-- Taluka -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
+
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Taluka" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+
+                    <TextView android:id="@+id/tv_taluka" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Full Name" android:textStyle="bold" android:textSize="16sp" />
-                <TextView android:id="@+id/tv_full_name" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Name" android:textAlignment="textEnd" android:textSize="16sp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- FORM -->
+        <androidx.cardview.widget.CardView android:id="@+id/form_view_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:visibility="gone" app:cardCornerRadius="12dp" app:cardElevation="4dp">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Supervisor ID" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <EditText android:id="@+id/et_asha_id" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Full Name" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <EditText android:id="@+id/et_full_name" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Phone Number" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <EditText android:id="@+id/et_phone_no" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:inputType="phone" android:background="@drawable/rounded_edittext" />
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Password (optional)" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <EditText android:id="@+id/et_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:hint="Leave blank to keep current" android:inputType="textPassword" android:background="@drawable/rounded_edittext" />
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Village" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <EditText android:id="@+id/et_village" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="District" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <EditText android:id="@+id/et_district" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Taluka" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <EditText android:id="@+id/et_taluka" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />
+
+                <Spinner android:id="@+id/spinner_gender" android:visibility="gone" android:layout_width="0dp" android:layout_height="0dp" />
             </LinearLayout>
 
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Date of Birth" android:textStyle="bold" android:textSize="16sp" />
-                <TextView android:id="@+id/tv_age" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="--" android:textAlignment="textEnd" android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Gender" android:textStyle="bold" android:textSize="16sp" />
-                <TextView android:id="@+id/tv_gender" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="--" android:textAlignment="textEnd" android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Phone Number" android:textStyle="bold" android:textSize="16sp" />
-                <TextView android:id="@+id/tv_phone_no" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="--" android:textAlignment="textEnd" android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Village" android:textStyle="bold" android:textSize="16sp" />
-                <TextView android:id="@+id/tv_village" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="--" android:textAlignment="textEnd" android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="District" android:textStyle="bold" android:textSize="16sp" />
-                <TextView android:id="@+id/tv_district" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="--" android:textAlignment="textEnd" android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Taluka" android:textStyle="bold" android:textSize="16sp" />
-                <TextView android:id="@+id/tv_taluka" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="--" android:textAlignment="textEnd" android:textSize="16sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Form View Container (Editable fields) -->
-        <LinearLayout android:id="@+id/form_view_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="16dp" android:visibility="gone">
-
-            <!-- Supervisor ID (Read-only) -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Supervisor ID" android:textStyle="bold" android:textSize="16sp" android:layout_marginBottom="8dp" />
-
-            <EditText android:id="@+id/et_asha_id" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Supervisor ID" android:inputType="text" android:enabled="false" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" android:layout_marginBottom="16dp" />
-
-            <!-- Full Name -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Full Name" android:textStyle="bold" android:textSize="16sp" android:layout_marginBottom="8dp" />
-
-            <EditText android:id="@+id/et_full_name" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Full Name" android:inputType="text" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" android:layout_marginBottom="16dp" />
-
-            <!-- Date of Birth -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Date of Birth" android:textStyle="bold" android:textSize="16sp" android:layout_marginBottom="8dp" />
-
-            <EditText android:id="@+id/et_age" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Select Date of Birth" android:inputType="none" android:focusable="false" android:clickable="true" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" android:layout_marginBottom="16dp" />
-
-            <!-- Phone Number -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Phone Number" android:textStyle="bold" android:textSize="16sp" android:layout_marginBottom="8dp" />
-
-            <EditText android:id="@+id/et_phone_no" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Phone Number" android:inputType="phone" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" android:layout_marginBottom="16dp" />
-
-            <!-- Village -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Village" android:textStyle="bold" android:textSize="16sp" android:layout_marginBottom="8dp" />
-
-            <EditText android:id="@+id/et_village" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Village" android:inputType="text" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" android:layout_marginBottom="16dp" />
-
-            <!-- District -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="District" android:textStyle="bold" android:textSize="16sp" android:layout_marginBottom="8dp" />
-
-            <EditText android:id="@+id/et_district" android:layout_width="match_parent" android:layout_height="56dp" android:hint="District" android:inputType="text" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" android:layout_marginBottom="16dp" />
-
-            <!-- Taluka -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Taluka" android:textStyle="bold" android:textSize="16sp" android:layout_marginBottom="8dp" />
-
-            <EditText android:id="@+id/et_taluka" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Taluka" android:inputType="text" android:padding="16dp" android:textSize="16sp" android:background="@drawable/rounded_edittext" android:layout_marginBottom="16dp" />
-
-            <!-- Hidden Gender Spinner -->
-            <Spinner android:id="@+id/spinner_gender" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
-
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <!-- Buttons -->
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="24dp" android:gravity="center">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="24dp" android:orientation="horizontal" android:gravity="center">
 
-            <Button android:id="@+id/btn_edit" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="Edit" android:backgroundTint="#4CAF50" android:textColor="@color/white" />
+            <Button android:id="@+id/btn_edit" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:layout_marginEnd="10dp" android:text="Edit Profile" android:textSize="16sp" android:textStyle="bold" android:textColor="@android:color/white" android:backgroundTint="#4CAF50" />
 
-            <Button android:id="@+id/btn_logout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:text="Logout" android:backgroundTint="#F44336" android:textColor="@color/white" />
+            <Button android:id="@+id/btn_logout" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:layout_marginStart="10dp" android:text="Logout" android:textSize="16sp" android:textStyle="bold" android:textColor="@android:color/white" android:backgroundTint="#F44336" />
 
         </LinearLayout>
 

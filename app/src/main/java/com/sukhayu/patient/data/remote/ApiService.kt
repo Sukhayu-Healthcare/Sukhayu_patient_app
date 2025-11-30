@@ -60,16 +60,16 @@ data class AshaListResponse(
 )
 
 data class SupervisorProfile(
-    val user_id: String,
-    val user_name: String,
-    val phone: String,
-    val user_role: String,
+    val user_id: String?,
+    val user_name: String?,
+    val phone: String?,
+    val user_role: String?,
     val date_of_birth: String?,
-    val user_created_at: String,
-    val asha_id: String,
-    val village: String,
-    val district: String,
-    val taluka: String,
+    val user_created_at: String?,
+    val asha_id: String?,
+    val village: String?,
+    val district: String?,
+    val taluka: String?,
     val profile_pic: String?,
     val supervisor_id: String?
 )
@@ -105,6 +105,12 @@ data class UpdateAshaRequest(
     val supervisor_id: String?
 )
 
+data class SelfUpdateRequest(
+    val asha_password: String? = null,
+    val asha_phone: String? = null,
+    val asha_profile_pic: String? = null
+)
+
 interface ApiService {
 
     @POST("patient/v2/login")
@@ -120,8 +126,9 @@ interface ApiService {
     @PUT("asha/profile")
     fun updateSupervisorProfile(
         @Header("Authorization") token: String,
-        @Body updateData: Map<String, Any?>
+        @Body body: SelfUpdateRequest
     ): Call<UpdateProfileResponse>
+
 
     @POST("asha/register-asha")
     fun registerAsha(
