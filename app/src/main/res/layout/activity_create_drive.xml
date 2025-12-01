@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="#F8F9FA">
+
+    <include layout="@layout/include_header" />
+
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+
+            <!-- Drive Date Card -->
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+
+                        <View android:layout_width="3dp" android:layout_height="20dp" android:background="#4CAF50" android:layout_marginEnd="10dp" />
+
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Drive Date" android:textSize="15sp" android:textStyle="bold" android:textColor="#1A1A2E" />
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="*" android:textSize="16sp" android:textColor="#E53935" android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <Button android:id="@+id/btnSelectDate" android:layout_width="match_parent" android:layout_height="50dp" android:text="Select Date" android:textSize="15sp" android:textStyle="bold" android:textAllCaps="false" android:background="@drawable/button_rounded_green" android:textColor="@android:color/white" android:stateListAnimator="@null" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="12dp" android:paddingStart="4dp">
+
+                        <View android:layout_width="6dp" android:layout_height="6dp" android:background="#4CAF50" android:layout_marginEnd="8dp" />
+
+                        <TextView android:id="@+id/tvSelectedDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No date selected" android:textSize="13sp" android:textColor="#757575" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Venue Card -->
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+
+                        <View android:layout_width="3dp" android:layout_height="20dp" android:background="#4CAF50" android:layout_marginEnd="10dp" />
+
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Venue" android:textSize="15sp" android:textStyle="bold" android:textColor="#1A1A2E" />
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="*" android:textSize="16sp" android:textColor="#E53935" android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <EditText android:id="@+id/etVenue" android:layout_width="match_parent" android:layout_height="50dp" android:inputType="text" android:hint="e.g. Community Center, Ward 5" android:paddingStart="14dp" android:paddingEnd="14dp" android:background="@drawable/edittext_rounded" android:textSize="14sp" android:textColor="#1A1A2E" android:textColorHint="#BDBDBD" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Remarks Card -->
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+
+                        <View android:layout_width="3dp" android:layout_height="20dp" android:background="#9E9E9E" android:layout_marginEnd="10dp" />
+
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Remarks" android:textSize="15sp" android:textStyle="bold" android:textColor="#1A1A2E" />
+
+                        <ImageButton android:id="@+id/btnMicRemark" android:layout_width="44dp" android:layout_height="44dp" android:src="@android:drawable/ic_btn_speak_now" android:scaleType="centerInside" android:contentDescription="Voice Input" android:background="@drawable/mic_button_green" android:tint="#4CAF50" />
+
+                    </LinearLayout>
+
+                    <EditText android:id="@+id/etRemark" android:layout_width="match_parent" android:layout_height="120dp" android:inputType="textMultiLine" android:gravity="top|start" android:hint="Tap mic or type remarks..." android:paddingTop="14dp" android:paddingStart="14dp" android:paddingEnd="14dp" android:paddingBottom="14dp" android:background="@drawable/edittext_rounded" android:textSize="14sp" android:textColor="#1A1A2E" android:textColorHint="#BDBDBD" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Bottom Action Buttons -->
+    <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="0dp" app:cardElevation="8dp" app:cardBackgroundColor="@android:color/white">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="16dp" android:paddingBottom="20dp" android:spacing="16dp" android:gravity="center">
+
+            <Button android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Cancel" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:background="@drawable/button_rounded_gray" android:textColor="#E53935" android:stateListAnimator="@null" />
+
+            <Button android:id="@+id/btnCreate" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Create Drive" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:background="@drawable/button_rounded_green" android:textColor="@android:color/white" android:stateListAnimator="@null" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

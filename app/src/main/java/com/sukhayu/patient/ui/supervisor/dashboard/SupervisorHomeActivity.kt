@@ -14,11 +14,12 @@ import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.SupervisorProfile
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ui.supervisor.ViewAshaDataActivity
-import com.sukhayu.patient.ui.asha.profile.AshaProfileActivity
+import com.sukhayu.patient.ui.supervisor.ViewSurveysAndDrivesActivity
 import com.sukhayu.patient.ui.supervisor.profile.SupervisorAshaProfileActivity
 import com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity
+import com.sukhayu.patient.ui.supervisor.surveys.CreateSurveyActivity
+import com.sukhayu.patient.ui.supervisor.drives.CreateDriveActivity
 import com.sukhayu.patient.utils.TokenManager
-import com.sukhayu.utils.VoiceInputHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,10 +36,9 @@ class SupervisorHomeActivity : AppCompatActivity() {
     private lateinit var cardCreateSurvey: MaterialCardView
     private lateinit var cardCreateDrive: MaterialCardView
     private lateinit var cardProfile: MaterialCardView
+    private lateinit var cardViewSurveysAndDrives: MaterialCardView
 
     private var supervisorProfile: SupervisorProfile? = null
-
-    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +50,6 @@ class SupervisorHomeActivity : AppCompatActivity() {
         loadProfile()
         setupListeners()
         requestAudioPermission()
-        voiceHelper = VoiceInputHelper(this)
-        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun initViews() {
@@ -65,6 +63,7 @@ class SupervisorHomeActivity : AppCompatActivity() {
         cardCreateSurvey = findViewById(R.id.cardCreateSurvey)
         cardCreateDrive = findViewById(R.id.cardCreateDrive)
         cardProfile = findViewById(R.id.cardProfile)
+        cardViewSurveysAndDrives = findViewById(R.id.cardViewSurveysAndDrives)
     }
 
     private fun loadProfile() {
@@ -114,7 +113,7 @@ class SupervisorHomeActivity : AppCompatActivity() {
         btnLogout.setOnClickListener { logout() }
 
         cardProfile.setOnClickListener {
-            val intent = Intent(this, AshaProfileActivity::class.java)
+            val intent = Intent(this, SupervisorAshaProfileActivity::class.java)
             startActivity(intent)
         }
 
@@ -124,6 +123,18 @@ class SupervisorHomeActivity : AppCompatActivity() {
 
         cardViewAsha.setOnClickListener {
             startActivity(Intent(this, ViewAshaDataActivity::class.java))
+        }
+
+        cardCreateSurvey.setOnClickListener {
+            startActivity(Intent(this, CreateSurveyActivity::class.java))
+        }
+
+        cardCreateDrive.setOnClickListener {
+            startActivity(Intent(this, CreateDriveActivity::class.java))
+        }
+
+        cardViewSurveysAndDrives.setOnClickListener {
+            startActivity(Intent(this, ViewSurveysAndDrivesActivity::class.java))
         }
     }
 
@@ -144,6 +155,5 @@ class SupervisorHomeActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        voiceHelper.destroy()
     }
 }

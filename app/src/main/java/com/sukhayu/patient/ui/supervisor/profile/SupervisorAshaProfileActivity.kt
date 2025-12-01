@@ -16,7 +16,6 @@ import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.*
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
-import com.sukhayu.utils.VoiceInputHelper
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import retrofit2.Call
@@ -55,8 +54,6 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
     private lateinit var btnEdit: Button
     private lateinit var btnLogout: Button
 
-    private lateinit var voiceHelper: VoiceInputHelper
-
     private val imagePicker = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri ->
@@ -79,8 +76,6 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
             setupListeners()
 
             requestAudioPermission()
-            voiceHelper = VoiceInputHelper(this)
-            VoiceInputHelper.attachToAllEditTexts(this)
         } catch (e: Exception) {
             Log.e("AshaProfile", "Error in onCreate", e)
             toast("Error initializing profile: ${e.message}")
@@ -321,7 +316,6 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        voiceHelper.destroy()
     }
 
     private fun toast(msg: String) {

@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="8dp" app:cardCornerRadius="12dp" app:cardElevation="4dp" app:strokeWidth="1dp" app:strokeColor="@android:color/darker_gray">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
+
+            <TextView android:id="@+id/tvSurveyName" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Survey Name" android:textSize="16sp" android:textStyle="bold" android:textColor="@android:color/black" />
+
+            <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Status" android:textSize="12sp" android:textStyle="bold" android:paddingStart="8dp" android:paddingEnd="8dp" android:paddingTop="4dp" android:paddingBottom="4dp" android:background="@drawable/status_badge_background" android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="8dp">
+
+            <TextView android:id="@+id/tvType" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Type: General Survey" android:textSize="13sp" android:textColor="@android:color/darker_gray" android:layout_marginBottom="4dp" />
+
+            <TextView android:id="@+id/tvDate" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Date: 2024-01-15" android:textSize="13sp" android:textColor="@android:color/darker_gray" android:layout_marginBottom="4dp" />
+
+            <TextView android:id="@+id/tvAshaName" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="ASHA: Ramesh Kumar" android:textSize="13sp" android:textColor="@android:color/darker_gray" android:layout_marginBottom="4dp" />
+
+        </LinearLayout>
+
+        <TextView android:id="@+id/tvPatientCount" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Patients: 45" android:textSize="14sp" android:textStyle="bold" android:textColor="@android:color/holo_green_light" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

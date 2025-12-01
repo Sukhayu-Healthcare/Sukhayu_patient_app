@@ -45,8 +45,12 @@
         <!-- Supervisor -->
         <activity android:name="com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity" android:exported="true"/>
         <activity android:name="com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity" android:exported="true"/>
-        <activity android:name="com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity" android:exported="false" />
+        <activity android:name="com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity" android:exported="true" />
+        <activity android:name="com.sukhayu.patient.ui.supervisor.profile.SupervisorAshaProfileActivity" android:exported="true" />
         <activity android:name=".ui.supervisor.ViewAshaDataActivity" android:exported="false" />
+        <activity android:name="com.sukhayu.patient.ui.supervisor.surveys.CreateSurveyActivity" android:exported="false" />
+        <activity android:name="com.sukhayu.patient.ui.supervisor.drives.CreateDriveActivity" android:exported="false" />
+        <activity android:name="com.sukhayu.patient.ui.supervisor.ViewSurveysAndDrivesActivity" android:exported="true" />
 
         <!-- ASHA Dashboard (non-launcher) -->
         <activity android:name="com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity" android:exported="true"/>

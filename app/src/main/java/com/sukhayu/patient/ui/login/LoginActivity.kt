@@ -120,9 +120,9 @@ class LoginActivity : AppCompatActivity() {
         getSharedPreferences("auth", MODE_PRIVATE).edit().apply {
             putString("token", data.token)
             putString("role", data.role)
-            putString("user_id", data.patient.id)
-            putString("user_name", data.patient.name)
-            putString("user_phone", data.patient.phone)
+            putString("user_id", data.patient.id ?: "")
+            putString("user_name", data.patient.name ?: "")
+            putString("user_phone", data.patient.phone ?: "")
             putString("supreme_id", data.patient.supreme_id ?: "")
             apply()
         }
@@ -130,7 +130,7 @@ class LoginActivity : AppCompatActivity() {
         // Also update TokenManager
         TokenManager.saveToken(
             token = data.token,
-            userId = data.patient.id,
+            userId = data.patient.id ?: data.patient.phone ?: "unknown",
             supremeId = data.patient.supreme_id ?: "",
             role = data.role
         )
@@ -140,19 +140,26 @@ class LoginActivity : AppCompatActivity() {
         getSharedPreferences("auth", MODE_PRIVATE).edit().apply {
             putString("token", data.token)
             putString("role", data.role)
-            putString("user_id", data.user.id)
-            putString("user_name", data.user.name)
-            putString("user_phone", data.user.phone)
+            putString("user_id", data.user.id ?: "")
+            putString("user_name", data.user.name ?: "")
+            putString("user_phone", data.user.phone ?: "")
             apply()
         }
 
-        // Also update TokenManager
-        TokenManager.saveToken(
-            token = data.token,
-            userId = data.user.id,
-            supremeId = "",
-            role = data.role
-        )
+        // Also update TokenManager with null checks
+        val userId = data.user.id ?: data.user.phone ?: "unknown_user"
+        
+        if (userId != null && userId.isNotEmpty()) {
+            TokenManager.saveToken(
+                token = data.token,
+                userId = userId,
+                supremeId = "",
+                role = data.role
+            )
+        } else {
+            Toast.makeText(this, "Invalid user ID from server", Toast.LENGTH_SHORT).show()
+            Log.e("LoginActivity", "User ID is null or empty: ${data.user.id}, phone: ${data.user.phone}")
+        }
     }
 
     override fun onDestroy() {

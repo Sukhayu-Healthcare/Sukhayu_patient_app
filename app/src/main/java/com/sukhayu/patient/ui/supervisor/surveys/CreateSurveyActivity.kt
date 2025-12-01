@@ -1,4 +1,4 @@
-package com.sukhayu.patient.ui.supervisor.drives
+package com.sukhayu.patient.ui.supervisor.surveys
 
 import android.Manifest
 import android.app.DatePickerDialog
@@ -8,49 +8,57 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.R
+import com.sukhayu.utils.VoiceInputHelper
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CreateDriveActivity : AppCompatActivity() {
+class CreateSurveyActivity : AppCompatActivity() {
 
-    private lateinit var voiceHelper: VoiceInputHelper
+    private lateinit var spinnerSurveyType: Spinner
     private lateinit var btnSelectDate: Button
     private lateinit var tvSelectedDate: TextView
-    private lateinit var etVenue: EditText
     private lateinit var etRemark: EditText
     private lateinit var btnMicRemark: ImageButton
     private lateinit var btnCreate: Button
     private lateinit var btnCancel: Button
+    private lateinit var voiceHelper: VoiceInputHelper
 
     private var selectedDate: String = ""
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_drive)
+        setContentView(R.layout.activity_create_survey)
 
         initViews()
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
+        setupSpinner()
         setupListeners()
     }
 
     private fun initViews() {
+        spinnerSurveyType = findViewById(R.id.spinnerSurveyType)
         btnSelectDate = findViewById(R.id.btnSelectDate)
         tvSelectedDate = findViewById(R.id.tvSelectedDate)
-        etVenue = findViewById(R.id.etVenue)
         etRemark = findViewById(R.id.etRemark)
         btnMicRemark = findViewById(R.id.btnMicRemark)
         btnCreate = findViewById(R.id.btnCreate)
         btnCancel = findViewById(R.id.btnCancel)
     }
 
+    private fun setupSpinner() {
+        val surveyTypes = arrayOf("Select Survey Type", "Tuberculosis", "Pregnancy", "General Survey")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, surveyTypes)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerSurveyType.adapter = adapter
+    }
+
     private fun setupListeners() {
         btnSelectDate.setOnClickListener { showDatePicker() }
         btnMicRemark.setOnClickListener { startVoiceInput() }
-        btnCreate.setOnClickListener { createDrive() }
+        btnCreate.setOnClickListener { createSurvey() }
         btnCancel.setOnClickListener { finish() }
     }
 
@@ -72,21 +80,22 @@ class CreateDriveActivity : AppCompatActivity() {
         voiceHelper.startVoiceInput(etRemark)
     }
 
-    private fun createDrive() {
-        val venue = etVenue.text.toString()
+    private fun createSurvey() {
+        val surveyType = spinnerSurveyType.selectedItem.toString()
+        val remark = etRemark.text.toString()
+
+        if (surveyType == "Select Survey Type") {
+            Toast.makeText(this, "Please select survey type", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         if (selectedDate.isEmpty()) {
             Toast.makeText(this, "Please select date", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (venue.isEmpty()) {
-            Toast.makeText(this, "Please enter venue", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // TODO: Call API to create drive
-        Toast.makeText(this, "Drive created on $selectedDate at $venue", Toast.LENGTH_SHORT).show()
+        // TODO: Call API to create survey
+        Toast.makeText(this, "Survey created: $surveyType on $selectedDate", Toast.LENGTH_SHORT).show()
         finish()
     }
 
