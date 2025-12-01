@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
+import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.ApiService
 import com.sukhayu.patient.model.HealthHistoryItem
 import com.sukhayu.patient.model.PatientRegistrationRequest
@@ -37,8 +38,6 @@ import java.util.Locale
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class RegisterPatientActivity : AppCompatActivity() {
 
@@ -67,8 +66,8 @@ class RegisterPatientActivity : AppCompatActivity() {
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val isoDateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-    // Retrofit
-    private lateinit var apiService: ApiService
+    // API Service
+    private val apiService: ApiService by lazy { ApiClient.retrofit }
 
     // Image picker launcher
     private val imagePickerLauncher = registerForActivityResult(
@@ -105,8 +104,8 @@ class RegisterPatientActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asha_register_patient)
 
-        // Initialize Retrofit
-        initRetrofit()
+        // Initialize TokenManager
+        TokenManager.init(this)
 
         // Find views
         findViews()
@@ -127,13 +126,6 @@ class RegisterPatientActivity : AppCompatActivity() {
         VoiceInputHelper.attachToAllEditTexts(this)
     }
 
-    private fun initRetrofit() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8000/") // Update with your actual base URL
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        apiService = retrofit.create(ApiService::class.java)
-    }
 
     private fun findViews() {
         etPatientName = findViewById(R.id.et_patient_name)
@@ -388,30 +380,49 @@ class RegisterPatientActivity : AppCompatActivity() {
         if (!NetworkUtils.isNetworkAvailable(this)) {
             Toast.makeText(
                 this,
-                "Unable to register. Please check network and try again.",
-                Toast.LENGTH_SHORT
+                "No internet connection. Please check your network.",
+                Toast.LENGTH_LONG
             ).show()
             return
         }
 
-        // Disable button and show loading
+        // Disable button to prevent double-submission
         btnRegisterPatient.isEnabled = false
         btnRegisterPatient.text = "Registering..."
 
-        // Get token
+        // Get token from TokenManager
         val token = TokenManager.getToken()
         if (token.isEmpty()) {
-            Toast.makeText(this, "Not logged in. Please login first.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Session expired. Please login again.",
+                Toast.LENGTH_LONG
+            ).show()
             btnRegisterPatient.isEnabled = true
             btnRegisterPatient.text = "Register Patient"
             return
         }
 
-        // Prepare request
+        // Prepare date in ISO format (yyyy-MM-dd)
         val dobISO = convertDobToISO(etDob.text.toString())
-        val phoneDigitsOnly = etPhone.text.toString().replace(Regex("[^0-9]"), "")
-        val supremeId = if (etSupremeId.text.isBlank()) null else etSupremeId.text.toString().toIntOrNull()
+        if (dobISO.isEmpty()) {
+            Toast.makeText(this, "Invalid date format.", Toast.LENGTH_SHORT).show()
+            btnRegisterPatient.isEnabled = true
+            btnRegisterPatient.text = "Register Patient"
+            return
+        }
 
+        // Clean phone number (remove non-digits)
+        val phoneDigitsOnly = etPhone.text.toString().replace(Regex("[^0-9]"), "")
+
+        // Parse supreme_id (null if empty, otherwise convert to Int)
+        val supremeId = if (etSupremeId.text.isBlank()) {
+            null
+        } else {
+            etSupremeId.text.toString().toIntOrNull()
+        }
+
+        // Create request object
         val request = PatientRegistrationRequest(
             name = etPatientName.text.toString().trim(),
             password = etPassword.text.toString(),
@@ -426,47 +437,82 @@ class RegisterPatientActivity : AppCompatActivity() {
             supreme_id = supremeId
         )
 
-        // Make API call
+        Log.d("RegisterPatient", "Submitting registration for: ${request.name}")
+
+        // Make API call with Bearer token
         apiService.registerPatient("Bearer $token", request)
             .enqueue(object : Callback<PatientRegistrationResponse> {
                 override fun onResponse(
                     call: Call<PatientRegistrationResponse>,
                     response: Response<PatientRegistrationResponse>
                 ) {
+                    // Re-enable button
                     btnRegisterPatient.isEnabled = true
                     btnRegisterPatient.text = "Register Patient"
 
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        if (responseBody != null) {
+                    when {
+                        response.isSuccessful && response.body() != null -> {
+                            // Success - show success dialog
+                            val responseBody = response.body()!!
+                            Log.d("RegisterPatient", "Success: Patient ID=${responseBody.patient_id}, Supreme ID=${responseBody.supreme_id}")
                             showSuccessDialog(responseBody)
-                        } else {
+                        }
+                        response.code() == 401 -> {
+                            // Unauthorized - token might be invalid
                             Toast.makeText(
                                 this@RegisterPatientActivity,
-                                "Unexpected error. Please try again.",
-                                Toast.LENGTH_SHORT
+                                "Session expired. Please login again.",
+                                Toast.LENGTH_LONG
                             ).show()
                         }
-                    } else {
-                        // Handle error response
-                        val errorMessage = response.errorBody()?.string() ?: "Registration failed"
-                        Log.e("RegisterPatient", "Error: $errorMessage")
-                        Toast.makeText(
-                            this@RegisterPatientActivity,
-                            "Registration failed: ${response.message()}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        response.code() == 400 -> {
+                            // Bad request - validation error
+                            val errorMessage = try {
+                                response.errorBody()?.string() ?: "Invalid data provided"
+                            } catch (e: Exception) {
+                                "Invalid data provided"
+                            }
+                            Log.e("RegisterPatient", "Validation error: $errorMessage")
+                            Toast.makeText(
+                                this@RegisterPatientActivity,
+                                "Registration failed. Please check all fields.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        response.code() == 500 -> {
+                            // Server error
+                            Toast.makeText(
+                                this@RegisterPatientActivity,
+                                "Server error. Please try again later.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        else -> {
+                            // Other errors
+                            val errorMessage = response.message() ?: "Unknown error"
+                            Log.e("RegisterPatient", "Error ${response.code()}: $errorMessage")
+                            Toast.makeText(
+                                this@RegisterPatientActivity,
+                                "Registration failed: $errorMessage",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
 
                 override fun onFailure(call: Call<PatientRegistrationResponse>, t: Throwable) {
+                    // Re-enable button
                     btnRegisterPatient.isEnabled = true
                     btnRegisterPatient.text = "Register Patient"
-                    Log.e("RegisterPatient", "Network error", t)
+
+                    // Log error
+                    Log.e("RegisterPatient", "Network failure", t)
+
+                    // Show user-friendly error message
                     Toast.makeText(
                         this@RegisterPatientActivity,
-                        "Unable to register. Please check network and try again.",
-                        Toast.LENGTH_SHORT
+                        "Network error. Please check your connection and try again.",
+                        Toast.LENGTH_LONG
                     ).show()
                 }
             })
