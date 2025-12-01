@@ -15,6 +15,8 @@ import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.asha.nhp.NationalHealthProgramsActivity
 import com.sukhayu.patient.ui.asha.registration.RegisterPatientActivity
 import com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity
+import com.sukhayu.patient.ui.login.LoginActivity
+import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
 
 class AshaDashboardActivity : AppCompatActivity() {
@@ -25,8 +27,8 @@ class AshaDashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asha_dashboard)
 
-        // header ASHA name
-        findViewById<TextView>(R.id.tv_asha_name).text = getString(R.string.sample_asha_name)
+        // Load and display ASHA profile data
+        loadProfileData()
 
         // static metrics (replace with DB values later)
         findViewById<TextView>(R.id.tv_total_patients).text = "12"
@@ -65,6 +67,11 @@ class AshaDashboardActivity : AppCompatActivity() {
             // TODO: show help dialog/screen
         }
 
+        // Logout button
+        findViewById<Button>(R.id.tv_logout).setOnClickListener {
+            logout()
+        }
+
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
         VoiceInputHelper.attachToAllEditTexts(this)
@@ -75,6 +82,29 @@ class AshaDashboardActivity : AppCompatActivity() {
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
         }
+    }
+
+    private fun loadProfileData() {
+        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+        val ashaName = prefs.getString("user_name", "ASHA Worker") ?: "ASHA Worker"
+        val ashaId = prefs.getString("user_id", "N/A") ?: "N/A"
+
+        findViewById<TextView>(R.id.tv_asha_name).text = ashaName
+        findViewById<TextView>(R.id.tvAshaId).text = "ID: $ashaId"
+    }
+
+    private fun logout() {
+        // Clear shared preferences
+        getSharedPreferences("auth", MODE_PRIVATE).edit().clear().apply()
+
+        // Clear TokenManager
+        TokenManager.clearToken()
+
+        // Navigate to login with clear task flag
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     override fun onDestroy() {
