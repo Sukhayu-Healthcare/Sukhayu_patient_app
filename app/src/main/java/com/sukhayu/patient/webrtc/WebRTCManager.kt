@@ -3,6 +3,8 @@ package com.sukhayu.patient.webrtc
 import android.content.Context
 import android.util.Log
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import org.webrtc.*
 import java.util.concurrent.TimeUnit
@@ -18,6 +20,7 @@ class WebRTCManager(
     private var peerConnection: PeerConnection? = null
     private var localVideoTrack: VideoTrack? = null
     private var localAudioTrack: AudioTrack? = null
+    private var patientSocketId: String = ""
     
     private val peerConnectionFactory: PeerConnectionFactory by lazy {
         initPeerConnectionFactory()
@@ -30,6 +33,7 @@ class WebRTCManager(
     var onCallConnected: (() -> Unit)? = null
     var onCallEnded: (() -> Unit)? = null
     var onError: ((String) -> Unit)? = null
+    var onDoctorFound: ((String) -> Unit)? = null
 
     private fun initPeerConnectionFactory(): PeerConnectionFactory {
         val initOptions = PeerConnectionFactory.InitializationOptions.builder(context)
@@ -80,6 +84,66 @@ class WebRTCManager(
         }
         Log.d(TAG, "Registering as patient: $patientId")
         webSocket?.send(registerMessage.toString())
+        
+        // Store patient socket ID after registration
+        patientSocketId = patientId
+    }
+
+    fun findDoctor() {
+        Log.d(TAG, "Finding available doctor")
+        val client = OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .build()
+
+        val jsonBody = JSONObject().apply {
+            put("patientid", patientId)
+            put("caseType", "video")
+            put("role", "MO")
+            put("patientsocketid", patientSocketId)
+        }
+
+        val requestBody = jsonBody.toString()
+            .toRequestBody("application/json; charset=utf-8".toMediaType())
+
+        val request = Request.Builder()
+            .url("https://ashartc.onrender.com/api/patient/patient/find-doctor")
+            .post(requestBody)
+            .build()
+
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
+                Log.e(TAG, "Failed to find doctor: ${e.message}")
+                onError?.invoke("Failed to find doctor: ${e.message}")
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                response.use {
+                    if (!response.isSuccessful) {
+                        Log.e(TAG, "Find doctor failed with code: ${response.code}")
+                        onError?.invoke("No doctor available")
+                        return
+                    }
+
+                    val responseBody = response.body?.string()
+                    Log.d(TAG, "Doctor found response: $responseBody")
+                    
+                    try {
+                        val jsonResponse = JSONObject(responseBody ?: "{}")
+                        val doctorSocketId = jsonResponse.optString("doctorSocketId", "")
+                        
+                        if (doctorSocketId.isNotEmpty()) {
+                            Log.d(TAG, "Doctor found with socket ID: $doctorSocketId")
+                            onDoctorFound?.invoke(doctorSocketId)
+                        } else {
+                            onError?.invoke("No doctor available")
+                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error parsing response: ${e.message}")
+                        onError?.invoke("Error finding doctor")
+                    }
+                }
+            }
+        })
     }
 
     fun initiateCall() {

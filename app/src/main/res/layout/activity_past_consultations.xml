@@ -3,10 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
 
     <!-- Single direct child of ScrollView -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+
+        <!-- Header -->
+        <include android:id="@+id/header" layout="@layout/include_header" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp" />
 
         <!-- Your existing content goes here -->
-        <LinearLayout android:id="@+id/llPast" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+        <LinearLayout android:id="@+id/llPast" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
             <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp" app:cardCornerRadius="8dp" app:cardElevation="4dp">
 

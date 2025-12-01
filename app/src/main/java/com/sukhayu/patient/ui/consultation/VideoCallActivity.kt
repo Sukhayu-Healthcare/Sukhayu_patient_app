@@ -21,6 +21,7 @@ class VideoCallActivity : AppCompatActivity() {
     private var webRTCManager: WebRTCManager? = null
     private var patientId: String = ""
     private var doctorId: String = ""
+    private var actualDoctorSocketId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,10 +106,18 @@ class VideoCallActivity : AppCompatActivity() {
                     Toast.makeText(this@VideoCallActivity, error, Toast.LENGTH_SHORT).show()
                 }
             }
+            onDoctorFound = { doctorSocketId ->
+                runOnUiThread {
+                    actualDoctorSocketId = doctorSocketId
+                    Toast.makeText(this@VideoCallActivity, "Doctor found, connecting...", Toast.LENGTH_SHORT).show()
+                    initiateCall()
+                }
+            }
         }
 
         webRTCManager?.initializeWebSocket()
-        webRTCManager?.initiateCall()
+        // Find doctor first, then initiate call in onDoctorFound callback
+        webRTCManager?.findDoctor()
     }
 
     private fun endCall() {
