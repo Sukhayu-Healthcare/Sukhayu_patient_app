@@ -32,6 +32,9 @@
         <activity android:name="com.sukhayu.patient.ui.consultation.PastConsultationsActivity" android:exported="true" />
         <activity android:name="com.sukhayu.patient.ui.consultation.DoctorDetailActivity" android:exported="false" />
 
+        <!-- WebRTC Video Call Activity -->
+        <activity android:name="com.sukhayu.patient.ui.consultation.VideoCallActivity" android:exported="false" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|screenSize" />
+
         <!-- AI Symptom Checker -->
         <activity android:name="com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity" android:exported="true" />
         <activity android:name="com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity" android:exported="true"/>
@@ -88,6 +91,11 @@
         <!-- General Survey Activity -->
         <activity android:name="com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyActivity" android:exported="false" android:label="General Screening" />
         <activity android:name="com.sukhayu.patient.ui.supervisor.AshaDetailActivity" android:exported="true" />
+
+        <!-- Add FileProvider -->
+        <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.databinding.ActivityDiseaseOutbreakBinding
 import com.sukhayu.utils.VoiceInputHelper
 
@@ -105,18 +106,20 @@ class DiseaseOutbreakActivity : AppCompatActivity() {
 
         override fun getItemCount(): Int = items.size
 
-        class VH(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
-            private val tvName: android.widget.TextView =
-                view.findViewById(android.R.id.text1)
-            private val tvCases: android.widget.TextView? =
-                view.findViewById(com.sukhayu.patient.R.id.tvCases)
-            private val tvPrecautions: android.widget.TextView? =
-                view.findViewById(com.sukhayu.patient.R.id.tvPrecautions)
+        inner class VH(view: View) : RecyclerView.ViewHolder(view) {
+            val tvTitle: android.widget.TextView? = view.findViewById(com.sukhayu.patient.R.id.tvAwarenessTitle)
+            val tvDesc: android.widget.TextView? = view.findViewById(com.sukhayu.patient.R.id.tvAwarenessDescription)
+
+            init {
+                // Use safe calls to prevent crashes
+                if (tvTitle == null || tvDesc == null) {
+                    android.util.Log.e("DiseaseOutbreak", "Layout missing required views")
+                }
+            }
 
             fun bind(item: AwarenessItem) {
-                tvName.text = item.title
-                tvCases?.text = "Cases: ${item.cases}"
-                tvPrecautions?.text = "Precautions: ${item.precautions}"
+                tvTitle?.text = item.title
+                tvDesc?.text = "Cases: ${item.cases}, Precautions: ${item.precautions}"
             }
         }
     }

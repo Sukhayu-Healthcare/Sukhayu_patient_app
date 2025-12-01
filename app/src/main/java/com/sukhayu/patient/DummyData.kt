@@ -203,41 +203,33 @@ object DummyData {
                 id = "DOC_001",
                 name = "Dr. Rajesh Kumar",
                 specialty = "General Physician",
-                rating = 4.5,
+                rating = 4.5f,
                 experience = 10,
-                availability = "Available",
-                consultationFee = 500.0,
-                imageUrl = null
+                available = true
             ),
             Doctor(
                 id = "DOC_002",
                 name = "Dr. Priya Patel",
                 specialty = "Gynecologist",
-                rating = 4.8,
+                rating = 4.8f,
                 experience = 15,
-                availability = "Available",
-                consultationFee = 800.0,
-                imageUrl = null
+                available = true
             ),
             Doctor(
                 id = "DOC_003",
                 name = "Dr. Amit Sharma",
                 specialty = "Pediatrician",
-                rating = 4.6,
+                rating = 4.6f,
                 experience = 8,
-                availability = "Busy",
-                consultationFee = 600.0,
-                imageUrl = null
+                available = false
             ),
             Doctor(
                 id = "DOC_004",
                 name = "Dr. Sunita Verma",
                 specialty = "Cardiologist",
-                rating = 4.9,
+                rating = 4.9f,
                 experience = 20,
-                availability = "Available",
-                consultationFee = 1000.0,
-                imageUrl = null
+                available = true
             )
         )
     }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp" android:gravity="center_horizontal">
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="TTS Test Activity" android:textSize="24sp" android:textStyle="bold" android:gravity="center" android:layout_marginBottom="24dp" />
+
+    <TextView android:id="@+id/tvStatus" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="TTS Status" android:textSize="16sp" android:padding="12dp" android:background="@android:color/darker_gray" android:textColor="@android:color/white" android:layout_marginBottom="16dp" android:hint="Long press to speak this text" />
+
+    <EditText android:id="@+id/etTestText" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Enter text to speak" android:minLines="3" android:gravity="top" android:layout_marginBottom="16dp" />
+
+    <Button android:id="@+id/btnSpeak" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Speak Text" android:textSize="16sp" android:layout_marginBottom="8dp" />
+
+    <Button android:id="@+id/btnStop" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Stop Speaking" android:textSize="16sp" style="?android:attr/buttonBarButtonStyle" />
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Instructions:\n\n1. Type text in the box above\n2. Press 'Speak Text' to hear it\n3. Press 'Stop Speaking' to interrupt\n4. Long press the status text to hear it" android:textSize="14sp" android:layout_marginTop="24dp" android:padding="12dp" android:background="@android:color/darker_gray" android:textColor="@android:color/white" />
+
+</LinearLayout>

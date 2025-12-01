@@ -3,43 +3,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    android:layout_marginBottom="12dp">
+    app:cardElevation="4dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/tvDoctorName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Dr. Name"
+            android:text="Dr. John Doe"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:textSize="16sp"/>
+            app:layout_constraintEnd_toStartOf="@id/btnVideoCall"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvSpecialty"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvDoctorSpecialization"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Specialty"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="4dp"
+            android:text="Cardiologist"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@id/btnVideoCall"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDoctorName" />
 
         <TextView
-            android:id="@+id/tvRating"
+            android:id="@+id/tvDoctorRating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="⭐ 4.5"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@id/btnVideoCall"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDoctorSpecialization" />
+
+        <Button
+            android:id="@+id/btnVideoCall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rating: 4.5"
-            android:layout_marginTop="4dp"/>
+            android:drawableLeft="@android:drawable/ic_menu_call"
+            android:text="Video Call"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnConsult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:text="Consult"
-            android:layout_marginTop="8dp"/>
-    </LinearLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnVideoCall"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

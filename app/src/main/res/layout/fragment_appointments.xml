@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp">
+
+    <TextView android:id="@+id/textViewAppointmentsTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="My Appointments" android:textSize="20sp" android:textStyle="bold" android:layout_marginBottom="16dp" />
+
+    <TextView android:id="@+id/textViewNoAppointments" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="No appointments scheduled" android:textSize="16sp" android:layout_marginBottom="16dp" />
+
+    <Button android:id="@+id/buttonNewAppointment" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Book New Appointment" />
+
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerViewAppointments" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginTop="16dp" />
+
+</LinearLayout>

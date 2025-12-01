@@ -6,11 +6,9 @@ package com.sukhayu.patient.model
 data class Doctor(
     val id: String,
     val name: String,
-    val specialty: String,
-    val rating: Double,
+    val specialty: String? = null,
+    val rating: Float? = null,
     val experience: Int? = null,
-    val availability: String? = null,
-    val consultationFee: Double? = null,
-    val imageUrl: String? = null
+    val available: Boolean = true
 )
 
