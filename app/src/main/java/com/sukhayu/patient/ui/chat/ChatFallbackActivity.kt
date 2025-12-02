@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
-import com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity
+import com.sukhayu.patient.ui.dashboard.DashboardActivity
 import com.sukhayu.patient.ui.videocall.VideoCallActivity
 import com.sukhayu.patient.ui.voicecall.VoiceCallActivity
 
@@ -96,7 +96,7 @@ class ChatFallbackActivity : AppCompatActivity() {
     }
 
     private fun returnToHomepage() {
-        val intent = Intent(this, SupervisorHomeActivity::class.java)
+        val intent = Intent(this, DashboardActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()

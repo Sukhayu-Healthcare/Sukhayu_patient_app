@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -18,8 +17,8 @@ class VoiceCallActivity : AppCompatActivity() {
     private lateinit var tvDoctorName: TextView
     private lateinit var tvTimer: TextView
     private lateinit var tvCallStatus: TextView
-    private lateinit var btnTurnOnVideo: Button
-    private lateinit var btnChat: Button
+    private lateinit var btnTurnOnVideo: ImageButton
+    private lateinit var btnChat: ImageButton
     private lateinit var btnEndCall: ImageButton
 
     private var emergencyMode = false
