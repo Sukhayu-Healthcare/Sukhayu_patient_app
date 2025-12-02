@@ -18,6 +18,7 @@ import com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity
 import com.sukhayu.patient.ui.consultation.ConsultDoctorActivity
 import com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity
 import com.sukhayu.patient.ui.consultation.PastConsultationsActivity
+import com.sukhayu.patient.ui.emergency.EmergencyActivity
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ui.profile.ProfileActivity
 import com.sukhayu.utils.VoiceInputHelper
@@ -119,7 +120,7 @@ class DashboardActivity : AppCompatActivity() {
         //  EMERGENCY
         // ---------------------------------------------------------
         findViewById<Button>(R.id.btnEmergency).setOnClickListener {
-            startActivity(Intent(this, PastConsultationsActivity::class.java))
+            startActivity(Intent(this, EmergencyActivity::class.java))
         }
 
         // ---------------------------------------------------------

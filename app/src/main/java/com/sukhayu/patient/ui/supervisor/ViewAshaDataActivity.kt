@@ -13,14 +13,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.AshaListResponse
 import com.sukhayu.patient.data.remote.AshaWorker
+import com.sukhayu.patient.data.repository.SupervisorRepository
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,10 +37,13 @@ class ViewAshaDataActivity : AppCompatActivity() {
     private var ashaListFull: List<AshaWorker> = emptyList() // Keep full list for filtering
     private val TAG = "ViewAshaDataActivity"
     private lateinit var voiceHelper: VoiceInputHelper
+    private lateinit var repository: SupervisorRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_asha_data)
+
+        repository = SupervisorRepository(this)
 
         recyclerView = findViewById(R.id.recyclerViewAsha)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -120,55 +126,27 @@ class ViewAshaDataActivity : AppCompatActivity() {
         }
 
         Log.d(TAG, "Fetching ASHA list for supervisor")
-        Log.d(TAG, "Token: Bearer ${token.take(20)}...")
 
-        val call = ApiClient.retrofit.getAshaList("Bearer $token")
-        Log.d(TAG, "Full request URL: ${call.request().url}")
-        Log.d(TAG, "Request method: ${call.request().method}")
-        
-        call.enqueue(object : Callback<AshaListResponse> {
-            override fun onResponse(call: Call<AshaListResponse>, response: Response<AshaListResponse>) {
-                Log.d(TAG, "Response code: ${response.code()}")
-                Log.d(TAG, "Response message: ${response.message()}")
+        lifecycleScope.launch {
+            val result = repository.getAshaWorkers()
+            
+            result.onSuccess { ashaWorkers ->
+                Log.d(TAG, "Retrieved ${ashaWorkers.size} ASHA workers")
                 
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    Log.d(TAG, "Response body: $responseBody")
-                    
-                    val ashaWorkers = responseBody?.ashas ?: emptyList()
-                    Log.d(TAG, "Retrieved ${ashaWorkers.size} ASHA workers")
-                    
-                    ashaListFull = ashaWorkers // Store full list
-                    ashaAdapter.updateData(ashaWorkers)
-                    updateAshaCount(ashaWorkers.size, ashaWorkers.size)
-                    
-                    if (ashaWorkers.isEmpty()) {
-                        Toast.makeText(this@ViewAshaDataActivity, "No ASHA workers registered yet", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this@ViewAshaDataActivity, "Loaded ${ashaWorkers.size} ASHA workers", Toast.LENGTH_SHORT).show()
-                    }
+                ashaListFull = ashaWorkers
+                ashaAdapter.updateData(ashaWorkers)
+                updateAshaCount(ashaWorkers.size, ashaWorkers.size)
+                
+                if (ashaWorkers.isEmpty()) {
+                    Toast.makeText(this@ViewAshaDataActivity, "No ASHA workers registered yet", Toast.LENGTH_SHORT).show()
                 } else {
-                    val errorBody = response.errorBody()?.string()
-                    Log.e(TAG, "Failed to fetch: ${response.code()}")
-                    Log.e(TAG, "Error message: ${response.message()}")
-                    Log.e(TAG, "Error body: $errorBody")
-                    
-                    val errorMessage = when (response.code()) {
-                        401 -> "Unauthorized. Please login again."
-                        403 -> "Access forbidden. Only supervisors can view ASHA workers."
-                        404 -> "Supervisor profile not found."
-                        500 -> "Server error. Please try again later."
-                        else -> "Failed to load data: ${response.message()}"
-                    }
-                    Toast.makeText(this@ViewAshaDataActivity, errorMessage, Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@ViewAshaDataActivity, "Loaded ${ashaWorkers.size} ASHA workers", Toast.LENGTH_SHORT).show()
                 }
+            }.onFailure { error ->
+                Log.e(TAG, "Error: ${error.message}", error)
+                Toast.makeText(this@ViewAshaDataActivity, "Error: ${error.message}", Toast.LENGTH_LONG).show()
             }
-
-            override fun onFailure(call: Call<AshaListResponse>, t: Throwable) {
-                Log.e(TAG, "Network error: ${t.message}", t)
-                Toast.makeText(this@ViewAshaDataActivity, "Network error: ${t.message}", Toast.LENGTH_LONG).show()
-            }
-        })
+        }
     }
 
     private fun requestAudioPermission() {

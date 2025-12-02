@@ -97,6 +97,18 @@
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
         </provider>
 
+        <!-- Emergency Activity -->
+        <activity android:name=".ui.emergency.EmergencyActivity" android:exported="false" android:screenOrientation="portrait" />
+
+        <!-- Video Call Activity -->
+        <activity android:name=".ui.videocall.VideoCallActivity" android:exported="false" android:screenOrientation="portrait" />
+
+        <!-- Voice Call Activity -->
+        <activity android:name=".ui.voicecall.VoiceCallActivity" android:exported="false" android:screenOrientation="portrait" />
+
+        <!-- Chat Fallback Activity -->
+        <activity android:name=".ui.chat.ChatFallbackActivity" android:exported="false" android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

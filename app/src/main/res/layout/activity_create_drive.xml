@@ -87,7 +87,7 @@
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="16dp" android:paddingBottom="20dp" android:spacing="16dp" android:gravity="center">
 
-        <Button android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Cancel" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:layout_marginEnd="8dp" android:backgroundTint="#DC2626" android:cornerRadius="12dp" android:stateListAnimator="@null" />
+        <Button android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Cancel" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:layout_marginEnd="8dp" android:backgroundTint="#DC2626" android:stateListAnimator="@null" />
 
         <Button android:id="@+id/btnCreate" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Create Drive" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:layout_marginEnd="8dp" android:backgroundTint="#16A34A" android:textColor="@android:color/white" android:stateListAnimator="@null" />
 

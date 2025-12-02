@@ -12,12 +12,15 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.*
+import com.sukhayu.patient.data.repository.SupervisorRepository
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,6 +57,8 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
     private lateinit var btnEdit: Button
     private lateinit var btnLogout: Button
 
+    private lateinit var repository: SupervisorRepository
+
     private val imagePicker = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri ->
@@ -69,6 +74,8 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
         try {
             setContentView(R.layout.activity_supervisor_profile)
             TokenManager.init(this)
+            
+            repository = SupervisorRepository(this)
             
             initViews()
             setFieldsEnabled(false)
@@ -144,37 +151,24 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
             return
         }
 
-        ApiClient.retrofit.getSupervisorProfile("Bearer $token")
-            .enqueue(object : Callback<SupervisorProfile> {
-                override fun onResponse(
-                    call: Call<SupervisorProfile>,
-                    response: Response<SupervisorProfile>
-                ) {
-                    Log.d("AshaProfile", "Response code: ${response.code()}")
-                    
-                    val body = response.body()
-                    if (response.isSuccessful && body != null) {
-                        Log.d("AshaProfile", "Profile loaded: $body")
-                        displayProfileData(body)
-                        toast("Profile loaded successfully")
-                    } else {
-                        val errorBody = response.errorBody()?.string()
-                        Log.e("AshaProfile", "Failed to load profile: $errorBody")
-                        toast("Failed to load profile: ${response.code()}")
-                        
-                        if (response.code() == 401) {
-                            TokenManager.clearToken()
-                            startActivity(Intent(this@SupervisorAshaProfileActivity, LoginActivity::class.java))
-                            finish()
-                        }
-                    }
+        lifecycleScope.launch {
+            val result = repository.getSupervisorProfile()
+            
+            result.onSuccess { profile ->
+                Log.d("AshaProfile", "Profile loaded: $profile")
+                displayProfileData(profile)
+                toast("Profile loaded successfully")
+            }.onFailure { error ->
+                Log.e("AshaProfile", "Failed to load profile", error)
+                toast("Failed to load profile: ${error.message}")
+                
+                if (error.message?.contains("401") == true) {
+                    TokenManager.clearToken()
+                    startActivity(Intent(this@SupervisorAshaProfileActivity, LoginActivity::class.java))
+                    finish()
                 }
-
-                override fun onFailure(call: Call<SupervisorProfile>, t: Throwable) {
-                    Log.e("AshaProfile", "Network error", t)
-                    toast("Network error: ${t.message}")
-                }
-            })
+            }
+        }
     }
 
     private fun displayProfileData(profile: SupervisorProfile) {
@@ -260,38 +254,25 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
 
         Log.d("AshaProfile", "Updating profile: $updateRequest")
 
-        ApiClient.retrofit.updateSupervisorProfile("Bearer $token", updateRequest)
-            .enqueue(object : Callback<UpdateProfileResponse> {
-                override fun onResponse(
-                    call: Call<UpdateProfileResponse>,
-                    response: Response<UpdateProfileResponse>
-                ) {
-                    btnEdit.isEnabled = true
-                    
-                    if (response.isSuccessful && response.body() != null) {
-                        toast("Profile updated successfully")
-                        val updated = response.body()!!.profile
-                        displayProfileData(updated)
+        lifecycleScope.launch {
+            val result = repository.updateSupervisorProfile(updateRequest)
+            
+            btnEdit.isEnabled = true
+            
+            result.onSuccess { updatedProfile ->
+                toast("Profile updated successfully")
+                displayProfileData(updatedProfile)
 
-                        formViewContainer.visibility = View.GONE
-                        cardViewContainer.visibility = View.VISIBLE
-                        setFieldsEnabled(false)
-                        btnEdit.text = "Edit"
-                    } else {
-                        val errorBody = response.errorBody()?.string()
-                        Log.e("AshaProfile", "Update failed: $errorBody")
-                        toast("Update failed: ${response.code()}")
-                        btnEdit.text = "Save"
-                    }
-                }
-
-                override fun onFailure(call: Call<UpdateProfileResponse>, t: Throwable) {
-                    btnEdit.isEnabled = true
-                    btnEdit.text = "Save"
-                    Log.e("AshaProfile", "Network error", t)
-                    toast("Network error: ${t.message}")
-                }
-            })
+                formViewContainer.visibility = View.GONE
+                cardViewContainer.visibility = View.VISIBLE
+                setFieldsEnabled(false)
+                btnEdit.text = "Edit"
+            }.onFailure { error ->
+                Log.e("AshaProfile", "Update failed", error)
+                toast("Update failed: ${error.message}")
+                btnEdit.text = "Save"
+            }
+        }
     }
 
     private fun setFieldsEnabled(enabled: Boolean) {
