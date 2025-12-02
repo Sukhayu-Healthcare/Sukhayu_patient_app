@@ -7,11 +7,11 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.local.entity.GeneralSurveyEntity
+import com.sukhayu.patient.data.local.entity.toRequest
 import com.sukhayu.utils.VoiceInputHelper
 import android.Manifest
 import android.content.pm.PackageManager
@@ -20,14 +20,6 @@ import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * Canonical General Survey Activity.
- * - Package must be: com.sukhayu.patient.asha.ui.surveys.general_survey
- * - File name must be: GeneralSurveyActivity.kt
- * - Class name must be: GeneralSurveyActivity
- *
- * Renders General Health Survey form for community screening
- */
 class GeneralSurveyActivity : AppCompatActivity() {
 
     companion object {
@@ -105,7 +97,6 @@ class GeneralSurveyActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        // Initialize ViewModel
         viewModel = ViewModelProvider(this)[GeneralSurveyViewModel::class.java]
 
         initializeViews()
@@ -113,6 +104,7 @@ class GeneralSurveyActivity : AppCompatActivity() {
         setupDatePickers()
         setupConditionalFields()
         setupSaveButton()
+        observeViewModel()
 
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
@@ -175,7 +167,6 @@ class GeneralSurveyActivity : AppCompatActivity() {
     private fun readIntentExtrasAndPrefillForm() {
         patientId = intent.getStringExtra(EXTRA_PATIENT_ID)
 
-        // Validate that patientId is not null or empty
         if (patientId.isNullOrBlank()) {
             Toast.makeText(this, "Error: No patient selected. Please search and select a patient first.", Toast.LENGTH_LONG).show()
             finish()
@@ -187,13 +178,11 @@ class GeneralSurveyActivity : AppCompatActivity() {
         val patientGender = intent.getStringExtra(EXTRA_PATIENT_GENDER)
         val patientAge = intent.getStringExtra(EXTRA_PATIENT_AGE)
 
-        // Display patient details in header
         tvPatientNameHeader.text = "Name: ${patientName ?: "-"}"
         tvPatientPhoneHeader.text = "Phone: ${patientPhone ?: "-"}"
         tvPatientGenderHeader.text = "Gender: ${patientGender ?: "-"}"
         tvPatientAgeHeader.text = "Age: ${patientAge ?: "-"}"
 
-        // Pre-fill visit date with today's date
         etVisitDate.setText(dateFormat.format(Date()))
     }
 
@@ -214,7 +203,6 @@ class GeneralSurveyActivity : AppCompatActivity() {
     }
 
     private fun setupConditionalFields() {
-        // Show medication details when "Yes" is selected
         rgCurrentMedication.setOnCheckedChangeListener { _, checkedId ->
             tilMedicationDetails.visibility = if (checkedId == R.id.rbCurrentMedicationYes) {
                 View.VISIBLE
@@ -223,7 +211,6 @@ class GeneralSurveyActivity : AppCompatActivity() {
             }
         }
 
-        // Show referral facility options when referral is needed
         rgReferralNeeded.setOnCheckedChangeListener { _, checkedId ->
             val isReferralNeeded = checkedId == R.id.rbReferralNeededYes
             tvReferralFacilityLabel.visibility = if (isReferralNeeded) View.VISIBLE else View.GONE
@@ -239,6 +226,23 @@ class GeneralSurveyActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeViewModel() {
+        viewModel.submitResult.observe(this) { state ->
+            when (state) {
+                is ResultState.Idle -> Unit
+                is ResultState.Loading ->
+                    Toast.makeText(this, "Submitting...", Toast.LENGTH_SHORT).show()
+                is ResultState.Success -> {
+                    Toast.makeText(this, state.data.message, Toast.LENGTH_LONG).show()
+                    finish()
+                }
+                is ResultState.Error -> {
+                    Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
     private fun validateForm(): Boolean {
         val visitDate = etVisitDate.text.toString().trim()
 
@@ -247,7 +251,6 @@ class GeneralSurveyActivity : AppCompatActivity() {
             return false
         }
 
-        // Check if at least one section has data
         if (!hasAnyData()) {
             Toast.makeText(this, "Please fill at least some survey information", Toast.LENGTH_SHORT).show()
             return false
@@ -257,7 +260,6 @@ class GeneralSurveyActivity : AppCompatActivity() {
     }
 
     private fun hasAnyData(): Boolean {
-        // Check if any radio group has a selection
         return rgDiabetes.checkedRadioButtonId != -1 ||
                 rgHypertension.checkedRadioButtonId != -1 ||
                 rgHeartDisease.checkedRadioButtonId != -1 ||
@@ -271,22 +273,18 @@ class GeneralSurveyActivity : AppCompatActivity() {
     private fun saveGeneralSurvey() {
         Log.d("GENERAL_SURVEY_DB", "saveGeneralSurvey called")
 
-        // Ensure patientId is available
         if (patientId.isNullOrBlank()) {
             Toast.makeText(this, "Error: Patient ID not found", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Build GeneralSurveyEntity from form data
         val surveyEntity = GeneralSurveyEntity(
             patientId = patientId!!,
             patientName = patientName,
 
-            // Section 1: Identification
             visitDate = etVisitDate.text.toString().trim(),
             location = etLocation.text.toString().trim().takeIf { it.isNotEmpty() },
 
-            // Section 2: Existing Conditions
             hasDiabetes = getRadioGroupValue(rgDiabetes),
             hasHypertension = getRadioGroupValue(rgHypertension),
             hasHeartDisease = getRadioGroupValue(rgHeartDisease),
@@ -294,7 +292,6 @@ class GeneralSurveyActivity : AppCompatActivity() {
             hasKidneyDisease = getRadioGroupValue(rgKidneyDisease),
             otherConditions = etOtherConditions.text.toString().trim().takeIf { it.isNotEmpty() },
 
-            // Section 3: Symptoms
             symptomFrequentUrination = getRadioGroupValue(rgFrequentUrination),
             symptomExcessiveThirst = getRadioGroupValue(rgExcessiveThirst),
             symptomWeightLoss = getRadioGroupValue(rgWeightLoss),
@@ -303,21 +300,18 @@ class GeneralSurveyActivity : AppCompatActivity() {
             symptomShortnessOfBreath = getRadioGroupValue(rgShortnessOfBreath),
             symptomFatigue = getRadioGroupValue(rgFatigue),
 
-            // Section 4: Risk Factors
             riskFamilyHistory = getRadioGroupValue(rgFamilyHistory),
             riskTobaccoUse = getRadioGroupValue(rgTobaccoUse),
             riskAlcoholUse = getRadioGroupValue(rgAlcoholUse),
             riskPhysicalInactivity = getRadioGroupValue(rgPhysicalActivity),
             riskUnhealthyDiet = getRadioGroupValue(rgUnhealthyDiet),
 
-            // Section 5: Service Use
             hasRegularCheckups = getRadioGroupValue(rgRegularCheckups),
             onCurrentMedication = getRadioGroupValue(rgCurrentMedication),
             medicationDetails = etMedicationDetails.text.toString().trim().takeIf { it.isNotEmpty() },
             hadRecentBpCheck = getRadioGroupValue(rgRecentBPCheck),
             hadRecentSugarCheck = getRadioGroupValue(rgRecentSugarCheck),
 
-            // Section 6: ASHA Assessment
             referralNeeded = getRadioGroupValue(rgReferralNeeded),
             referralFacility = getReferralFacilityValue(),
             remarks = etRemarks.text.toString().trim().takeIf { it.isNotEmpty() }
@@ -325,15 +319,18 @@ class GeneralSurveyActivity : AppCompatActivity() {
 
         Log.d("GENERAL_SURVEY_DB", "Survey entity created: $surveyEntity")
 
-        // Save using ViewModel
+        // Build request from entity
+        val request = surveyEntity.toRequest()
+        Log.d("GeneralSurvey", "Mapped request = $request")
+
+        // Save locally, then submit to backend
         viewModel.saveSurvey(
             survey = surveyEntity,
             onSuccess = { rowId ->
                 Log.d("GENERAL_SURVEY_DB", "Successfully saved with ID: $rowId")
-                runOnUiThread {
-                    Toast.makeText(this, "General Survey saved successfully (ID: $rowId)", Toast.LENGTH_LONG).show()
-                    finish()
-                }
+
+                // 🔥 CALL BACKEND HERE
+                viewModel.submitGeneralSurvey(request)
             },
             onError = { error ->
                 Log.e("GENERAL_SURVEY_DB", "Error saving survey", error)
@@ -342,12 +339,9 @@ class GeneralSurveyActivity : AppCompatActivity() {
                 }
             }
         )
+
     }
 
-    /**
-     * Helper method to get Boolean value from RadioGroup
-     * Returns true if "Yes" is selected, false if "No" is selected, null if nothing selected
-     */
     private fun getRadioGroupValue(radioGroup: RadioGroup): Boolean? {
         val selectedId = radioGroup.checkedRadioButtonId
         if (selectedId == -1) return null
@@ -358,9 +352,6 @@ class GeneralSurveyActivity : AppCompatActivity() {
         return selectedText.equals("Yes", ignoreCase = true)
     }
 
-    /**
-     * Helper method to get referral facility value
-     */
     private fun getReferralFacilityValue(): String? {
         val selectedId = rgReferralFacility.checkedRadioButtonId
         if (selectedId == -1) return null
@@ -386,4 +377,3 @@ class GeneralSurveyActivity : AppCompatActivity() {
         voiceHelper.destroy()
     }
 }
-

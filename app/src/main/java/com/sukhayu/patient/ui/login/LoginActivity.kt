@@ -15,20 +15,28 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.sukhayu.patient.R
+import com.sukhayu.patient.data.local.AshaLocalDatabase
+import com.sukhayu.patient.data.local.entity.PatientEntity
 import com.sukhayu.patient.data.remote.*
 import com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity
 import com.sukhayu.patient.ui.dashboard.DashboardActivity
 import com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.sukhayu.patient.data.repository.PatientRepository //
+
 
 class LoginActivity : AppCompatActivity() {
 
     private val gson = Gson()
     private lateinit var voiceHelper: VoiceInputHelper
+    private val ioScope = CoroutineScope(Dispatchers.IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,15 +81,24 @@ class LoginActivity : AppCompatActivity() {
                     val json = gson.toJson(response.body())
                     val role = response.body()?.get("role")?.toString()?.lowercase()
 
-                    when (role) {
+                    when (role?.lowercase()) {
 
                         /** PATIENT LOGIN **/
                         "patient" -> {
                             val parsed = gson.fromJson(json, LoginResponsePatient::class.java)
 
                             savePatientLogin(parsed)
+
+                            // 🔥 guard cache so it can't crash the app
+                            try {
+                                cachePatient(parsed.patient)
+                            } catch (e: Exception) {
+                                Log.e("LoginActivity", "Failed to cache patient locally", e)
+                            }
+
                             startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
                         }
+
 
                         /** ASHA / SUPERVISOR LOGIN **/
                         "asha", "supervisor" -> {
@@ -92,6 +109,24 @@ class LoginActivity : AppCompatActivity() {
                             if (role == "supervisor") {
                                 startActivity(Intent(this@LoginActivity, SupervisorHomeActivity::class.java))
                             } else {
+                                Log.d("LoginActivity", "ASHA login branch reached, starting sync...")
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    try {
+                                        val db = AshaLocalDatabase.getInstance(applicationContext)
+                                        val repo = PatientRepository(db, ApiClient.retrofit)
+                                        repo.syncPatientsFromServer(parsed.token)
+                                    } catch (e: Exception) {
+                                        Log.e("LoginActivity", "Failed to sync patients", e)
+                                        runOnUiThread {
+                                            Toast.makeText(
+                                                this@LoginActivity,
+                                                "Could not sync patients, working in offline mode.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+
+                                }
                                 startActivity(Intent(this@LoginActivity, AshaDashboardActivity::class.java))
                             }
                         }
@@ -117,26 +152,40 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun savePatientLogin(data: LoginResponsePatient) {
+        // Save in SharedPreferences
         getSharedPreferences("auth", MODE_PRIVATE).edit().apply {
             putString("token", data.token)
             putString("role", data.role)
-            putString("user_id", data.patient.id ?: "")
+
+            // Prefer patientId, fall back to userId, otherwise empty
+            putString(
+                "user_id",
+                data.patient.patientId ?: data.patient.userId ?: ""
+            )
             putString("user_name", data.patient.name ?: "")
             putString("user_phone", data.patient.phone ?: "")
-            putString("supreme_id", data.patient.supreme_id ?: "")
+
+            // supreme_id is now supremeId in the model
+            putString("supreme_id", data.patient.supremeId ?: "")
+
             apply()
         }
 
         // Also update TokenManager
         TokenManager.saveToken(
             token = data.token,
-            userId = data.patient.id ?: data.patient.phone ?: "unknown",
-            supremeId = data.patient.supreme_id ?: "",
+            userId = data.patient.patientId
+                ?: data.patient.userId
+                ?: data.patient.phone
+                ?: "unknown",
+            supremeId = data.patient.supremeId ?: "",
             role = data.role
         )
     }
 
+
     private fun saveAshaOrSupervisorLogin(data: LoginResponseAshaOrSupervisor) {
+        // Save in SharedPreferences
         getSharedPreferences("auth", MODE_PRIVATE).edit().apply {
             putString("token", data.token)
             putString("role", data.role)
@@ -146,19 +195,52 @@ class LoginActivity : AppCompatActivity() {
             apply()
         }
 
-        // Also update TokenManager with null checks
-        val userId = data.user.id ?: data.user.phone ?: "unknown_user"
-        
-        if (userId != null && userId.isNotEmpty()) {
-            TokenManager.saveToken(
-                token = data.token,
-                userId = userId,
-                supremeId = "",
-                role = data.role
-            )
-        } else {
-            Toast.makeText(this, "Invalid user ID from server", Toast.LENGTH_SHORT).show()
-            Log.e("LoginActivity", "User ID is null or empty: ${data.user.id}, phone: ${data.user.phone}")
+        // 🔥 NEW: also save into TokenManager so ViewModels can read it
+        TokenManager.saveToken(
+            token = data.token,
+            userId = data.user.id ?: data.user.phone ?: "unknown",
+            supremeId = "",              // ASHA doesn’t have a supreme_id here, so keep empty
+            role = data.role
+        )
+    }
+
+    private fun cachePatient(patient: PatientInfo) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val db = AshaLocalDatabase.getInstance(applicationContext)
+                val dao = db.patientDao()
+
+                // Build a safe PatientEntity – no nulls in non-null params
+                val entity = PatientEntity(
+                    id = patient.patientId
+                        ?: patient.userId
+                        ?: patient.phone
+                        ?: System.currentTimeMillis().toString(),
+                    name = patient.name ?: "Unknown",
+                    phone = patient.phone,
+                    gender = null,              // backend doesn't give here
+                    weightKg = null,
+                    supremeId = patient.supremeId,
+                    age = null                  // backend doesn't give age here
+                )
+
+                dao.insertOrUpdate(entity)
+                Log.d("LoginActivity", "Cached patient locally: $entity")
+            } catch (e: Exception) {
+                Log.e("LoginActivity", "Error while caching patient locally", e)
+            }
+        }
+    }
+
+
+    private fun calculateAge(dob: String): Int? {
+        return try {
+            val formatter = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+            val birthDate = formatter.parse(dob) ?: return null
+            val diff = java.util.Calendar.getInstance().time.time - birthDate.time
+            (diff / (1000L * 60 * 60 * 24 * 365)).toInt()
+        } catch (e: Exception) {
+            null
         }
     }
 

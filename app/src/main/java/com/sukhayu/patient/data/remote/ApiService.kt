@@ -11,6 +11,7 @@ import retrofit2.http.Path
 import retrofit2.http.PUT
 import retrofit2.http.Query
 
+
 data class LoginRequest(
     val phone: String,
     val password: String
@@ -30,6 +31,8 @@ data class LoginResponsePatient(
     val patient: PatientInfo,
     val familyProfiles: List<Any>? = null
 )
+
+
 
 data class AshaInfo(
     val userId: String,
@@ -165,4 +168,20 @@ interface ApiService {
         @Path("id") ashaId: String,
         @Body body: UpdateAshaRequest
     ): Call<UpdateAshaResponse>
+
+    @POST("survey/genral")
+    suspend fun submitGeneralSurvey(
+        @Header("Authorization") authHeader: String,
+        @Body body: GeneralSurveyRequest
+    ): GeneralSurveyResponse
+
+    @GET("survey/genral")
+    suspend fun getGeneralScreenings(
+        @Header("Authorization") authHeader: String
+    ): GeneralScreeningsResponse
+
+    @GET("patient/all")
+    suspend fun getAllPatients(
+        @Header("Authorization") authHeader: String
+    ): AllPatientsResponse
 }

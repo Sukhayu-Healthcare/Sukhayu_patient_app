@@ -23,8 +23,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
+import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.ApiService
+import com.sukhayu.patient.data.remote.PatientDto
+import com.sukhayu.patient.data.remote.toEntity
 import com.sukhayu.patient.model.HealthHistoryItem
 import com.sukhayu.patient.model.PatientRegistrationRequest
 import com.sukhayu.patient.model.PatientRegistrationResponse
@@ -35,6 +38,9 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -452,9 +458,9 @@ class RegisterPatientActivity : AppCompatActivity() {
 
                     when {
                         response.isSuccessful && response.body() != null -> {
-                            // Success - show success dialog
                             val responseBody = response.body()!!
                             Log.d("RegisterPatient", "Success: Patient ID=${responseBody.patient_id}, Supreme ID=${responseBody.supreme_id}")
+                            cachePatientLocally(responseBody)
                             showSuccessDialog(responseBody)
                         }
                         response.code() == 401 -> {
@@ -585,6 +591,29 @@ class RegisterPatientActivity : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        }
+    }
+
+    private fun cachePatientLocally(response: PatientRegistrationResponse) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val db = AshaLocalDatabase.getInstance(applicationContext)
+                val dto = PatientDto(
+                    id = response.patient_id?.toString() ?: return@launch,
+                    patient_id = response.patient_id.toString(),
+                    name = etPatientName.text.toString().trim(),
+                    user_name = etPatientName.text.toString().trim(),
+                    phone = etPhone.text.toString().trim(),
+                    village = etVillage.text.toString().trim(),
+                    district = etDistrict.text.toString().trim(),
+                    gender = spinnerGender.selectedItem.toString(),
+                    weight_kg = null,
+                    supreme_id = response.supreme_id?.toString()
+                )
+                db.patientDao().insertOrUpdate(dto.toEntity())
+            } catch (e: Exception) {
+                Log.e("RegisterPatient", "Failed to cache patient", e)
+            }
         }
     }
 

@@ -27,9 +27,11 @@ interface PatientDao {
     suspend fun insertPatients(patients: List<PatientEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPatient(patient: PatientEntity)
+    suspend fun insertOrUpdate(patient: PatientEntity)
+
+    @Query("SELECT * FROM patients ORDER BY name ASC")
+    suspend fun getAllPatients(): List<PatientEntity>
 
     @Query("DELETE FROM patients")
     suspend fun deleteAll()
 }
-

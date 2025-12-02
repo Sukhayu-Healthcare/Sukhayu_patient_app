@@ -4,9 +4,18 @@ import com.sukhayu.patient.DummyData
 import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.PatientEntity
 import com.sukhayu.patient.data.remote.ApiService
+import com.sukhayu.patient.data.remote.AllPatientsResponse
+import com.sukhayu.patient.data.remote.GeneralScreeningsResponse
+import com.sukhayu.patient.data.remote.GeneralSurveyRequest
+import com.sukhayu.patient.data.remote.GeneralSurveyResponse
 import com.sukhayu.patient.data.remote.PatientDto
+import com.sukhayu.patient.data.remote.PatientFromServer
+import com.sukhayu.patient.data.remote.toEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import android.util.Log
+import retrofit2.HttpException
+
 
 class PatientRepository(
     private val db: AshaLocalDatabase,
@@ -76,15 +85,49 @@ class PatientRepository(
             db.patientDao().getPatientById(patientId)
         }
 
-    private fun PatientDto.toEntity(): PatientEntity {
-        return PatientEntity(
-            id = this.id,
-            name = this.name,
-            phone = this.phone,
-            gender = this.gender,
-            weightKg = this.weight_kg,
-            supremeId = this.supreme_id
-        )
+    suspend fun submitGeneralSurvey(
+        token: String,
+        request: GeneralSurveyRequest
+    ): GeneralSurveyResponse =
+        withContext(Dispatchers.IO) {
+            apiService.submitGeneralSurvey("Bearer $token", request)
+        }
+
+    suspend fun getGeneralScreenings(token: String): GeneralScreeningsResponse =
+        withContext(Dispatchers.IO) {
+            apiService.getGeneralScreenings("Bearer $token")
+        }
+
+    suspend fun syncPatientsFromServer(token: String) = withContext(Dispatchers.IO) {
+        try {
+            Log.d("PatientSync", "Calling /patient/all with token (trimmed)=${token.take(15)}...")
+
+            val response = apiService.getAllPatients("Bearer $token")
+
+            val count = response.patients?.size ?: 0
+            Log.d("PatientSync", "Got /patient/all response, patients count = $count")
+
+            if (response.patients.isNullOrEmpty()) {
+                Log.w("PatientSync", "No patients received from server, skipping insert")
+                return@withContext
+            }
+
+            val dao = db.patientDao()
+            response.patients.forEach { serverPatient ->
+                try {
+                    val entity = serverPatient.toEntity()
+                    Log.d("PatientSync", "Inserting patient id=${entity.id}, name=${entity.name}")
+                    dao.insertOrUpdate(entity)
+                } catch (e: Exception) {
+                    Log.e("PatientSync", "Failed to insert patient ${serverPatient.patient_id}", e)
+                }
+            }
+
+            Log.d("PatientSync", "Finished inserting patients into local DB")
+        } catch (e: HttpException) {
+            Log.e("PatientSync", "HTTP error while syncing patients: code=${e.code()}", e)
+        } catch (e: Exception) {
+            Log.e("PatientSync", "Unexpected error while syncing patients", e)
+        }
     }
 }
-

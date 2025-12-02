@@ -16,7 +16,7 @@ import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
 
-class AshaDashboardActivity : AppCompatActivity() {
+class AshaDashboardActivity_OLD : AppCompatActivity() {
 
     private lateinit var voiceHelper: VoiceInputHelper
 

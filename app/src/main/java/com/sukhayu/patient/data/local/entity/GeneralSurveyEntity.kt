@@ -3,6 +3,9 @@ package com.sukhayu.patient.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sukhayu.patient.data.remote.GeneralSurveyRequest
+
+
 
 /**
  * Room Entity for General Health Survey
@@ -120,4 +123,50 @@ data class GeneralSurveyEntity(
     @ColumnInfo(name = "synced_to_server")
     val syncedToServer: Boolean = false
 )
+
+private fun boolToString(value: Boolean?): String? {
+    return when (value) {
+        true -> "yes"
+        false -> "no"
+        null -> null
+    }
+}
+
+fun GeneralSurveyEntity.toRequest(): GeneralSurveyRequest {
+    return GeneralSurveyRequest(
+        patientId = this.patientId,                        // 👈 add this
+        screeningDate = this.visitDate,
+        village = this.location ?: "",
+
+        diabetes = boolToString(this.hasDiabetes),
+        hypertension = boolToString(this.hasHypertension),
+        heartDisease = boolToString(this.hasHeartDisease),
+        stroke = boolToString(this.hasStroke),
+        kidneyProblem = boolToString(this.hasKidneyDisease),
+        otherCondition = this.otherConditions,
+
+        urination = boolToString(this.symptomFrequentUrination),
+        thirst = boolToString(this.symptomExcessiveThirst),
+        weightLoss = boolToString(this.symptomWeightLoss),
+        blurredVision = boolToString(this.symptomBlurredVision),
+        chestPain = boolToString(this.symptomChestPain),
+        shortnessOfBreath = boolToString(this.symptomShortnessOfBreath),
+        weakness = boolToString(this.symptomFatigue),
+
+        familyHistory = boolToString(this.riskFamilyHistory),
+        pastHistory = null,
+        tobacco = boolToString(this.riskTobaccoUse),
+        alcohol = boolToString(this.riskAlcoholUse),
+        physicalActivity = boolToString(this.riskPhysicalInactivity),
+        diet = boolToString(this.riskUnhealthyDiet),
+
+        regularHealthCheck = boolToString(this.hasRegularCheckups),
+        currentMedication = boolToString(this.onCurrentMedication),
+        medicationDetails = this.medicationDetails,
+        bpCheck = boolToString(this.hadRecentBpCheck),
+        sugarCheck = boolToString(this.hadRecentSugarCheck),
+
+        remarks = this.remarks
+    )
+}
 
