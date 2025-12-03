@@ -10,6 +10,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.PUT
 import retrofit2.http.Query
+import com.sukhayu.patient.data.remote.SupervisorSurveyDataResponse
 
 
 data class LoginRequest(
@@ -169,6 +170,16 @@ interface ApiService {
         @Body body: UpdateAshaRequest
     ): Call<UpdateAshaResponse>
 
+    // Supervisor: fetch survey data for a given table + date
+    @GET("supervisor/surveys")
+    suspend fun getSupervisorSurveyData(
+        @Header("Authorization") authHeader: String,
+        @Query("table") table: String,
+        @Query("date") date: String
+    ): SupervisorSurveyDataResponse
+
+
+
     @POST("survey/genral")
     suspend fun submitGeneralSurvey(
         @Header("Authorization") authHeader: String,
@@ -195,4 +206,6 @@ interface ApiService {
     suspend fun getTbFirstScreenings(
         @Header("Authorization") authHeader: String
     ): TbFirstScreeningsResponse
+
+
 }
