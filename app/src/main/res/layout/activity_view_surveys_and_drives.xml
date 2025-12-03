@@ -1,14 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="#F5F5F5">
 
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Surveys and Drives" android:textSize="20sp" android:textStyle="bold" android:layout_marginBottom="16dp" />
+    <!-- Header Card -->
+    <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="16dp" app:cardCornerRadius="12dp" app:cardElevation="4dp">
 
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Surveys" android:textSize="18sp" android:layout_marginBottom="8dp" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/surveyList" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginBottom="16dp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Survey Data Viewer" android:textSize="20sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginBottom="4dp" />
 
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Drives" android:textSize="18sp" android:layout_marginBottom="8dp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="View and download survey records by type and date" android:textSize="14sp" android:textColor="@android:color/darker_gray" />
 
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/driveList" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Filter Card -->
+    <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="16dp" app:cardCornerRadius="12dp" app:cardElevation="4dp">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Survey Type" android:textSize="14sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginBottom="4dp" />
+
+            <Spinner android:id="@+id/spinnerSurveyType" android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/edit_text" android:padding="8dp" android:layout_marginBottom="16dp" />
+
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Date" android:textSize="14sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginBottom="4dp" />
+
+            <EditText android:id="@+id/etDate" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Select Date (YYYY-MM-DD)" android:inputType="none" android:focusable="false" android:clickable="true" android:drawableEnd="@android:drawable/ic_menu_my_calendar" android:drawablePadding="8dp" android:padding="12dp" android:background="@android:drawable/edit_text" android:layout_marginBottom="16dp" />
+
+            <Button android:id="@+id/btnFetchData" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Fetch Survey Data" android:textColor="@android:color/white" android:backgroundTint="#4CAF50" android:padding="12dp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Summary and Download Card -->
+    <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="16dp" app:cardCornerRadius="12dp" app:cardElevation="4dp">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp">
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+
+                <TextView android:id="@+id/tvSummary" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Total Records: 0 | ASHAs: 0" android:textSize="14sp" android:textStyle="bold" android:textColor="@android:color/black" />
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Select filters and fetch data" android:textSize="12sp" android:textColor="@android:color/darker_gray" android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+            <Button android:id="@+id/btnDownload" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Download CSV" android:textColor="@android:color/white" android:backgroundTint="#2196F3" android:enabled="false" android:layout_marginStart="8dp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Data Table Card -->
+    <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="16dp" app:cardCornerRadius="12dp" app:cardElevation="4dp">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Survey Records" android:textSize="16sp" android:textStyle="bold" android:textColor="@android:color/black" android:padding="16dp" android:background="#E3F2FD" />
+
+            <HorizontalScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:padding="8dp">
+
+                <ScrollView android:layout_width="wrap_content" android:layout_height="match_parent">
+
+                    <TableLayout android:id="@+id/tableLayout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:stretchColumns="*" android:shrinkColumns="*" />
+
+                </ScrollView>
+
+            </HorizontalScrollView>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

@@ -1,3 +1,4 @@
+/*
 package com.sukhayu.patient.data.remote
 
 import com.sukhayu.patient.data.local.entity.PatientEntity
@@ -53,4 +54,5 @@ private fun calculateAgeFromDob(dob: String): Int? {
         null
     }
 }
+*/
 
