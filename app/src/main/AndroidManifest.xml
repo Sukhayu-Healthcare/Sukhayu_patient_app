@@ -91,6 +91,11 @@
 
         <!-- General Survey Activity -->
         <activity android:name="com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyActivity" android:exported="false" android:label="General Screening" />
+
+        <!-- Family List and Member List Activities -->
+        <activity android:name="com.sukhayu.patient.ui.asha.family.FamilyListActivity" android:exported="false" android:label="Family List" />
+        <activity android:name="com.sukhayu.patient.ui.asha.family.MemberListActivity" android:exported="false" android:label="Family Members" />
+
         <activity android:name="com.sukhayu.patient.ui.supervisor.AshaDetailActivity" android:exported="true" />
 
         <!-- Add FileProvider -->
