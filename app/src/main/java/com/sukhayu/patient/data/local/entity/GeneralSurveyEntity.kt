@@ -133,40 +133,42 @@ private fun boolToString(value: Boolean?): String? {
 }
 
 fun GeneralSurveyEntity.toRequest(): GeneralSurveyRequest {
+    // GeneralSurveyRequest expects: tableName, date, records
+    // We need to build a Map for the record
+    val recordMap = mutableMapOf<String, Any?>()
+    
+    recordMap["patient_id"] = this.patientId
+    recordMap["screening_date"] = this.visitDate
+    recordMap["village"] = this.location ?: ""
+    recordMap["diabetes"] = boolToString(this.hasDiabetes)
+    recordMap["hypertension"] = boolToString(this.hasHypertension)
+    recordMap["heart_disease"] = boolToString(this.hasHeartDisease)
+    recordMap["stroke"] = boolToString(this.hasStroke)
+    recordMap["kidney_problem"] = boolToString(this.hasKidneyDisease)
+    recordMap["other_condition"] = this.otherConditions
+    recordMap["urination"] = boolToString(this.symptomFrequentUrination)
+    recordMap["thirst"] = boolToString(this.symptomExcessiveThirst)
+    recordMap["weight_loss"] = boolToString(this.symptomWeightLoss)
+    recordMap["blurred_vision"] = boolToString(this.symptomBlurredVision)
+    recordMap["chest_pain"] = boolToString(this.symptomChestPain)
+    recordMap["shortness_of_breath"] = boolToString(this.symptomShortnessOfBreath)
+    recordMap["weakness"] = boolToString(this.symptomFatigue)
+    recordMap["family_history"] = boolToString(this.riskFamilyHistory)
+    recordMap["tobacco"] = boolToString(this.riskTobaccoUse)
+    recordMap["alcohol"] = boolToString(this.riskAlcoholUse)
+    recordMap["physical_activity"] = boolToString(this.riskPhysicalInactivity)
+    recordMap["diet"] = boolToString(this.riskUnhealthyDiet)
+    recordMap["regular_health_check"] = boolToString(this.hasRegularCheckups)
+    recordMap["current_medication"] = boolToString(this.onCurrentMedication)
+    recordMap["medication_details"] = this.medicationDetails
+    recordMap["bp_check"] = boolToString(this.hadRecentBpCheck)
+    recordMap["sugar_check"] = boolToString(this.hadRecentSugarCheck)
+    recordMap["remarks"] = this.remarks
+
     return GeneralSurveyRequest(
-        patientId = this.patientId,                        // 👈 add this
-        screeningDate = this.visitDate,
-        village = this.location ?: "",
-
-        diabetes = boolToString(this.hasDiabetes),
-        hypertension = boolToString(this.hasHypertension),
-        heartDisease = boolToString(this.hasHeartDisease),
-        stroke = boolToString(this.hasStroke),
-        kidneyProblem = boolToString(this.hasKidneyDisease),
-        otherCondition = this.otherConditions,
-
-        urination = boolToString(this.symptomFrequentUrination),
-        thirst = boolToString(this.symptomExcessiveThirst),
-        weightLoss = boolToString(this.symptomWeightLoss),
-        blurredVision = boolToString(this.symptomBlurredVision),
-        chestPain = boolToString(this.symptomChestPain),
-        shortnessOfBreath = boolToString(this.symptomShortnessOfBreath),
-        weakness = boolToString(this.symptomFatigue),
-
-        familyHistory = boolToString(this.riskFamilyHistory),
-        pastHistory = null,
-        tobacco = boolToString(this.riskTobaccoUse),
-        alcohol = boolToString(this.riskAlcoholUse),
-        physicalActivity = boolToString(this.riskPhysicalInactivity),
-        diet = boolToString(this.riskUnhealthyDiet),
-
-        regularHealthCheck = boolToString(this.hasRegularCheckups),
-        currentMedication = boolToString(this.onCurrentMedication),
-        medicationDetails = this.medicationDetails,
-        bpCheck = boolToString(this.hadRecentBpCheck),
-        sugarCheck = boolToString(this.hadRecentSugarCheck),
-
-        remarks = this.remarks
+        tableName = "patient_screening",
+        date = this.visitDate,
+        records = listOf(recordMap.filterValues { it != null } as Map<String, Any>)
     )
 }
 

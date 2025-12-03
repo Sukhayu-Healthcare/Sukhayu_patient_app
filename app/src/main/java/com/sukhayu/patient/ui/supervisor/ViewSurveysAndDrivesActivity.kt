@@ -1,130 +1,285 @@
 package com.sukhayu.patient.ui.supervisor
 
+import android.app.DatePickerDialog
+import android.content.ContentValues
+import android.graphics.Color
+import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.view.Gravity
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayout
+import androidx.lifecycle.lifecycleScope
 import com.sukhayu.patient.R
-import com.sukhayu.patient.ui.supervisor.drives.DriveAdapter
-import com.sukhayu.patient.ui.supervisor.drives.DriveItem
-import com.sukhayu.patient.ui.supervisor.surveys.SurveyAdapter
-import com.sukhayu.patient.ui.supervisor.surveys.SurveyItem
+import com.sukhayu.patient.data.remote.ApiClient
+import com.sukhayu.patient.data.remote.SupervisorSurveyDataResponse
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileWriter
+import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ViewSurveysAndDrivesActivity : AppCompatActivity() {
 
-    private lateinit var tabLayout: TabLayout
-    private lateinit var spinnerType: Spinner
-    private lateinit var spinnerStatus: Spinner
-    private lateinit var etSearchQuery: EditText
-    private lateinit var btnSearch: Button
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var spinnerSurveyType: Spinner
+    private lateinit var etDate: EditText
+    private lateinit var btnFetchData: Button
+    private lateinit var tvSummary: TextView
+    private lateinit var btnDownload: Button
+    private lateinit var tableLayout: TableLayout
 
-    private var allSurveys = mutableListOf<SurveyItem>()
-    private var allDrives = mutableListOf<DriveItem>()
-    private var currentTab = "Survey"
+    private val surveyTypes = mapOf(
+        "Patient Screening" to "patient_screening",
+        "TB Patients" to "tb_patients",
+        "TB Follow-ups" to "tb_followups",
+        "ANC First Visit" to "anc_first_visit",
+        "ANC Follow-up Visit" to "anc_followup_visit"
+    )
+
+    private var currentData: SupervisorSurveyDataResponse? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view_surveys_drives)
+        setContentView(R.layout.activity_view_surveys_and_drives)
 
         initViews()
-        setupTabs()
-        setupSpinners()
+        setupSpinner()
         setupListeners()
-        loadDummyData()
-        displaySurveys()
     }
 
     private fun initViews() {
-        tabLayout = findViewById(R.id.tabLayout)
-        spinnerType = findViewById(R.id.spinnerType)
-        spinnerStatus = findViewById(R.id.spinnerStatus)
-        etSearchQuery = findViewById(R.id.etSearchQuery)
-        btnSearch = findViewById(R.id.btnSearch)
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        spinnerSurveyType = findViewById(R.id.spinnerSurveyType)
+        etDate = findViewById(R.id.etDate)
+        btnFetchData = findViewById(R.id.btnFetchData)
+        tvSummary = findViewById(R.id.tvSummary)
+        btnDownload = findViewById(R.id.btnDownload)
+        tableLayout = findViewById(R.id.tableLayout)
     }
 
-    private fun setupTabs() {
-        tabLayout.addTab(tabLayout.newTab().setText("Surveys"))
-        tabLayout.addTab(tabLayout.newTab().setText("Drives"))
-
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                currentTab = if (tab?.position == 0) "Survey" else "Drive"
-                etSearchQuery.text.clear()
-                if (currentTab == "Survey") displaySurveys() else displayDrives()
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
-    }
-
-    private fun setupSpinners() {
-        val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item,
-            arrayOf("All Types", "Tuberculosis", "Pregnancy", "General Survey", "Health Camp"))
-        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerType.adapter = typeAdapter
-
-        val statusAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item,
-            arrayOf("All Status", "Past", "Ongoing", "Upcoming"))
-        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerStatus.adapter = statusAdapter
+    private fun setupSpinner() {
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            surveyTypes.keys.toList()
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerSurveyType.adapter = adapter
     }
 
     private fun setupListeners() {
-        btnSearch.setOnClickListener { performSearch() }
+        etDate.setOnClickListener { showDatePicker() }
+        btnFetchData.setOnClickListener { fetchSurveyData() }
+        btnDownload.setOnClickListener { exportToCsv() }
     }
 
-    private fun loadDummyData() {
-        allSurveys.addAll(listOf(
-            SurveyItem("TB Screening Campaign", "2024-01-15", "Tuberculosis", "Completed", "Ramesh Kumar", 45),
-            SurveyItem("Pregnancy ANC Program", "2024-01-20", "Pregnancy", "Ongoing", "Priya Singh", 28),
-            SurveyItem("General Health Check", "2024-02-01", "General Survey", "Upcoming", "Amit Patel", 0),
-            SurveyItem("TB Follow-up Drive", "2023-12-20", "Tuberculosis", "Completed", "Ramesh Kumar", 35)
-        ))
-
-        allDrives.addAll(listOf(
-            DriveItem("Blood Camp Drive", "2024-01-18", "Community Center, Ward 5", "Successful blood collection camp", "Priya Singh"),
-            DriveItem("Vaccination Drive", "2024-01-25", "Primary Health Center", "Child immunization program", "Amit Patel"),
-            DriveItem("Health Awareness Camp", "2024-02-05", "Market Square, Main Bazaar", "General health awareness and registration", "Ramesh Kumar")
-        ))
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        DatePickerDialog(
+            this,
+            { _, year, month, day ->
+                val date = String.format("%04d-%02d-%02d", year, month + 1, day)
+                etDate.setText(date)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
     }
 
-    private fun displaySurveys() {
-        val adapter = SurveyAdapter(allSurveys)
-        recyclerView.adapter = adapter
-    }
+    private fun fetchSurveyData() {
+        val selectedType = spinnerSurveyType.selectedItem.toString()
+        val tableName = surveyTypes[selectedType] ?: return
+        val date = etDate.text.toString()
 
-    private fun displayDrives() {
-        val adapter = DriveAdapter(allDrives)
-        recyclerView.adapter = adapter
-    }
-
-    private fun performSearch() {
-        val type = spinnerType.selectedItem.toString()
-        val status = spinnerStatus.selectedItem.toString()
-        val query = etSearchQuery.text.toString().lowercase()
-
-        if (currentTab == "Survey") {
-            val filtered = allSurveys.filter { survey ->
-                (type == "All Types" || survey.type == type) &&
-                (status == "All Status" || survey.status == status) &&
-                (query.isEmpty() || survey.surveyName.lowercase().contains(query) ||
-                        survey.ashaName.lowercase().contains(query))
-            }
-            recyclerView.adapter = SurveyAdapter(filtered)
-        } else {
-            val filtered = allDrives.filter { drive ->
-                (status == "All Status" || (if (status == "Completed") drive.driveName.contains("Blood") else true)) &&
-                (query.isEmpty() || drive.driveName.lowercase().contains(query) ||
-                        drive.ashaName.lowercase().contains(query) ||
-                        drive.venue.lowercase().contains(query))
-            }
-            recyclerView.adapter = DriveAdapter(filtered)
+        if (date.isEmpty()) {
+            Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        val token = getSharedPreferences("auth", MODE_PRIVATE)
+            .getString("token", "") ?: ""
+
+        if (token.isEmpty()) {
+            Toast.makeText(this, "Authentication token not found", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        lifecycleScope.launch {
+            try {
+                btnFetchData.isEnabled = false
+                btnFetchData.text = "Loading..."
+
+                val response = ApiClient.retrofit.getSupervisorSurveyData(
+                    "Bearer $token",
+                    tableName,
+                    date
+                )
+
+                currentData = response
+                updateUI(response)
+                displayTable(response)
+
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@ViewSurveysAndDrivesActivity,
+                    "Error: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+                e.printStackTrace()
+            } finally {
+                btnFetchData.isEnabled = true
+                btnFetchData.text = "Fetch Survey Data"
+            }
+        }
+    }
+
+    private fun updateUI(data: SupervisorSurveyDataResponse) {
+        tvSummary.text = "Total Records: ${data.count} | ASHAs: ${data.asha_count}"
+        btnDownload.isEnabled = data.count > 0
+    }
+
+    private fun displayTable(data: SupervisorSurveyDataResponse) {
+        tableLayout.removeAllViews()
+
+        if (data.records.isEmpty()) {
+            val noDataRow = TableRow(this)
+            val noDataText = TextView(this).apply {
+                text = "No records found"
+                setPadding(16, 16, 16, 16)
+                gravity = Gravity.CENTER
+            }
+            noDataRow.addView(noDataText)
+            tableLayout.addView(noDataRow)
+            return
+        }
+
+        // Header row
+        val headerRow = TableRow(this)
+        val headers = data.records.firstOrNull()?.keys?.toList() ?: return
+
+        headers.forEach { header ->
+            val headerText = TextView(this).apply {
+                text = header.replace("_", " ").uppercase()
+                setPadding(12, 12, 12, 12)
+                setTypeface(null, Typeface.BOLD)
+                setBackgroundColor(Color.LTGRAY)
+                gravity = Gravity.CENTER
+                minWidth = 150
+            }
+            headerRow.addView(headerText)
+        }
+        tableLayout.addView(headerRow)
+
+        // Data rows
+        data.records.forEach { record ->
+            val dataRow = TableRow(this)
+            headers.forEach { key ->
+                val cellText = TextView(this).apply {
+                    text = record[key]?.toString() ?: "N/A"
+                    setPadding(12, 12, 12, 12)
+                    setBackgroundColor(Color.WHITE)
+                    minWidth = 150
+                }
+                dataRow.addView(cellText)
+            }
+            tableLayout.addView(dataRow)
+
+            // Add divider
+            val divider = View(this).apply {
+                layoutParams = TableRow.LayoutParams(
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    1
+                )
+                setBackgroundColor(Color.GRAY)
+            }
+            tableLayout.addView(divider)
+        }
+    }
+
+    private fun exportToCsv() {
+        val data = currentData ?: return
+
+        try {
+            val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+            val fileName = "survey_${data.table}_${data.date}_$timestamp.csv"
+
+            // Build CSV content
+            val csvContent = buildString {
+                // Write headers
+                val headers = data.records.firstOrNull()?.keys?.toList() ?: return@buildString
+                appendLine(headers.joinToString(",") { "\"${it.replace("_", " ").uppercase()}\"" })
+
+                // Write data rows
+                data.records.forEach { record ->
+                    val row = headers.joinToString(",") { key ->
+                        val value = record[key]?.toString() ?: "N/A"
+                        "\"${value.replace("\"", "\"\"")}\""
+                    }
+                    appendLine(row)
+                }
+            }
+
+            // Save file using appropriate method based on Android version
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // Android 10+ - Use MediaStore (no permission needed)
+                saveToDownloadsMediaStore(fileName, csvContent)
+            } else {
+                // Android 9 and below - Use legacy method
+                saveToDownloadsLegacy(fileName, csvContent)
+            }
+
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error exporting: ${e.message}", Toast.LENGTH_LONG).show()
+            e.printStackTrace()
+        }
+    }
+
+    private fun saveToDownloadsMediaStore(fileName: String, content: String) {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "text/csv")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/SukhayuSurveys")
+        }
+
+        val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+
+        if (uri != null) {
+            contentResolver.openOutputStream(uri)?.use { outputStream ->
+                outputStream.write(content.toByteArray())
+                outputStream.flush()
+            }
+
+            Toast.makeText(
+                this,
+                "CSV file saved to Downloads/SukhayuSurveys/$fileName",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            throw Exception("Failed to create file in Downloads")
+        }
+    }
+
+    private fun saveToDownloadsLegacy(fileName: String, content: String) {
+        val directory = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "SukhayuSurveys"
+        )
+
+        if (!directory.exists()) {
+            directory.mkdirs()
+        }
+
+        val file = File(directory, fileName)
+        file.writeText(content)
+
+        Toast.makeText(
+            this,
+            "CSV file saved to Downloads/SukhayuSurveys/$fileName",
+            Toast.LENGTH_LONG
+        ).show()
     }
 }

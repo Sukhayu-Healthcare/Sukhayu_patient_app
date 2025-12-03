@@ -4,6 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -24,6 +27,32 @@ class RegisterAshaActivity : AppCompatActivity() {
     private lateinit var voiceHelper: VoiceInputHelper
     private val TAG = "RegisterAshaActivity"
 
+    // Hierarchical data structure
+    private val districtTalukaVillageData = mapOf(
+        "Nagpur" to mapOf(
+            "Nagpur Rural" to listOf("Kalmeshwar", "Mouda", "Parseoni", "Narkhed", "Katol"),
+            "Nagpur Urban" to listOf("Nagpur City", "Kamptee", "Hingna", "Umred"),
+            "Ramtek" to listOf("Ramtek", "Mansar", "Saoner"),
+            "Umred" to listOf("Umred", "Bhiwapur", "Kuhi")
+        ),
+        "Thane" to mapOf(
+            "Thane" to listOf("Thane", "Kalyan", "Dombivli", "Bhiwandi", "Ambernath"),
+            "Kalyan" to listOf("Kalyan", "Ulhasnagar", "Shahad", "Ambivli"),
+            "Bhiwandi" to listOf("Bhiwandi", "Wada", "Vasai", "Virar"),
+            "Murbad" to listOf("Murbad", "Karjat", "Khopoli")
+        ),
+        "Raigad" to mapOf(
+            "Alibag" to listOf("Alibag", "Mandwa", "Rewas", "Nagothane"),
+            "Panvel" to listOf("Panvel", "Uran", "Karjat", "Khopoli"),
+            "Pen" to listOf("Pen", "Roha", "Sudhagad"),
+            "Murud" to listOf("Murud", "Shrivardhan", "Mhasla")
+        )
+    )
+
+    private var selectedDistrict: String = ""
+    private var selectedTaluka: String = ""
+    private var selectedVillage: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySupervisorRegisterAshaBinding.inflate(layoutInflater)
@@ -34,8 +63,13 @@ class RegisterAshaActivity : AppCompatActivity() {
 
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
-        VoiceInputHelper.attachToAllEditTexts(this)
+        
+        // Attach voice input only to specific fields (exclude age and password fields)
+        voiceHelper.attachVoiceToEditText(binding.etFullName)
+        // Note: Spinners (district, taluka, village) don't need voice input
+        // age, password, and confirm password are excluded from voice input
 
+        setupSpinners()
         setupClickListeners()
     }
 
@@ -50,6 +84,89 @@ class RegisterAshaActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupSpinners() {
+        // Setup District Spinner
+        val districts = listOf("Select District") + districtTalukaVillageData.keys.toList()
+        val districtAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, districts)
+        districtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerDistrict.adapter = districtAdapter
+
+        binding.spinnerDistrict.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position > 0) {
+                    selectedDistrict = districts[position]
+                    setupTalukaSpinner(selectedDistrict)
+                } else {
+                    selectedDistrict = ""
+                    clearTalukaSpinner()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedDistrict = ""
+                clearTalukaSpinner()
+            }
+        }
+    }
+
+    private fun setupTalukaSpinner(district: String) {
+        val talukas = districtTalukaVillageData[district]?.keys?.toList() ?: emptyList()
+        val talukaList = listOf("Select Taluka") + talukas
+        val talukaAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, talukaList)
+        talukaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerTaluka.adapter = talukaAdapter
+        binding.spinnerTaluka.isEnabled = true
+
+        binding.spinnerTaluka.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position > 0) {
+                    selectedTaluka = talukaList[position]
+                    setupVillageSpinner(selectedDistrict, selectedTaluka)
+                } else {
+                    selectedTaluka = ""
+                    clearVillageSpinner()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedTaluka = ""
+                clearVillageSpinner()
+            }
+        }
+    }
+
+    private fun setupVillageSpinner(district: String, taluka: String) {
+        val villages = districtTalukaVillageData[district]?.get(taluka) ?: emptyList()
+        val villageList = listOf("Select Village") + villages
+        val villageAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, villageList)
+        villageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerVillage.adapter = villageAdapter
+        binding.spinnerVillage.isEnabled = true
+
+        binding.spinnerVillage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedVillage = if (position > 0) villageList[position] else ""
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedVillage = ""
+            }
+        }
+    }
+
+    private fun clearTalukaSpinner() {
+        binding.spinnerTaluka.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf("Select Taluka"))
+        binding.spinnerTaluka.isEnabled = false
+        selectedTaluka = ""
+        clearVillageSpinner()
+    }
+
+    private fun clearVillageSpinner() {
+        binding.spinnerVillage.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf("Select Village"))
+        binding.spinnerVillage.isEnabled = false
+        selectedVillage = ""
+    }
+
     private fun setupClickListeners() {
         binding.ivBack.setOnClickListener {
             onBackPressed()
@@ -62,12 +179,14 @@ class RegisterAshaActivity : AppCompatActivity() {
 
     private fun registerAsha() {
         val fullName = binding.etFullName.text.toString().trim()
-        val village = binding.etVillage.text.toString().trim()
         val phoneNo = binding.etPhoneNo.text.toString().trim()
-        val district = binding.etDistrict.text.toString().trim()
-        val taluka = binding.etTaluka.text.toString().trim()
-        val password = binding.etPassword.text.toString().trim()
+        val state = "Maharashtra"
+        val district = selectedDistrict
+        val taluka = selectedTaluka
+        val village = selectedVillage
         val age = binding.etAge.text.toString().trim()
+        val password = binding.etPassword.text.toString().trim()
+        val confirmPassword = binding.etConfirmPassword.text.toString().trim()
 
         val token = TokenManager.getToken()
         if (token.isEmpty()) {
@@ -79,9 +198,9 @@ class RegisterAshaActivity : AppCompatActivity() {
         Log.d(TAG, "=== REGISTRATION REQUEST DEBUG ===")
         Log.d(TAG, "Token exists: ${token.isNotEmpty()}")
         Log.d(TAG, "Token preview: ${token.take(30)}...")
-        Log.d(TAG, "Request data - Name: $fullName, Phone: $phoneNo, Village: $village, District: $district, Taluka: $taluka")
+        Log.d(TAG, "Request data - Name: $fullName, Phone: $phoneNo, State: $state, District: $district, Taluka: $taluka, Village: $village")
 
-        if (validateInputs(fullName, village, phoneNo, district, taluka, password, age)) {
+        if (validateInputs(fullName, phoneNo, state, district, taluka, village, age, password, confirmPassword)) {
             // Disable button while processing
             binding.btnRegister.isEnabled = false
             binding.btnRegister.text = "Registering..."
@@ -94,7 +213,6 @@ class RegisterAshaActivity : AppCompatActivity() {
                 district = district,
                 taluka = taluka,
                 profilePic = null
-                // Remove supervisorId - backend gets it from token
             )
 
             Log.d(TAG, "Request object: $registerRequest")
@@ -156,52 +274,72 @@ class RegisterAshaActivity : AppCompatActivity() {
 
     private fun validateInputs(
         fullName: String,
-        village: String,
         phoneNo: String,
+        state: String,
         district: String,
         taluka: String,
+        village: String,
+        age: String,
         password: String,
-        age: String
+        confirmPassword: String
     ): Boolean {
         return when {
             fullName.isEmpty() -> {
                 binding.etFullName.error = "Full Name is required"
-                false
-            }
-            village.isEmpty() -> {
-                binding.etVillage.error = "Village is required"
+                binding.etFullName.requestFocus()
                 false
             }
             phoneNo.isEmpty() -> {
                 binding.etPhoneNo.error = "Phone Number is required"
+                binding.etPhoneNo.requestFocus()
                 false
             }
             phoneNo.length != 10 -> {
                 binding.etPhoneNo.error = "Phone Number must be 10 digits"
+                binding.etPhoneNo.requestFocus()
                 false
             }
             district.isEmpty() -> {
-                binding.etDistrict.error = "District is required"
+                Toast.makeText(this, "Please select a district", Toast.LENGTH_SHORT).show()
                 false
             }
             taluka.isEmpty() -> {
-                binding.etTaluka.error = "Taluka is required"
+                Toast.makeText(this, "Please select a taluka", Toast.LENGTH_SHORT).show()
                 false
             }
-            password.isEmpty() -> {
-                binding.etPassword.error = "Password is required"
-                false
-            }
-            password.length < 6 -> {
-                binding.etPassword.error = "Password must be at least 6 characters"
+            village.isEmpty() -> {
+                Toast.makeText(this, "Please select a village", Toast.LENGTH_SHORT).show()
                 false
             }
             age.isEmpty() -> {
                 binding.etAge.error = "Age is required"
+                binding.etAge.requestFocus()
                 false
             }
             age.toIntOrNull() == null || age.toInt() < 18 -> {
                 binding.etAge.error = "Age must be a valid number and at least 18"
+                binding.etAge.requestFocus()
+                false
+            }
+            password.isEmpty() -> {
+                binding.etPassword.error = "Password is required"
+                binding.etPassword.requestFocus()
+                false
+            }
+            password.length < 6 -> {
+                binding.etPassword.error = "Password must be at least 6 characters"
+                binding.etPassword.requestFocus()
+                false
+            }
+            confirmPassword.isEmpty() -> {
+                binding.etConfirmPassword.error = "Confirm Password is required"
+                binding.etConfirmPassword.requestFocus()
+                false
+            }
+            password != confirmPassword -> {
+                binding.etConfirmPassword.error = "Passwords do not match"
+                binding.etConfirmPassword.requestFocus()
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
                 false
             }
             else -> true

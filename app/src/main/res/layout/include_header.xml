@@ -1,70 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/commonHeader"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:paddingStart="12dp"
-    android:paddingEnd="16dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:background="@android:color/white"
-    android:elevation="2dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@android:color/white" android:elevation="2dp">
 
-    <ImageView
-        android:id="@+id/btnBack"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_arrow_back_24"
-        app:tint="#0F172A"
-        android:contentDescription="Back Button"
-        android:padding="4dp"
-        android:visibility="gone"
-        android:clickable="true"
-        android:focusable="true"/>
+    <!-- Main Header Row -->
+    <LinearLayout android:id="@+id/commonHeader" android:layout_width="match_parent" android:layout_height="56dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="12dp" android:paddingEnd="16dp" android:paddingTop="8dp" android:paddingBottom="8dp">
 
-    <ImageView
-        android:id="@+id/headerLogo"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/asha_jyoti_logo"
-        android:layout_marginStart="0dp"
-        android:contentDescription="@string/app_name" />
+        <ImageView android:id="@+id/btnBack" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_arrow_back_24" app:tint="#0F172A" android:contentDescription="Back Button" android:padding="4dp" android:visibility="gone" android:clickable="true" android:focusable="true" />
 
-    <TextView
-        android:id="@+id/headerTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AshaJyoti"
-        android:textColor="#0F172A"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginStart="12dp" />
+        <ImageView android:id="@+id/headerLogo" android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/asha_jyoti_logo" android:layout_marginStart="0dp" android:contentDescription="@string/app_name" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="end|center_vertical"
-        android:orientation="horizontal">
+        <TextView android:id="@+id/headerTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AshaJyoti" android:textColor="#0F172A" android:textSize="20sp" android:textStyle="bold" android:layout_marginStart="12dp" />
 
-        <ImageView
-            android:id="@+id/headerLanguageIcon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:src="@drawable/ic_language"
-            app:tint="#0F172A"
-            android:layout_marginEnd="6dp"
-            android:contentDescription="@string/language_icon_desc" />
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end|center_vertical" android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/headerLanguage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="English"
-            android:textColor="#0F172A"
-            android:textSize="14sp" />
+            <ImageView android:id="@+id/headerLanguageIcon" android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/ic_language" app:tint="#0F172A" android:layout_marginEnd="6dp" android:contentDescription="@string/language_icon_desc" />
+
+            <TextView android:id="@+id/headerLanguage" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="English" android:textColor="#0F172A" android:textSize="14sp" />
+        </LinearLayout>
     </LinearLayout>
+
+    <!-- Role Badge Row - Full Width, Large & Prominent -->
+    <LinearLayout android:id="@+id/headerRoleContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center" android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="16dp" android:paddingBottom="16dp" android:background="@drawable/role_badge_background" android:visibility="gone">
+
+        <ImageView android:id="@+id/headerRoleIcon" android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_person_24" app:tint="#1E40AF" android:layout_marginEnd="12dp" android:contentDescription="Role Icon" />
+
+        <TextView android:id="@+id/headerRole" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PATIENT" android:textColor="#1E3A8A" android:textSize="20sp" android:textStyle="bold" android:letterSpacing="0.05" android:textAllCaps="true" />
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View android:id="@+id/headerDivider" android:layout_width="match_parent" android:layout_height="2dp" android:background="#BAE6FD" android:visibility="gone" />
 </LinearLayout>

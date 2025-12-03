@@ -15,6 +15,7 @@ import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
+import com.sukhayu.patient.utils.HeaderUtils
 
 class AshaDashboardActivity_OLD : AppCompatActivity() {
 
@@ -24,6 +25,8 @@ class AshaDashboardActivity_OLD : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d("AshaDashboard", "Activity onCreate called")
         setContentView(R.layout.activity_asha_dashboard)
+        // In onCreate() after setContentView()
+        HeaderUtils.setupRoleInHeader(this)
 
         // Setup header
         setupHeader()

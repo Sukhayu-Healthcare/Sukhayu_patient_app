@@ -68,12 +68,17 @@ class CreateSurveyActivity : AppCompatActivity() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
+        val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
             val date = Calendar.getInstance()
             date.set(selectedYear, selectedMonth, selectedDay)
             selectedDate = dateFormat.format(date.time)
             tvSelectedDate.text = "Date: $selectedDate"
-        }, year, month, day).show()
+        }, year, month, day)
+        
+        // Set minimum date to today
+        datePickerDialog.datePicker.minDate = calendar.timeInMillis
+        
+        datePickerDialog.show()
     }
 
     private fun startVoiceInput() {
