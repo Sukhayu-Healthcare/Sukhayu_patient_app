@@ -70,11 +70,6 @@ class PregnancySurveyActivity : AppCompatActivity() {
         val repository = PatientRepository(database, apiService)
         val factory = PregnancySurveyViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[PregnancySurveyViewModel::class.java]
-
-        // TODO: Set to false once backend is stable
-        // For now, enable dummy data if no auth token is available
-        val token = getAuthToken()
-        viewModel.useDummyData = token == null
     }
 
     private fun initializeViews() {

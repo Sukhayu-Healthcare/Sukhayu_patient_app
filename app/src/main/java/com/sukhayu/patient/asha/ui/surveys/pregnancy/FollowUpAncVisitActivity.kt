@@ -2,13 +2,18 @@ package com.sukhayu.patient.asha.ui.surveys.pregnancy
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.sukhayu.patient.asha.ui.surveys.tb.ResultState
 import com.sukhayu.patient.data.local.AshaLocalDatabase
+import com.sukhayu.patient.data.local.entity.toAncFollowUpRequest
+import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.repository.AncVisitRepository
+import com.sukhayu.patient.data.repository.PregnancyRepository
 import com.sukhayu.patient.databinding.ActivityFollowUpAncVisitBinding
 import com.sukhayu.utils.VoiceInputHelper
 import android.Manifest
@@ -54,9 +59,15 @@ class FollowUpAncVisitActivity : AppCompatActivity() {
         }
 
         // Initialize ViewModel
-        val dao = AshaLocalDatabase.getInstance(this).ancVisitDao()
-        val repository = AncVisitRepository(dao)
-        val factory = FollowUpAncVisitViewModelFactory(repository)
+        val database = AshaLocalDatabase.getInstance(this)
+        val ancVisitDao = database.ancVisitDao()
+        val pregnancyDao = database.pregnancyDao()
+        val apiService = ApiClient.retrofit
+
+        val ancVisitRepository = AncVisitRepository(ancVisitDao)
+        val pregnancyRepository = PregnancyRepository(pregnancyDao, apiService)
+
+        val factory = FollowUpAncVisitViewModelFactory(ancVisitRepository, pregnancyRepository)
         viewModel = ViewModelProvider(this, factory)[FollowUpAncVisitViewModel::class.java]
 
         // 1) Read Intent extras and fill header
@@ -287,12 +298,14 @@ class FollowUpAncVisitActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.isSaving.observe(this) { saving ->
             binding.btnSaveFollowUpAnc.isEnabled = !saving
+            binding.btnSaveFollowUpAnc.text = if (saving) "Saving..." else "Save ANC Follow-up"
         }
 
+        // Local DB save result
         viewModel.saveSuccess.observe(this) { success ->
-            if (success) {
-                Toast.makeText(this, "Follow-up visit saved", Toast.LENGTH_SHORT).show()
-                finish()
+            if (success == true) {
+                // Local save is done; don't finish here because we also submit to backend
+                Toast.makeText(this, "ANC follow-up saved locally", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -301,20 +314,61 @@ class FollowUpAncVisitActivity : AppCompatActivity() {
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             }
         }
+
+        // 🔥 Backend submit result (POST survey/anc-followup)
+        viewModel.submitResult.observe(this) { state ->
+            when (state) {
+                is ResultState.Idle -> {
+                    // Do nothing
+                }
+
+                is ResultState.Loading -> {
+                    Toast.makeText(this, "Submitting ANC follow-up...", Toast.LENGTH_SHORT).show()
+                }
+
+                is ResultState.Success -> {
+                    Toast.makeText(this, state.data.message, Toast.LENGTH_LONG).show()
+                    Log.d("ANC_FOLLOWUP", "Backend response: followupId = ${state.data.followupId}")
+                    finish() // Close only on backend success
+                }
+
+                is ResultState.Error -> {
+                    Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
+                    // Local save already done; ASHA can retry sync later
+                }
+            }
+        }
     }
 
     private fun saveFollowUpAncVisit() {
+        val currentPatientId = patientId
         val currentPregnancyId = pregnancyId
+
+        if (currentPatientId.isNullOrBlank()) {
+            Toast.makeText(this, "No patient ID available", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         if (currentPregnancyId.isNullOrBlank()) {
-            Toast.makeText(this, "No pregnancy/patient ID available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No pregnancy ID available", Toast.LENGTH_SHORT).show()
             return
         }
 
         // Build entity from form using helper
         val entity = AncVisitFormMapper.buildEntityFromForm(binding, currentPregnancyId)
 
-        // Save via ViewModel
+        // Log entity to verify mapping
+        Log.d("ANC_FOLLOWUP", "Entity = $entity")
+
+        // Map to backend request (POST survey/anc-followup)
+        val request = entity.toAncFollowUpRequest(currentPatientId)
+        Log.d("ANC_FOLLOWUP", "Mapped request = $request")
+
+        // Save locally (offline-first)
         viewModel.saveVisit(entity)
+
+        // Submit to backend
+        viewModel.submitAncFollowUp(request)
     }
 }
 

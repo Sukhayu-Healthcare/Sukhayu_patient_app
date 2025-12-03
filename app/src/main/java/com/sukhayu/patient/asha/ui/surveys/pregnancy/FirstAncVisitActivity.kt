@@ -2,12 +2,16 @@ package com.sukhayu.patient.asha.ui.surveys.pregnancy
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.sukhayu.patient.asha.ui.surveys.tb.ResultState
 import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.PregnancyEntity
+import com.sukhayu.patient.data.local.entity.toFirstAncVisitRequest
+import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.repository.PregnancyRepository
 import com.sukhayu.patient.databinding.ActivityFirstAncVisitBinding
 import com.sukhayu.utils.VoiceInputHelper
@@ -49,7 +53,8 @@ class FirstAncVisitActivity : AppCompatActivity() {
 
         // Initialize ViewModel
         val dao = AshaLocalDatabase.getInstance(this).pregnancyDao()
-        val repository = PregnancyRepository(dao)
+        val apiService = ApiClient.retrofit
+        val repository = PregnancyRepository(dao, apiService)
         val factory = FirstAncVisitViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[FirstAncVisitViewModel::class.java]
 
@@ -78,16 +83,37 @@ class FirstAncVisitActivity : AppCompatActivity() {
             binding.btnSaveFirstAnc.isEnabled = !saving
         }
 
+        // Local DB save result
         viewModel.saveSuccess.observe(this) { success ->
             if (success == true) {
-                Toast.makeText(this, "First ANC Visit saved successfully", Toast.LENGTH_LONG).show()
-                finish()
+                // Local save is done; don't finish here because we also submit to backend
+                Toast.makeText(this, "First ANC Visit saved locally", Toast.LENGTH_LONG).show()
             }
         }
 
         viewModel.errorMessage.observe(this) { msg ->
             msg?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        // 🔥 Backend submit result (POST survey/anc)
+        viewModel.submitResult.observe(this) { state ->
+            when (state) {
+                is ResultState.Idle -> Unit
+                is ResultState.Loading -> {
+                    Toast.makeText(this, "Submitting First ANC Visit...", Toast.LENGTH_SHORT).show()
+                }
+                is ResultState.Success -> {
+                    Toast.makeText(this, state.data.message, Toast.LENGTH_LONG).show()
+                    Log.d("FIRST_ANC", "ANC ID from backend: ${state.data.ancId}")
+                    // Close screen only after backend confirms success
+                    finish()
+                }
+                is ResultState.Error -> {
+                    Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
+                    // Local data is already saved; ASHA can retry sync later
+                }
             }
         }
     }
@@ -257,8 +283,18 @@ class FirstAncVisitActivity : AppCompatActivity() {
             nextVisitDate = binding.etNextVisitDate.text.toString().ifBlank { null }
         )
 
-        // Call ViewModel to save
+        // Log entity to verify mapping
+        Log.d("FIRST_ANC", "Entity = $entity")
+
+        // Map to backend request (POST survey/anc)
+        val request = entity.toFirstAncVisitRequest()
+        Log.d("FIRST_ANC", "Mapped request = $request")
+
+        // Save locally (offline-first)
         viewModel.savePregnancy(entity)
+
+        // Submit to backend
+        viewModel.submitFirstAncVisit(request)
     }
 
     /**

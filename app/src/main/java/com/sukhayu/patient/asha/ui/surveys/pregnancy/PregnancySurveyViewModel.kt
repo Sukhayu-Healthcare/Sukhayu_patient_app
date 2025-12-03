@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sukhayu.patient.DummyData
 import com.sukhayu.patient.data.local.entity.PatientEntity
 import com.sukhayu.patient.data.repository.PatientRepository
 import kotlinx.coroutines.launch
@@ -30,11 +29,6 @@ class PregnancySurveyViewModel(
 
     private var selectedPatient: PatientEntity? = null
 
-    // TODO: Deprecated - Dummy data is now automatically seeded into the local DB on first run.
-    //       The patientRepository.searchPatients() will return DB-backed dummy data even when offline.
-    //       This flag can be removed once fully migrated to DB-first approach.
-    var useDummyData: Boolean = false
-
     var isPatientLoaded: Boolean = false
         private set
 
@@ -48,22 +42,9 @@ class PregnancySurveyViewModel(
             try {
                 _uiState.value = UiState.Loading
 
-                val results = if (useDummyData) {
-                    // DEPRECATED: Direct dummy data access
-                    // TODO: Remove this branch - use patientRepository.searchPatients() instead,
-                    //       which now searches the local DB (already seeded with dummy patients)
-                    val dummyResults = DummyData.searchDummyPatients(query)
-                    if (dummyResults.isEmpty()) {
-                        // If no match, create dummy patient with entered name
-                        listOf(DummyData.getDummyPatient(query))
-                    } else {
-                        dummyResults
-                    }
-                } else {
-                    // RECOMMENDED: Use repository which searches local DB first (offline-first)
-                    // This works for both Pregnancy/ANC and TB modules
-                    patientRepository.searchPatients(query, token)
-                }
+                // Use repository which searches backend first, then falls back to local DB
+                // This works for both Pregnancy/ANC and TB modules
+                val results = patientRepository.searchPatients(query, token)
 
                 when {
                     results.isEmpty() -> {

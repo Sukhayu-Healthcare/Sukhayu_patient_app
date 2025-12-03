@@ -44,10 +44,10 @@ class PatientRepository(
     /**
      * UNIFIED PATIENT SEARCH for all modules (Pregnancy/ANC + TB).
      *
-     * Offline-first patient search:
-     * 1. First search locally in Room
-     * 2. Then try to fetch from API (if token available)
-     * 3. Update local cache with API results
+     * Backend-first patient search with local DB fallback:
+     * 1. Try to fetch from backend API first (if token available)
+     * 2. If backend returns results, update local cache and return them
+     * 3. If backend returns empty or fails, fallback to local DB search
      *
      * This single function should be used by:
      * - Pregnancy/ANC survey flows
@@ -56,32 +56,26 @@ class PatientRepository(
      */
     suspend fun searchPatients(query: String, token: String?): List<PatientEntity> =
         withContext(Dispatchers.IO) {
-            val searchPattern = "%$query%"
-
-            // Step 1: Search locally
-            val localResults = db.patientDao().searchPatients(searchPattern)
-
-            // Step 2: Try to fetch from API if token is available
+            // Step 1: Try backend first if token is available
             if (token != null) {
                 try {
                     val response = apiService.searchPatients("Bearer $token", query)
                     val remotePatients = response.patients.map { it.toEntity() }
 
-                    // Step 3: Update local cache
+                    // Step 2: If backend returns results, update local cache and return them
                     if (remotePatients.isNotEmpty()) {
                         db.patientDao().insertPatients(remotePatients)
+                        return@withContext remotePatients
                     }
-
-                    // Return remote results if available
-                    return@withContext remotePatients
+                    // If backend returns empty list, fall through to local search
                 } catch (e: Exception) {
-                    // If API fails, return local results
-                    e.printStackTrace()
+                    // If API fails, fall through to local search
+                    Log.e("PatientRepository", "Backend search failed, using local DB fallback", e)
                 }
             }
 
-            // Return local results if API failed or no token
-            return@withContext localResults
+            // Step 3: Fallback to local DB search
+            return@withContext db.patientDao().searchPatients(query)
         }
 
     suspend fun getPatientById(patientId: String): PatientEntity? =

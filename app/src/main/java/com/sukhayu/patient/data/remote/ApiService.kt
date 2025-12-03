@@ -219,5 +219,22 @@ interface ApiService {
         @Path("tb_id") tbId: String
     ): TbFollowUpsResponse
 
+    @POST("survey/anc")
+    suspend fun submitFirstAncVisit(
+        @Header("Authorization") authHeader: String,
+        @Body body: FirstAncVisitRequest
+    ): FirstAncVisitResponse
+
+    @GET("survey/anc")
+    suspend fun getAncRecords(
+        @Header("Authorization") authHeader: String
+    ): AncRecordsResponse
+
+    @POST("survey/anc-followup")
+    suspend fun submitAncFollowUp(
+        @Header("Authorization") authHeader: String,
+        @Body body: AncFollowUpRequest
+    ): AncFollowUpResponse
+
 }
 
