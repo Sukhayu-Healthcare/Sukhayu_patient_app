@@ -3,8 +3,6 @@ package com.sukhayu.patient.webrtc
 import android.content.Context
 import android.util.Log
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import org.webrtc.*
 import java.util.concurrent.TimeUnit
@@ -14,13 +12,17 @@ class WebRTCManager(
     private val localVideoView: SurfaceViewRenderer,
     private val remoteVideoView: SurfaceViewRenderer,
     private val patientId: String,
-    private val doctorId: String
+    private var doctorId: String,
+    private val eglBaseContext: EglBase.Context
 ) {
     private var webSocket: WebSocket? = null
     private var peerConnection: PeerConnection? = null
     private var localVideoTrack: VideoTrack? = null
     private var localAudioTrack: AudioTrack? = null
+    private var videoCapturer: VideoCapturer? = null
+    private var videoSource: VideoSource? = null
     private var patientSocketId: String = ""
+    private var preferredDoctorLevel: String? = null
     
     private val peerConnectionFactory: PeerConnectionFactory by lazy {
         initPeerConnectionFactory()
@@ -46,19 +48,20 @@ class WebRTCManager(
             .createPeerConnectionFactory()
     }
 
-    fun initializeWebSocket() {
+    fun initializeWebSocket(preferredLevel: String? = "MO") {
+        this.preferredDoctorLevel = preferredLevel
         val client = OkHttpClient.Builder()
             .readTimeout(0, TimeUnit.MILLISECONDS)
             .build()
 
         val request = Request.Builder()
-            .url("wss://ashartc.onrender.com") // Replace with your computer's local IP
+            .url("wss://ashartc.onrender.com")
             .build()
 
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
                 Log.d(TAG, "WebSocket connected")
-                registerAsPatient()
+                // Wait for socket-id before registering
             }
 
             override fun onMessage(webSocket: WebSocket, text: String) {
@@ -80,70 +83,21 @@ class WebRTCManager(
         val registerMessage = JSONObject().apply {
             put("type", "register")
             put("id", patientId)
-            put("role", "patient")
+            put("role", "patient") // Server expects "patient" or "doctor"
         }
         Log.d(TAG, "Registering as patient: $patientId")
         webSocket?.send(registerMessage.toString())
-        
-        // Store patient socket ID after registration
-        patientSocketId = patientId
     }
 
-    fun findDoctor() {
-        Log.d(TAG, "Finding available doctor")
-        val client = OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .build()
-
-        val jsonBody = JSONObject().apply {
-            put("patientid", patientId)
-            put("caseType", "video")
-            put("role", "MO")
-            put("patientsocketid", patientSocketId)
+    fun findDoctor(preferredLevel: String? = "MO") {
+        Log.d(TAG, "Requesting doctor with preferred level: $preferredLevel")
+        val callRequest = JSONObject().apply {
+            put("type", "call-request")
+            if (preferredLevel != null) {
+                put("preferredLevel", preferredLevel) // CHO, MO, or CIVIL
+            }
         }
-
-        val requestBody = jsonBody.toString()
-            .toRequestBody("application/json; charset=utf-8".toMediaType())
-
-        val request = Request.Builder()
-            .url("https://ashartc.onrender.com/api/patient/patient/find-doctor")
-            .post(requestBody)
-            .build()
-
-        client.newCall(request).enqueue(object : okhttp3.Callback {
-            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
-                Log.e(TAG, "Failed to find doctor: ${e.message}")
-                onError?.invoke("Failed to find doctor: ${e.message}")
-            }
-
-            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                response.use {
-                    if (!response.isSuccessful) {
-                        Log.e(TAG, "Find doctor failed with code: ${response.code}")
-                        onError?.invoke("No doctor available")
-                        return
-                    }
-
-                    val responseBody = response.body?.string()
-                    Log.d(TAG, "Doctor found response: $responseBody")
-                    
-                    try {
-                        val jsonResponse = JSONObject(responseBody ?: "{}")
-                        val doctorSocketId = jsonResponse.optString("doctorSocketId", "")
-                        
-                        if (doctorSocketId.isNotEmpty()) {
-                            Log.d(TAG, "Doctor found with socket ID: $doctorSocketId")
-                            onDoctorFound?.invoke(doctorSocketId)
-                        } else {
-                            onError?.invoke("No doctor available")
-                        }
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Error parsing response: ${e.message}")
-                        onError?.invoke("Error finding doctor")
-                    }
-                }
-            }
-        })
+        webSocket?.send(callRequest.toString())
     }
 
     fun initiateCall() {
@@ -216,29 +170,39 @@ class WebRTCManager(
 
     private fun setupLocalMedia() {
         Log.d(TAG, "Setting up local media")
-        val videoCapturer = createVideoCapturer()
-        val videoSource = peerConnectionFactory.createVideoSource(videoCapturer.isScreencast)
-        videoCapturer.initialize(
-            SurfaceTextureHelper.create("CaptureThread", EglBase.create().eglBaseContext),
+        videoCapturer = createVideoCapturer()
+        videoSource = peerConnectionFactory.createVideoSource(videoCapturer!!.isScreencast)
+        
+        val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", eglBaseContext)
+        videoCapturer!!.initialize(
+            surfaceTextureHelper,
             context,
-            videoSource.capturerObserver
+            videoSource!!.capturerObserver
         )
-        videoCapturer.startCapture(720, 480, 30)
+        videoCapturer!!.startCapture(720, 480, 30)
 
         localVideoTrack = peerConnectionFactory.createVideoTrack("local_video", videoSource)
         localVideoTrack?.addSink(localVideoView)
         Log.d(TAG, "Local video track created and attached")
 
-        val audioSource = peerConnectionFactory.createAudioSource(MediaConstraints())
+        val audioConstraints = MediaConstraints().apply {
+            mandatory.add(MediaConstraints.KeyValuePair("googEchoCancellation", "true"))
+            mandatory.add(MediaConstraints.KeyValuePair("googAutoGainControl", "true"))
+            mandatory.add(MediaConstraints.KeyValuePair("googNoiseSuppression", "true"))
+            mandatory.add(MediaConstraints.KeyValuePair("googHighpassFilter", "true"))
+        }
+        val audioSource = peerConnectionFactory.createAudioSource(audioConstraints)
         localAudioTrack = peerConnectionFactory.createAudioTrack("local_audio", audioSource)
         Log.d(TAG, "Local audio track created")
 
+        // Add tracks to peer connection
+        val streamId = "local_stream"
         localVideoTrack?.let { 
-            peerConnection?.addTrack(it, listOf("local_stream"))
+            peerConnection?.addTrack(it, listOf(streamId))
             Log.d(TAG, "Video track added to peer connection")
         }
         localAudioTrack?.let { 
-            peerConnection?.addTrack(it, listOf("local_stream"))
+            peerConnection?.addTrack(it, listOf(streamId))
             Log.d(TAG, "Audio track added to peer connection")
         }
     }
@@ -297,8 +261,7 @@ class WebRTCManager(
     private fun sendOffer(sdp: SessionDescription) {
         val message = JSONObject().apply {
             put("type", "offer")
-            put("from", patientId)
-            put("to", doctorId)
+            put("toUserID", doctorId)
             put("payload", JSONObject().apply {
                 put("type", sdp.type.canonicalForm())
                 put("sdp", sdp.description)
@@ -309,9 +272,8 @@ class WebRTCManager(
 
     private fun sendIceCandidate(candidate: IceCandidate) {
         val message = JSONObject().apply {
-            put("type", "ice-candidate")
-            put("from", patientId)
-            put("to", doctorId)
+            put("type", "ice")
+            put("toUserID", doctorId)
             put("payload", JSONObject().apply {
                 put("candidate", candidate.sdp)
                 put("sdpMid", candidate.sdpMid)
@@ -328,6 +290,35 @@ class WebRTCManager(
             val type = json.getString("type")
 
             when (type) {
+                "socket-id" -> {
+                    val socketID = json.getString("socketID")
+                    Log.d(TAG, "Received socket ID: $socketID")
+                    registerAsPatient()
+                }
+                "registered" -> {
+                    val id = json.getString("id")
+                    patientSocketId = id
+                    Log.d(TAG, "Successfully registered with ID: $id")
+                    // Automatically request a doctor after successful registration
+                    findDoctor(preferredDoctorLevel)
+                }
+                "doctor-assigned" -> {
+                    val assignedDoctorId = json.getString("doctorID")
+                    val doctorLevel = json.optString("doctorLevel", "")
+                    Log.d(TAG, "Doctor assigned: $assignedDoctorId (Level: $doctorLevel)")
+                    
+                    // Update the doctorId for subsequent messages
+                    doctorId = assignedDoctorId
+                    
+                    onDoctorFound?.invoke(assignedDoctorId)
+                    
+                    // Automatically initiate call after doctor is assigned
+                    initiateCall()
+                }
+                "no-doctor-available" -> {
+                    Log.d(TAG, "No doctor available")
+                    onError?.invoke("No doctor available at the moment")
+                }
                 "answer" -> {
                     val payload = json.getJSONObject("payload")
                     val sdp = SessionDescription(
@@ -345,7 +336,7 @@ class WebRTCManager(
                         override fun onCreateFailure(p0: String?) {}
                     }, sdp)
                 }
-                "ice-candidate" -> {
+                "ice" -> {
                     val payload = json.getJSONObject("payload")
                     val candidate = IceCandidate(
                         payload.getString("sdpMid"),
@@ -353,6 +344,11 @@ class WebRTCManager(
                         payload.getString("candidate")
                     )
                     peerConnection?.addIceCandidate(candidate)
+                }
+                "renegotiate" -> {
+                    val newDoctorId = json.getString("newDoctorID")
+                    Log.d(TAG, "Call handed over to new doctor: $newDoctorId")
+                    onError?.invoke("Call transferred to another doctor")
                 }
                 "call-status" -> {
                     val status = json.getString("status")
@@ -367,10 +363,10 @@ class WebRTCManager(
     }
 
     fun endCall() {
+        Log.d(TAG, "Ending call")
         val message = JSONObject().apply {
             put("type", "call-status")
-            put("from", patientId)
-            put("to", doctorId)
+            put("toUserID", doctorId)
             put("status", "ended")
         }
         webSocket?.send(message.toString())
@@ -379,10 +375,30 @@ class WebRTCManager(
     }
 
     private fun cleanup() {
+        Log.d(TAG, "Cleaning up resources")
+        
+        // Stop video capturer
+        try {
+            videoCapturer?.stopCapture()
+            videoCapturer?.dispose()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error stopping video capturer: ${e.message}")
+        }
+        
+        // Dispose tracks
         localVideoTrack?.dispose()
         localAudioTrack?.dispose()
-        peerConnection?.close()
+        
+        // Dispose sources
+        videoSource?.dispose()
+        
+        // Close peer connection
+        peerConnection?.dispose()
+        
+        // Close WebSocket
         webSocket?.close(1000, "Call ended")
+        
+        Log.d(TAG, "Cleanup completed")
     }
 
     companion object {

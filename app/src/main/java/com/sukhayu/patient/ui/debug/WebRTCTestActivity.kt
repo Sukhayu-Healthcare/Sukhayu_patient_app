@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
+import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.patient.webrtc.WebRTCManager
+import org.webrtc.EglBase
 import org.webrtc.SurfaceViewRenderer
 import java.util.UUID
 
@@ -22,12 +24,22 @@ class WebRTCTestActivity : AppCompatActivity() {
     private lateinit var tvStatus: TextView
     
     private var webRTCManager: WebRTCManager? = null
-    private val testPatientId = "patient_${UUID.randomUUID().toString().take(8)}"
+    private var eglBase: EglBase? = null
+    private var testPatientId: String = ""
     private val testDoctorId = "doctor_test"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_webrtc_test)
+
+        // Get patient ID from TokenManager
+        testPatientId = TokenManager.getSupremeId().ifEmpty {
+            TokenManager.getUserId()
+        }
+
+        if (testPatientId.isEmpty()) {
+            testPatientId = "test_patient_${System.currentTimeMillis()}"
+        }
 
         localVideoView = findViewById(R.id.localVideoView)
         remoteVideoView = findViewById(R.id.remoteVideoView)
@@ -74,15 +86,20 @@ class WebRTCTestActivity : AppCompatActivity() {
     private fun startTest() {
         updateStatus("Initializing WebRTC...")
         
-        localVideoView.init(null, null)
-        remoteVideoView.init(null, null)
+        // Create shared EglBase context
+        eglBase = EglBase.create()
+        val eglContext = eglBase!!.eglBaseContext
+
+        localVideoView.init(eglContext, null)
+        remoteVideoView.init(eglContext, null)
 
         webRTCManager = WebRTCManager(
             context = this,
             localVideoView = localVideoView,
             remoteVideoView = remoteVideoView,
             patientId = testPatientId,
-            doctorId = testDoctorId
+            doctorId = testDoctorId,
+            eglBaseContext = eglContext
         ).apply {
             onCallConnected = {
                 runOnUiThread {
@@ -119,8 +136,8 @@ class WebRTCTestActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        webRTCManager?.endCall()
         localVideoView.release()
         remoteVideoView.release()
+        eglBase?.release()
     }
 }

@@ -10,6 +10,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
 import com.sukhayu.patient.webrtc.WebRTCManager
+import com.sukhayu.patient.utils.TokenManager
+import org.webrtc.EglBase
 import org.webrtc.SurfaceViewRenderer
 
 class VideoCallActivity : AppCompatActivity() {
@@ -19,6 +21,7 @@ class VideoCallActivity : AppCompatActivity() {
     private lateinit var btnEndCall: Button
     
     private var webRTCManager: WebRTCManager? = null
+    private var eglBase: EglBase? = null
     private var patientId: String = ""
     private var doctorId: String = ""
     private var actualDoctorSocketId: String = ""
@@ -27,10 +30,19 @@ class VideoCallActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_call)
 
-        patientId = intent.getStringExtra("patientId") ?: ""
+        // Get patient ID from intent or TokenManager
+        patientId = intent.getStringExtra("patientId") ?: TokenManager.getSupremeId().ifEmpty {
+            TokenManager.getUserId()
+        }
         doctorId = intent.getStringExtra("doctorId") ?: ""
 
-        if (patientId.isEmpty() || doctorId.isEmpty()) {
+        if (patientId.isEmpty()) {
+            Toast.makeText(this, "Patient ID not found. Please login again.", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        if (doctorId.isEmpty()) {
             Toast.makeText(this, "Invalid call parameters", Toast.LENGTH_SHORT).show()
             finish()
             return
@@ -81,15 +93,20 @@ class VideoCallActivity : AppCompatActivity() {
     }
 
     private fun initializeCall() {
-        localVideoView.init(null, null)
-        remoteVideoView.init(null, null)
+        // Create shared EglBase context
+        eglBase = EglBase.create()
+        val eglContext = eglBase!!.eglBaseContext
+
+        localVideoView.init(eglContext, null)
+        remoteVideoView.init(eglContext, null)
 
         webRTCManager = WebRTCManager(
             context = this,
             localVideoView = localVideoView,
             remoteVideoView = remoteVideoView,
             patientId = patientId,
-            doctorId = doctorId
+            doctorId = doctorId,
+            eglBaseContext = eglContext
         ).apply {
             onCallConnected = {
                 runOnUiThread {
@@ -129,6 +146,7 @@ class VideoCallActivity : AppCompatActivity() {
         super.onDestroy()
         localVideoView.release()
         remoteVideoView.release()
+        eglBase?.release()
     }
 
     companion object {

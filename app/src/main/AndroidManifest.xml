@@ -101,6 +101,9 @@
         <!-- Emergency Activity -->
         <activity android:name=".ui.emergency.EmergencyActivity" android:exported="false" android:screenOrientation="portrait" />
 
+        <!-- Emergency Video Call Activity -->
+        <activity android:name=".ui.emergency.EmergencyVCActivity" android:exported="false" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|screenSize" />
+
         <!-- Video Call Activity -->
         <activity android:name=".ui.videocall.VideoCallActivity" android:exported="false" android:screenOrientation="portrait" />
 
