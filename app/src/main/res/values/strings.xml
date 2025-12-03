@@ -23,7 +23,7 @@
 
     <!-- Quick actions -->
     <string name="action_view_surveys">View Patient Survey</string>
-    <string name="action_health_drives">Health Drives</string>
+    <string name="action_health_drives">Announcement</string>
     <string name="action_register_patient">Register New Patient</string>
     <string name="action_help_login">Help Patient Login</string>
 

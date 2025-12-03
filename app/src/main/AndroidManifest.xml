@@ -96,6 +96,9 @@
         <activity android:name="com.sukhayu.patient.ui.asha.family.FamilyListActivity" android:exported="false" android:label="Family List" />
         <activity android:name="com.sukhayu.patient.ui.asha.family.MemberListActivity" android:exported="false" android:label="Family Members" />
 
+        <!-- Emergency Contacts Activity -->
+        <activity android:name="com.sukhayu.patient.ui.asha.emergency.EmergencyContactsActivity" android:exported="false" android:label="Emergency Contacts" />
+
         <activity android:name="com.sukhayu.patient.ui.supervisor.AshaDetailActivity" android:exported="true" />
 
         <!-- Add FileProvider -->
