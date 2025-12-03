@@ -2,6 +2,7 @@ package com.sukhayu.patient.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sukhayu.patient.data.remote.TbFollowUpRequest
 import java.util.UUID
 
 /**
@@ -85,3 +86,30 @@ data class TbFollowUpEntity(
     // TODO: Implement sync with NIKSHAY/backend when available
 )
 
+/**
+ * Convert TbFollowUpEntity to TbFollowUpRequest for backend submission
+ * Maps local Room entity fields to backend API request format
+ */
+fun TbFollowUpEntity.toBackendRequest(): TbFollowUpRequest {
+    return TbFollowUpRequest(
+        tbId = this.tbPatientIdOrNikshay,
+        patientId = this.patientId,
+        visitDate = this.visitDate,
+        phaseOfTreatment = this.phaseOfTreatment,
+        visitType = this.visitType,
+        dosesMissed = this.dosesMissedSinceLastVisit,
+        vomiting = this.vomitingAfterMedicines,
+        jaundice = this.yellowEyesOrSkin,
+        skinRash = this.severeSkinRashOrItching,
+        jointPain = this.jointPain,
+        persistentCough = this.persistentCoughOrBreathlessness,
+        fever = this.feverLastWeek,
+        weightThisVisit = this.weightKg,
+        dotProvider = this.dotProvider,
+        drugBoxChecked = this.drugBoxCheckedAndConsistent,
+        counsellingGiven = this.counsellingGiven,
+        treatmentContinued = this.treatmentContinuedAsPlanned,
+        referredForSideeffects = this.referredForSideEffects,
+        nextFollowupDate = this.nextFollowUpDate
+    )
+}

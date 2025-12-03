@@ -207,5 +207,17 @@ interface ApiService {
         @Header("Authorization") authHeader: String
     ): TbFirstScreeningsResponse
 
+    @POST("survey/tb-followup")
+    suspend fun submitTbFollowUp(
+        @Header("Authorization") authHeader: String,
+        @Body body: TbFollowUpRequest
+    ): TbFollowUpResponse
+
+    @GET("tb/followups/{tb_id}")
+    suspend fun getTbFollowUps(
+        @Header("Authorization") authHeader: String,
+        @Path("tb_id") tbId: String
+    ): TbFollowUpsResponse
 
 }
+

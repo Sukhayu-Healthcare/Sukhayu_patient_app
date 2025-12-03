@@ -2,6 +2,7 @@ package com.sukhayu.patient.asha.ui.surveys.tb
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -10,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.TbFollowUpEntity
+import com.sukhayu.patient.data.local.entity.toBackendRequest
+import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.repository.TbFollowUpRepository
 import com.sukhayu.patient.databinding.ActivityTbFollowUpBinding
 import java.text.SimpleDateFormat
@@ -51,7 +54,8 @@ class TbFollowUpActivity : AppCompatActivity() {
 
         // Initialize ViewModel
         val dao = AshaLocalDatabase.getInstance(this).tbFollowUpDao()
-        val repository = TbFollowUpRepository(dao)
+        val apiService = ApiClient.retrofit
+        val repository = TbFollowUpRepository(dao, apiService)
         val factory = TbFollowUpViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[TbFollowUpViewModel::class.java]
 
@@ -80,10 +84,11 @@ class TbFollowUpActivity : AppCompatActivity() {
             binding.btnSaveTbFollowUp.text = if (saving) "Saving..." else "Save TB Follow-up"
         }
 
+        // Local DB save result
         viewModel.saveSuccess.observe(this) { success ->
             if (success == true) {
-                Toast.makeText(this, "TB Follow-up saved successfully", Toast.LENGTH_LONG).show()
-                finish()
+                // Local save is done; don't finish here because we also submit to backend
+                Toast.makeText(this, "TB follow-up saved locally", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -91,6 +96,31 @@ class TbFollowUpActivity : AppCompatActivity() {
             msg?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
             }
+        }
+
+        // 🔥 Backend submit result (POST survey/tb-followup)
+        viewModel.submitResult.observe(this) { state ->
+            when (state) {
+
+                is ResultState.Idle -> {
+                    // Do nothing
+                }
+
+                is ResultState.Loading -> {
+                    Toast.makeText(this, "Submitting TB follow-up...", Toast.LENGTH_SHORT).show()
+                }
+
+                is ResultState.Success -> {
+                    Toast.makeText(this, state.data.message, Toast.LENGTH_LONG).show()
+                    finish() // Close only on backend success
+                }
+
+                is ResultState.Error -> {
+                    Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
+                    // Local save already done; ASHA can retry sync later
+                }
+            }
+
         }
     }
 
@@ -256,7 +286,18 @@ class TbFollowUpActivity : AppCompatActivity() {
             nextFollowUpDate = binding.etNextFollowUpDate.text.toString()
         )
 
+        // Log entity to verify mapping
+        Log.d("TB_FOLLOWUP", "Entity = $entity")
+
+        // Map to backend request (POST survey/tb-followup)
+        val request = entity.toBackendRequest()
+        Log.d("TB_FOLLOWUP", "Mapped request = $request")
+
+        // Save locally (offline-first)
         viewModel.saveTbFollowUp(entity)
+
+        // Submit to backend
+        viewModel.submitTbFollowUp(request)
     }
 
     private fun showDatePicker(onDateSelected: (Date) -> Unit) {
