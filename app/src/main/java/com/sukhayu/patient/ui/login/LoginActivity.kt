@@ -22,10 +22,13 @@ import com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity
 import com.sukhayu.patient.ui.dashboard.DashboardActivity
 import com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity
 import com.sukhayu.patient.utils.TokenManager
+<<<<<<< Updated upstream
 import com.sukhayu.utils.VoiceInputHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+=======
+>>>>>>> Stashed changes
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,8 +38,11 @@ import com.sukhayu.patient.data.repository.PatientRepository //
 class LoginActivity : AppCompatActivity() {
 
     private val gson = Gson()
+<<<<<<< Updated upstream
     private lateinit var voiceHelper: VoiceInputHelper
     private val ioScope = CoroutineScope(Dispatchers.IO)
+=======
+>>>>>>> Stashed changes
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +58,6 @@ class LoginActivity : AppCompatActivity() {
         // Set phone number field to number input with 10 digit limit
         etUsername.inputType = InputType.TYPE_CLASS_NUMBER
         etUsername.filters = arrayOf(InputFilter.LengthFilter(10))
-
-        requestAudioPermission()
-        voiceHelper = VoiceInputHelper(this)
-        VoiceInputHelper.attachToAllEditTexts(this)
 
         btnLogin.setOnClickListener {
             val phoneNumber = etUsername.text.toString().trim()
@@ -97,6 +99,7 @@ class LoginActivity : AppCompatActivity() {
                             }
 
                             startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
+                            finish()
                         }
 
 
@@ -129,6 +132,7 @@ class LoginActivity : AppCompatActivity() {
                                 }
                                 startActivity(Intent(this@LoginActivity, AshaDashboardActivity::class.java))
                             }
+                            finish()
                         }
 
                         else -> {
@@ -156,12 +160,17 @@ class LoginActivity : AppCompatActivity() {
         getSharedPreferences("auth", MODE_PRIVATE).edit().apply {
             putString("token", data.token)
             putString("role", data.role)
+<<<<<<< Updated upstream
 
             // Prefer patientId, fall back to userId, otherwise empty
             putString(
                 "user_id",
                 data.patient.patientId ?: data.patient.userId ?: ""
             )
+=======
+            putString("role_display", getRoleDisplayName(data.role))
+            putString("user_id", data.patient.id ?: "")
+>>>>>>> Stashed changes
             putString("user_name", data.patient.name ?: "")
             putString("user_phone", data.patient.phone ?: "")
 
@@ -189,6 +198,7 @@ class LoginActivity : AppCompatActivity() {
         getSharedPreferences("auth", MODE_PRIVATE).edit().apply {
             putString("token", data.token)
             putString("role", data.role)
+            putString("role_display", getRoleDisplayName(data.role))
             putString("user_id", data.user.id ?: "")
             putString("user_name", data.user.name ?: "")
             putString("user_phone", data.user.phone ?: "")
@@ -244,8 +254,16 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun getRoleDisplayName(role: String): String {
+        return when (role.lowercase()) {
+            "patient" -> "Patient"
+            "asha" -> "ASHA Worker"
+            "supervisor" -> "ASHA Supervisor"
+            else -> role.capitalize()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        voiceHelper.destroy()
     }
 }

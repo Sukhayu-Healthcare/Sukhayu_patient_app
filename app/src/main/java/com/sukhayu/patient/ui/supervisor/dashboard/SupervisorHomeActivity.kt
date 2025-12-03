@@ -20,6 +20,7 @@ import com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity
 import com.sukhayu.patient.ui.supervisor.surveys.CreateSurveyActivity
 import com.sukhayu.patient.ui.supervisor.drives.CreateDriveActivity
 import com.sukhayu.patient.utils.TokenManager
+import com.sukhayu.patient.utils.HeaderUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,7 +44,8 @@ class SupervisorHomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_supervisor_home)
-
+        // In onCreate() after setContentView()
+        HeaderUtils.setupRoleInHeader(this)
         TokenManager.init(this)
 
         initViews()

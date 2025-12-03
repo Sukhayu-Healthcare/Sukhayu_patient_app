@@ -26,6 +26,8 @@
 
                 <Button android:id="@+id/btnEditAsha" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Edit Profile" android:textColor="@android:color/white" android:backgroundTint="#4CAF50" android:layout_marginTop="24dp" android:paddingVertical="12dp" android:textSize="16sp" android:textStyle="bold" />
 
+                <Button android:id="@+id/btnDeleteAsha" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Delete Account" android:textColor="@android:color/white" android:backgroundTint="#F44336" android:layout_marginTop="12dp" android:paddingVertical="12dp" android:textSize="16sp" android:textStyle="bold" />
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

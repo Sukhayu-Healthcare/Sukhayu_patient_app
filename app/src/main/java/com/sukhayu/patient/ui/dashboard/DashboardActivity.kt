@@ -22,6 +22,7 @@ import com.sukhayu.patient.ui.emergency.EmergencyActivity
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ui.profile.ProfileActivity
 import com.sukhayu.utils.VoiceInputHelper
+import com.sukhayu.patient.utils.HeaderUtils
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -31,6 +32,8 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+        // In onCreate() after setContentView()
+        HeaderUtils.setupRoleInHeader(this)
 
         // ---------------------------------------------------------
         // FETCH USER DETAILS FROM SHARED PREFS

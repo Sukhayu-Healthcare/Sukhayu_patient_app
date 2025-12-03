@@ -122,7 +122,20 @@
                 <EditText android:id="@+id/et_phone_no" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:inputType="phone" android:background="@drawable/rounded_edittext" />
 
                 <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Password (optional)" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
-                <EditText android:id="@+id/et_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:hint="Leave blank to keep current" android:inputType="textPassword" android:background="@drawable/rounded_edittext" />
+                <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp">
+
+                    <EditText android:id="@+id/et_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="14dp" android:paddingEnd="48dp" android:textSize="16sp" android:hint="Leave blank to keep current" android:inputType="textPassword" android:background="@drawable/rounded_edittext" />
+
+                    <ImageButton android:id="@+id/btn_toggle_password" android:layout_width="40dp" android:layout_height="40dp" android:layout_gravity="end|center_vertical" android:layout_marginEnd="8dp" android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_visibility_off" android:contentDescription="Toggle password visibility" android:padding="8dp" />
+                </FrameLayout>
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Confirm Password" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp">
+
+                    <EditText android:id="@+id/et_confirm_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="14dp" android:paddingEnd="48dp" android:textSize="16sp" android:hint="Confirm new password" android:inputType="textPassword" android:background="@drawable/rounded_edittext" />
+
+                    <ImageButton android:id="@+id/btn_toggle_confirm_password" android:layout_width="40dp" android:layout_height="40dp" android:layout_gravity="end|center_vertical" android:layout_marginEnd="8dp" android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_visibility_off" android:contentDescription="Toggle confirm password visibility" android:padding="8dp" />
+                </FrameLayout>
 
                 <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Village" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
                 <EditText android:id="@+id/et_village" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />

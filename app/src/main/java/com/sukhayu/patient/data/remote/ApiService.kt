@@ -4,6 +4,7 @@ import com.sukhayu.patient.model.PatientRegistrationRequest
 import com.sukhayu.patient.model.PatientRegistrationResponse
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -169,6 +170,7 @@ interface ApiService {
         @Body body: UpdateAshaRequest
     ): Call<UpdateAshaResponse>
 
+<<<<<<< Updated upstream
     @POST("survey/genral")
     suspend fun submitGeneralSurvey(
         @Header("Authorization") authHeader: String,
@@ -184,4 +186,11 @@ interface ApiService {
     suspend fun getAllPatients(
         @Header("Authorization") authHeader: String
     ): AllPatientsResponse
+=======
+    @DELETE("asha/supervisor/delete-asha/{id}")
+    fun deleteAsha(
+        @Header("Authorization") token: String,
+        @Path("id") ashaId: String
+    ): Call<Void>
+>>>>>>> Stashed changes
 }

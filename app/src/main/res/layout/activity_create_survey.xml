@@ -89,7 +89,7 @@
 
         <Button android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Cancel" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:layout_marginEnd="8dp" android:backgroundTint="#DC2626" android:stateListAnimator="@null" />
 
-        <Button android:id="@+id/btnCreate" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Create Survey" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:layout_marginEnd="8dp" android:backgroundTint="#16A34A" android:textColor="@android:color/white" android:stateListAnimator="@null" />
+        <Button android:id="@+id/btnCreate" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Create" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:layout_marginEnd="8dp" android:backgroundTint="#16A34A" android:textColor="@android:color/white" android:stateListAnimator="@null" />
 
     </LinearLayout>
 </LinearLayout>

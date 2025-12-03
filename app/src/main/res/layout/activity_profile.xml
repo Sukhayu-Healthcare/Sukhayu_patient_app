@@ -66,7 +66,33 @@
 
                         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Phone Number" android:textColor="#000000" android:textSize="14sp" android:textStyle="bold" android:labelFor="@id/et_phone" android:layout_marginBottom="8dp" />
 
-                        <EditText android:id="@+id/et_phone" android:layout_width="match_parent" android:layout_height="45dp" android:hint="9876543210" android:enabled="false" android:background="@drawable/bg_edittext_rounded" android:paddingStart="14dp" android:paddingEnd="14dp" android:inputType="number" android:maxLength="15" android:importantForAutofill="no" android:textSize="15sp" />
+                        <EditText android:id="@+id/et_phone" android:layout_width="match_parent" android:layout_height="45dp" android:hint="9876543210" android:enabled="false" android:background="@drawable/bg_edittext_rounded" android:paddingStart="14dp" android:paddingEnd="14dp" android:inputType="number" android:maxLength="10" android:importantForAutofill="no" android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <!-- Password Field (visible only in edit mode) -->
+                    <LinearLayout android:id="@+id/layout_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="16dp" android:visibility="gone">
+
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Password" android:textColor="#000000" android:textSize="14sp" android:textStyle="bold" android:labelFor="@id/et_password" android:layout_marginBottom="8dp" />
+
+                        <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                            <EditText android:id="@+id/et_password" android:layout_width="match_parent" android:layout_height="45dp" android:hint="Min 8 chars with uppercase, lowercase, number, special char" android:background="@drawable/bg_edittext_rounded" android:paddingStart="14dp" android:paddingEnd="48dp" android:inputType="textPassword" android:textSize="15sp" />
+
+                            <ImageButton android:id="@+id/btn_toggle_password" android:layout_width="40dp" android:layout_height="40dp" android:layout_gravity="end|center_vertical" android:layout_marginEnd="4dp" android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_visibility_off" android:contentDescription="Toggle password visibility" android:padding="8dp" />
+                        </FrameLayout>
+                    </LinearLayout>
+
+                    <!-- Confirm Password Field (visible only in edit mode) -->
+                    <LinearLayout android:id="@+id/layout_confirm_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="16dp" android:visibility="gone">
+
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Confirm Password" android:textColor="#000000" android:textSize="14sp" android:textStyle="bold" android:labelFor="@id/et_confirm_password" android:layout_marginBottom="8dp" />
+
+                        <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                            <EditText android:id="@+id/et_confirm_password" android:layout_width="match_parent" android:layout_height="45dp" android:hint="Re-enter password" android:background="@drawable/bg_edittext_rounded" android:paddingStart="14dp" android:paddingEnd="48dp" android:inputType="textPassword" android:textSize="15sp" />
+
+                            <ImageButton android:id="@+id/btn_toggle_confirm_password" android:layout_width="40dp" android:layout_height="40dp" android:layout_gravity="end|center_vertical" android:layout_marginEnd="4dp" android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_visibility_off" android:contentDescription="Toggle confirm password visibility" android:padding="8dp" />
+                        </FrameLayout>
                     </LinearLayout>
 
                     <!-- Patient ID Field (read-only) -->

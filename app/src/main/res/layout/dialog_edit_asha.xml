@@ -5,16 +5,20 @@
         <com.google.android.material.textfield.TextInputEditText android:id="@+id/etEditAshaName" android:layout_width="match_parent" android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Village" android:layout_marginTop="8dp">
-        <com.google.android.material.textfield.TextInputEditText android:id="@+id/etEditVillage" android:layout_width="match_parent" android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="State" android:textSize="12sp" android:textColor="#666666" android:layout_marginTop="16dp" android:layout_marginBottom="4dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
 
-    <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="District" android:layout_marginTop="8dp">
-        <com.google.android.material.textfield.TextInputEditText android:id="@+id/etEditDistrict" android:layout_width="match_parent" android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <EditText android:id="@+id/etEditState" android:layout_width="match_parent" android:layout_height="48dp" android:text="Maharashtra" android:inputType="none" android:focusable="false" android:padding="12dp" android:background="@android:color/white" android:textColor="#666666" />
 
-    <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Taluka" android:layout_marginTop="8dp">
-        <com.google.android.material.textfield.TextInputEditText android:id="@+id/etEditTaluka" android:layout_width="match_parent" android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="District" android:textSize="12sp" android:textColor="#666666" android:layout_marginTop="16dp" android:layout_marginBottom="4dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
+
+    <Spinner android:id="@+id/spinnerEditDistrict" android:layout_width="match_parent" android:layout_height="48dp" android:padding="12dp" android:background="@android:color/white" />
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Taluka" android:textSize="12sp" android:textColor="#666666" android:layout_marginTop="16dp" android:layout_marginBottom="4dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
+
+    <Spinner android:id="@+id/spinnerEditTaluka" android:layout_width="match_parent" android:layout_height="48dp" android:padding="12dp" android:background="@android:color/white" />
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Village" android:textSize="12sp" android:textColor="#666666" android:layout_marginTop="16dp" android:layout_marginBottom="4dp" android:paddingStart="4dp" android:paddingEnd="4dp" />
+
+    <Spinner android:id="@+id/spinnerEditVillage" android:layout_width="match_parent" android:layout_height="48dp" android:padding="12dp" android:background="@android:color/white" />
 
 </LinearLayout>

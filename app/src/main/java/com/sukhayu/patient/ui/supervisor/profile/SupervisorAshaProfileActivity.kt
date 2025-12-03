@@ -28,6 +28,8 @@ import retrofit2.Response
 class SupervisorAshaProfileActivity : AppCompatActivity() {
 
     private var selectedImageUri: Uri? = null
+    private var isPasswordVisible = false
+    private var isConfirmPasswordVisible = false
 
     private lateinit var tvName: TextView
     private lateinit var tvId: TextView
@@ -53,6 +55,9 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
     private lateinit var etDistrict: EditText
     private lateinit var etTaluka: EditText
     private lateinit var etPassword: EditText
+    private lateinit var etConfirmPassword: EditText
+    private lateinit var btnTogglePassword: ImageButton
+    private lateinit var btnToggleConfirmPassword: ImageButton
 
     private lateinit var btnEdit: Button
     private lateinit var btnLogout: Button
@@ -116,6 +121,9 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
             etDistrict = findViewById(R.id.et_district)
             etTaluka = findViewById(R.id.et_taluka)
             etPassword = findViewById(R.id.et_password)
+            etConfirmPassword = findViewById(R.id.et_confirm_password)
+            btnTogglePassword = findViewById(R.id.btn_toggle_password)
+            btnToggleConfirmPassword = findViewById(R.id.btn_toggle_confirm_password)
 
             btnEdit = findViewById(R.id.btn_edit)
             btnLogout = findViewById(R.id.btn_logout)
@@ -193,6 +201,7 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
             etDistrict.setText(profile.district ?: "")
             etTaluka.setText(profile.taluka ?: "")
             etPassword.setText("")
+            etConfirmPassword.setText("")
 
             profileImage.setImageResource(R.drawable.sample_patient)
             
@@ -206,6 +215,14 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
     private fun setupListeners() {
         btnChangeImage.setOnClickListener {
             imagePicker.launch("image/*")
+        }
+
+        btnTogglePassword.setOnClickListener {
+            togglePasswordVisibility()
+        }
+
+        btnToggleConfirmPassword.setOnClickListener {
+            toggleConfirmPasswordVisibility()
         }
 
         btnEdit.setOnClickListener {
@@ -226,6 +243,30 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun togglePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible
+        if (isPasswordVisible) {
+            etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            btnTogglePassword.setImageResource(R.drawable.ic_visibility)
+        } else {
+            etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            btnTogglePassword.setImageResource(R.drawable.ic_visibility_off)
+        }
+        etPassword.setSelection(etPassword.text.length)
+    }
+
+    private fun toggleConfirmPasswordVisibility() {
+        isConfirmPasswordVisible = !isConfirmPasswordVisible
+        if (isConfirmPasswordVisible) {
+            etConfirmPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            btnToggleConfirmPassword.setImageResource(R.drawable.ic_visibility)
+        } else {
+            etConfirmPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            btnToggleConfirmPassword.setImageResource(R.drawable.ic_visibility_off)
+        }
+        etConfirmPassword.setSelection(etConfirmPassword.text.length)
+    }
+
     private fun saveProfileChanges() {
         val token = TokenManager.getToken()
         if (token.isEmpty()) {
@@ -233,18 +274,33 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
             return
         }
 
-        btnEdit.isEnabled = false
-        btnEdit.text = "Saving..."
-
         val newPhone = etPhoneNo.text.toString().trim()
         val newPassword = etPassword.text.toString().trim()
+        val confirmPassword = etConfirmPassword.text.toString().trim()
 
         if (newPhone.isEmpty()) {
-            btnEdit.isEnabled = true
-            btnEdit.text = "Save"
             toast("Phone number is required")
             return
         }
+
+        // Validate password if provided
+        if (newPassword.isNotEmpty()) {
+            if (!isPasswordStrong(newPassword)) {
+                toast("Password must be at least 8 characters with uppercase, lowercase, digit, and special character")
+                return
+            }
+            
+            if (newPassword != confirmPassword) {
+                toast("Passwords do not match")
+                return
+            }
+        } else if (confirmPassword.isNotEmpty()) {
+            toast("Please enter password in both fields")
+            return
+        }
+
+        btnEdit.isEnabled = false
+        btnEdit.text = "Saving..."
 
         val updateRequest = SelfUpdateRequest(
             asha_phone = newPhone,
@@ -275,9 +331,21 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun isPasswordStrong(password: String): Boolean {
+        if (password.length < 8) return false
+        
+        val hasUppercase = password.any { it.isUpperCase() }
+        val hasLowercase = password.any { it.isLowerCase() }
+        val hasDigit = password.any { it.isDigit() }
+        val hasSpecialChar = password.any { !it.isLetterOrDigit() }
+        
+        return hasUppercase && hasLowercase && hasDigit && hasSpecialChar
+    }
+
     private fun setFieldsEnabled(enabled: Boolean) {
         etPhoneNo.isEnabled = enabled
         etPassword.isEnabled = enabled
+        etConfirmPassword.isEnabled = enabled
         btnChangeImage.isEnabled = enabled
 
         etFullName.isEnabled = false
