@@ -1,5 +1,5 @@
-/*
 package com.sukhayu.patient.data.remote
+
 
 import com.sukhayu.patient.data.local.entity.PatientEntity
 import java.text.SimpleDateFormat
@@ -54,5 +54,5 @@ private fun calculateAgeFromDob(dob: String): Int? {
         null
     }
 }
-*/
+
 

@@ -31,10 +31,12 @@ class GeneralSurveyViewModel(application: Application) : AndroidViewModel(applic
     private val repository: GeneralSurveyRepository
     private val patientRepository: PatientRepository
 
-    private val _submitResult = MutableLiveData<ResultState<GeneralSurveyResponse>>(ResultState.Idle)
+    private val _submitResult =
+        MutableLiveData<ResultState<GeneralSurveyResponse>>(ResultState.Idle)
     val submitResult: LiveData<ResultState<GeneralSurveyResponse>> = _submitResult
 
-    private val _screenings = MutableLiveData<ResultState<GeneralScreeningsResponse>>(ResultState.Idle)
+    private val _screenings =
+        MutableLiveData<ResultState<GeneralScreeningsResponse>>(ResultState.Idle)
     val screenings: LiveData<ResultState<GeneralScreeningsResponse>> = _screenings
 
     init {
@@ -96,6 +98,9 @@ class GeneralSurveyViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
+    /**
+     * Submit general survey to backend (POST /survey/genral)
+     */
     fun submitGeneralSurvey(request: GeneralSurveyRequest) {
         viewModelScope.launch {
             val token = TokenManager.getToken()
@@ -106,23 +111,19 @@ class GeneralSurveyViewModel(application: Application) : AndroidViewModel(applic
 
             _submitResult.value = ResultState.Loading
             try {
-                Log.d("GENERAL_SURVEY_VM", "Submitting survey with token length=${token.length}")
-                Log.d("GENERAL_SURVEY_VM", "Request body = $request")
-
                 val response = patientRepository.submitGeneralSurvey(token, request)
                 _submitResult.value = ResultState.Success(response)
-            } catch (e: retrofit2.HttpException) {
-                val errorBody = e.response()?.errorBody()?.string()
-                Log.e("GENERAL_SURVEY_VM", "HTTP ${e.code()} while submitting survey. Body: $errorBody", e)
-                _submitResult.value = ResultState.Error("Server rejected survey: ${e.code()}")
             } catch (e: Exception) {
-                Log.e("GENERAL_SURVEY_VM", "Error submitting survey", e)
-                _submitResult.value = ResultState.Error(e.message ?: "Unable to submit survey")
+                Log.e(TAG, "Error submitting survey", e)
+                _submitResult.value =
+                    ResultState.Error(e.message ?: "Unable to submit survey")
             }
         }
     }
 
-
+    /**
+     * Load general screenings from backend (GET /survey/genral)
+     */
     fun loadGeneralScreenings() {
         viewModelScope.launch {
             val token = TokenManager.getToken()
@@ -137,12 +138,16 @@ class GeneralSurveyViewModel(application: Application) : AndroidViewModel(applic
                 _screenings.value = ResultState.Success(response)
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading screenings", e)
-                _screenings.value = ResultState.Error(e.message ?: "Unable to load screenings")
+                _screenings.value =
+                    ResultState.Error(e.message ?: "Unable to load screenings")
             }
         }
     }
 }
 
+/**
+ * Simple Result wrapper for network state
+ */
 sealed class ResultState<out T> {
     data object Idle : ResultState<Nothing>()
     data object Loading : ResultState<Nothing>()
