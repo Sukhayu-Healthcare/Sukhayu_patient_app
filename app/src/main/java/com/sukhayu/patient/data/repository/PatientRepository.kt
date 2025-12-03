@@ -15,6 +15,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import android.util.Log
 import retrofit2.HttpException
+import com.sukhayu.patient.data.remote.TbFirstRequest
+import com.sukhayu.patient.data.remote.TbFirstResponse
+import com.sukhayu.patient.data.remote.TbFirstScreeningsResponse
+
 
 
 class PatientRepository(
@@ -97,6 +101,17 @@ class PatientRepository(
         withContext(Dispatchers.IO) {
             apiService.getGeneralScreenings("Bearer $token")
         }
+
+    suspend fun submitTbFirst(token: String, request: TbFirstRequest): TbFirstResponse =
+        withContext(Dispatchers.IO) {
+            apiService.submitTbFirst("Bearer $token", request)
+        }
+
+    suspend fun getTbFirstScreenings(token: String): TbFirstScreeningsResponse =
+        withContext(Dispatchers.IO) {
+            apiService.getTbFirstScreenings("Bearer $token")
+        }
+
 
     suspend fun syncPatientsFromServer(token: String) = withContext(Dispatchers.IO) {
         try {

@@ -3,6 +3,7 @@ package com.sukhayu.patient.data.local.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.UUID
+import com.sukhayu.patient.data.remote.TbFirstRequest
 
 /**
  * Entity representing a TB screening record in the local database.
@@ -109,3 +110,45 @@ data class TbScreeningEntity(
     // TODO: Add sync with NIKSHAY/backend when available
 )
 
+// Helper: Boolean? → "yes" / "no" / null
+private fun boolToYesNo(value: Boolean?): String? = when (value) {
+    true -> "yes"
+    false -> "no"
+    null -> null
+}
+
+// MAIN MAPPER: local Room entity → backend request body for POST /tb-first
+fun TbScreeningEntity.toTbFirstRequest(): TbFirstRequest {
+    return TbFirstRequest(
+        // Identification
+        patientId = patientId,                  // backend: patient_id
+        patientName = name,                     // backend: patient_name
+        age = ageYears,                         // backend: age
+        gender = sex,                           // backend: gender (M/F/O)
+        mobile = mobileNumber,                  // backend: mobile
+        address = addressVillage,               // backend: address
+        screeningDate = dateOfScreening,        // backend: screening_date
+
+        // TB symptom screen (last 2–3 weeks)
+        cough2Weeks = boolToYesNo(cough2WeeksOrMore),                // cough_2_weeks
+        coughBlood = boolToYesNo(coughWithBlood),                    // cough_blood
+        fever2Weeks = boolToYesNo(fever2WeeksOrMore),                // fever_2_weeks
+        nightSweats = boolToYesNo(this.nightSweats),                 // night_sweats
+        weightLoss = boolToYesNo(weightLossPoorAppetite),            // weight_loss
+        chestPain = boolToYesNo(chestPainOrDifficultyBreathing),     // chest_pain
+
+        // Risk factors
+        householdTb = boolToYesNo(householdMemberOnTbTreatment),     // household_tb
+        previousTb = boolToYesNo(previousTbTreatment),               // previous_tb
+        closeContactTb = boolToYesNo(closeContactTbPatient),         // close_contact_tb
+        hivPositive = boolToYesNo(knownHivPositive),                 // hiv_positive
+        diabetes = boolToYesNo(diabetes),                            // diabetes
+        tobaccoUse = boolToYesNo(smokingOrTobaccoUse),               // tobacco_use
+        alcoholDependence = boolToYesNo(alcoholDependence),          // alcohol_dependence
+
+        // Initial action
+        sputumCollected = boolToYesNo(sputumCollected),              // sputum_collected
+        chestXray = boolToYesNo(chestXrayAdvised),                   // chest_xray
+        referredToHigherCenter = boolToYesNo(referredToHigherCentre) // referred_to_higher_center
+    )
+}

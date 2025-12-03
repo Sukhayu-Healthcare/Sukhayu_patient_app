@@ -184,4 +184,15 @@ interface ApiService {
     suspend fun getAllPatients(
         @Header("Authorization") authHeader: String
     ): AllPatientsResponse
+
+    @POST("survey/tb-first")
+    suspend fun submitTbFirst(
+        @Header("Authorization") authHeader: String,
+        @Body body: TbFirstRequest
+    ): TbFirstResponse
+
+    @GET("survey/tb-first")
+    suspend fun getTbFirstScreenings(
+        @Header("Authorization") authHeader: String
+    ): TbFirstScreeningsResponse
 }

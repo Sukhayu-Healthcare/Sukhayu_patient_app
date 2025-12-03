@@ -2,6 +2,7 @@ package com.sukhayu.patient.asha.ui.surveys.tb
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.TbScreeningEntity
+import com.sukhayu.patient.data.local.entity.toTbFirstRequest
 import com.sukhayu.patient.data.repository.TbScreeningRepository
 import com.sukhayu.patient.databinding.ActivityTbScreeningBinding
 import java.text.SimpleDateFormat
@@ -73,16 +75,36 @@ class TbScreeningActivity : AppCompatActivity() {
             binding.btnSaveTbScreening.text = if (saving) "Saving..." else "Save TB Screening"
         }
 
+        // Local DB save result
         viewModel.saveSuccess.observe(this) { success ->
             if (success == true) {
-                Toast.makeText(this, "TB Screening saved successfully", Toast.LENGTH_LONG).show()
-                finish()
+                // Local save is done; don't finish here because we also submit to backend
+                Toast.makeText(this, "TB screening saved locally", Toast.LENGTH_LONG).show()
             }
         }
 
         viewModel.errorMessage.observe(this) { msg ->
             msg?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        // 🔥 Backend submit result (POST /tb-first)
+        viewModel.submitResult.observe(this) { state ->
+            when (state) {
+                is ResultState.Idle -> Unit
+                is ResultState.Loading -> {
+                    Toast.makeText(this, "Submitting TB screening...", Toast.LENGTH_SHORT).show()
+                }
+                is ResultState.Success -> {
+                    Toast.makeText(this, state.data.message, Toast.LENGTH_LONG).show()
+                    // Close screen only after backend confirms success
+                    finish()
+                }
+                is ResultState.Error -> {
+                    Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
+                    // Local data is already saved; ASHA can retry sync later
+                }
             }
         }
     }
@@ -262,13 +284,24 @@ class TbScreeningActivity : AppCompatActivity() {
             } else null
         )
 
+        // Log entity to verify mapping
+        Log.d("TB_FIRST", "Entity = $entity")
+
+        // Map to backend request (POST /tb-first)
+        val request = entity.toTbFirstRequest()
+        Log.d("TB_FIRST", "Mapped request = $request")
+
+        // Save locally (offline-first)
         viewModel.saveTbScreening(entity)
+
+        // Submit to backend
+        viewModel.submitTbFirst(request)
     }
 
     private fun getSelectedSex(): String {
         return when (binding.rgSex.checkedRadioButtonId) {
-            R.id.rbSexM -> "M"
-            R.id.rbSexF -> "F"
+            R.id.rbSexM -> "Male"
+            R.id.rbSexF -> "Female"
             R.id.rbSexO -> "O"
             else -> "M" // Default
         }
@@ -297,135 +330,3 @@ class TbScreeningActivity : AppCompatActivity() {
         return true
     }
 }
-
-/*
- * ============================================================================
- * TB SCREENING IMPLEMENTATION SUMMARY
- * ============================================================================
- *
- * Template ID: "tb_screening_template"
- * Title: "TB Screening / Suspect Form"
- *
- * FILES CREATED:
- *
- * 1. Data Layer:
- *    - TbScreeningEntity.kt - Room entity with all TB screening fields
- *    - TbScreeningDao.kt - Database access object with CRUD operations
- *    - TbScreeningRepository.kt - Repository for offline-first data management
- *    - AshaLocalDatabase.kt - Updated to include TB screening table (version 6)
- *
- * 2. UI Layer:
- *    - TbScreeningActivity.kt - Main form activity with validation
- *    - TbScreeningViewModel.kt - ViewModel for state management
- *    - TbScreeningViewModelFactory.kt - Factory for ViewModel creation
- *    - activity_tb_screening.xml - Form layout with 4 sections
- *
- * 3. Navigation:
- *    - TbSurveyActivity.kt - Updated to navigate to TbScreeningActivity
- *    - AndroidManifest.xml - Added TbScreeningActivity registration
- *
- * FORM STRUCTURE (4 Sections):
- *
- * Section 1: Identification (7 fields)
- *    - name (text, required)
- *    - ageYears (number, required)
- *    - sex (single_select: M/F/O, required)
- *    - mobileNumber (text, optional)
- *    - addressVillage (text, required)
- *    - ashaIdOrName (text, required)
- *    - dateOfScreening (date, required)
- *
- * Section 2: TB Symptom Screen - Last 2-3 weeks (7 boolean fields, all required)
- *    - cough2WeeksOrMore
- *    - coughWithBlood
- *    - fever2WeeksOrMore
- *    - nightSweats
- *    - weightLossPoorAppetite
- *    - chestPainOrDifficultyBreathing
- *    - householdMemberOnTbTreatment
- *
- * Section 3: Risk Factors (6 boolean fields, all optional)
- *    - previousTbTreatment
- *    - closeContactTbPatient
- *    - knownHivPositive
- *    - diabetes
- *    - smokingOrTobaccoUse
- *    - alcoholDependence
- *
- * Section 4: Initial Action (5 fields, all optional)
- *    - sputumCollected (boolean)
- *    - sputumCollectionDate (date, conditional - shown if sputum collected)
- *    - chestXrayAdvised (boolean)
- *    - referredToHigherCentre (boolean)
- *    - referralPlaceName (text, conditional - shown if referred)
- *
- * DATA FLOW:
- *
- * 1. User Journey:
- *    TbSurveyActivity → Select Patient → Click "TB Screening" button
- *    → TbScreeningActivity opens with pre-filled patient data
- *    → ASHA completes form (2-3 minutes)
- *    → Click "Save" → Validation → Save to local DB
- *    → Success message → Return to TbSurveyActivity
- *
- * 2. Pre-filled Fields (from selected patient):
- *    - name (from patient.name)
- *    - sex (from patient.gender, mapped to M/F/O)
- *    - mobileNumber (from patient.phone)
- *    - Patient header shows: name, phone, gender, weight
- *
- * 3. Offline-First Persistence:
- *    TbScreeningActivity → TbScreeningViewModel.saveTbScreening()
- *    → TbScreeningRepository.createOrUpdateTbScreening()
- *    → TbScreeningDao.upsertTbScreening()
- *    → Room Database (tb_screenings table)
- *    → Marked as isSynced = false (pending backend sync)
- *
- * 4. Future Backend Sync (TODO):
- *    - TbScreeningRepository.getUnsyncedTbScreenings() returns pending records
- *    - Sync service sends data to NIKSHAY/backend API
- *    - On success, call TbScreeningRepository.markAsSynced(id)
- *
- * FIELD TYPE MAPPING:
- *
- * - text → EditText with TextInputLayout
- * - number → EditText with inputType="number"
- * - date → EditText with DatePickerDialog (format: dd/MM/yyyy)
- * - boolean → SwitchCompat (Yes/No toggle)
- * - single_select → RadioGroup with RadioButtons
- *
- * VALIDATION RULES:
- *
- * - All identification fields are required except mobileNumber
- * - All TB symptom screen fields are required (boolean, default = false)
- * - All risk factor fields are optional (boolean, default = false)
- * - All initial action fields are optional
- * - Conditional fields (sputumCollectionDate, referralPlaceName) are required
- *   only when parent field is true
- *
- * ARCHITECTURE PATTERN:
- *
- * Follows MVVM with Repository pattern, consistent with PregnancySurveyActivity:
- * - View (Activity + XML) → ViewModel → Repository → DAO → Room Database
- * - LiveData for reactive UI updates
- * - Coroutines for async database operations
- * - Offline-first with sync status tracking
- *
- * TESTING:
- *
- * Test Flow:
- * 1. Open ASHA Dashboard → Surveys → TB Symptoms Survey
- * 2. Search for patient: "Rajesh Kumar" (male, adult)
- * 3. Click "TB Screening / Suspect Form" button
- * 4. Verify name, phone, sex are pre-filled
- * 5. Fill age, village, ASHA name, date
- * 6. Toggle symptom switches (e.g., cough 2 weeks = Yes)
- * 7. Optionally fill risk factors
- * 8. Optionally fill initial actions
- * 9. Click "Save TB Screening"
- * 10. Verify success message and return to survey screen
- * 11. Check database: Should see 1 record in tb_screenings table
- *
- * ============================================================================
- */
-
