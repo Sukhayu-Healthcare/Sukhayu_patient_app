@@ -101,16 +101,24 @@
                 <!-- Row 2 -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2">
 
-                    <!-- Metric card - Purple -->
-                    <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_weight="1" android:layout_height="120dp" android:layout_marginEnd="8dp" app:cardCornerRadius="12dp" app:cardElevation="2dp">
+                    <!-- Metric card - Purple (My Schedule) -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardMySchedule"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="120dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="2dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
 
                         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="#F3E5F5" android:padding="14dp" android:gravity="center">
 
-                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_calendar" app:tint="#7B1FA2" android:contentDescription="@string/desc_completed_today" />
+                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_calendar" app:tint="#7B1FA2" android:contentDescription="My Schedule" />
 
-
-
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed Today" android:textSize="16sp" android:textColor="#424242" android:layout_marginTop="4dp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="My Schedule" android:textSize="16sp" android:textColor="#424242" android:layout_marginTop="4dp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -180,59 +188,59 @@
             </androidx.cardview.widget.CardView>
 
             <!-- Patient Services card (small grid) -->
-            <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="12dp" android:layout_marginTop="16dp" app:cardElevation="0dp">
+<!--            <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="12dp" android:layout_marginTop="16dp" app:cardElevation="0dp">-->
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="14dp">
+<!--&lt;!&ndash;                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="14dp">&ndash;&gt;-->
 
-                    <!-- Patient Services title -->
-                    <TextView android:text="Patient Services" android:textStyle="bold" android:textSize="16sp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<!--&lt;!&ndash;                    &lt;!&ndash; Patient Services title &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                    <TextView android:text="Patient Services" android:textStyle="bold" android:textSize="16sp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>&ndash;&gt;-->
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="12dp">
+<!--&lt;!&ndash;                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="12dp">&ndash;&gt;-->
 
-                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="72dp" android:orientation="vertical" android:background="@drawable/program_item_bg" android:gravity="center" android:layout_marginEnd="8dp">
-                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_robot" android:contentDescription="@string/desc_patient_services"/>
-                            <TextView android:text="Patient Services" android:textStyle="bold" android:textSize="16sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp"/>
+<!--&lt;!&ndash;                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="72dp" android:orientation="vertical" android:background="@drawable/program_item_bg" android:gravity="center" android:layout_marginEnd="8dp">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_robot" android:contentDescription="@string/desc_patient_services"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <TextView android:text="Patient Services" android:textStyle="bold" android:textSize="16sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp"/>&ndash;&gt;-->
 
-                        </LinearLayout>
+<!--&lt;!&ndash;                        </LinearLayout>&ndash;&gt;-->
 
-                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="72dp" android:orientation="vertical" android:background="@drawable/program_item_bg" android:gravity="center" android:layout_marginStart="8dp">
-                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_stethoscope" android:contentDescription="@string/desc_consult_doctor"/>
-                            <TextView android:text="Consult Doctor" android:textSize="13sp" android:textColor="@color/muted_text" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                        </LinearLayout>
-                    </LinearLayout>
+<!--&lt;!&ndash;                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="72dp" android:orientation="vertical" android:background="@drawable/program_item_bg" android:gravity="center" android:layout_marginStart="8dp">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_stethoscope" android:contentDescription="@string/desc_consult_doctor"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <TextView android:text="Consult Doctor" android:textSize="13sp" android:textColor="@color/muted_text" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </LinearLayout>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </LinearLayout>&ndash;&gt;-->
 
-                    <!-- second row -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="10dp">
-                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="72dp" android:orientation="vertical" android:background="@drawable/program_item_bg" android:gravity="center" android:layout_marginEnd="8dp">
-                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_document" android:contentDescription="@string/desc_past_consultations"/>
-                            <TextView android:text="Past Consultations" android:textSize="13sp" android:textColor="@color/muted_text" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                        </LinearLayout>
+<!--&lt;!&ndash;                    &lt;!&ndash; second row &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="10dp">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="72dp" android:orientation="vertical" android:background="@drawable/program_item_bg" android:gravity="center" android:layout_marginEnd="8dp">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_document" android:contentDescription="@string/desc_past_consultations"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <TextView android:text="Past Consultations" android:textSize="13sp" android:textColor="@color/muted_text" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </LinearLayout>&ndash;&gt;-->
 
-                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="72dp" android:orientation="vertical" android:background="@drawable/program_item_bg" android:gravity="center" android:layout_marginStart="8dp">
-                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_analytics" android:contentDescription="@string/desc_disease_analytics"/>
-                            <TextView android:text="Disease Analytics" android:textSize="13sp" android:textColor="@color/muted_text" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                        </LinearLayout>
-                    </LinearLayout>
+<!--&lt;!&ndash;                        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="72dp" android:orientation="vertical" android:background="@drawable/program_item_bg" android:gravity="center" android:layout_marginStart="8dp">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_analytics" android:contentDescription="@string/desc_disease_analytics"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <TextView android:text="Disease Analytics" android:textSize="13sp" android:textColor="@color/muted_text" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </LinearLayout>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </LinearLayout>&ndash;&gt;-->
 
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+<!--&lt;!&ndash;                </LinearLayout>&ndash;&gt;-->
+<!--            </androidx.cardview.widget.CardView>-->
 
 
 
             <!-- Recent Activity (simple mock) -->
-            <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" app:cardCornerRadius="12dp" app:cardElevation="2dp">
+<!--            <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" app:cardCornerRadius="12dp" app:cardElevation="2dp">-->
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="14dp">
-                    <TextView android:text="Recent Activity" android:textSize="16sp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<!--&lt;!&ndash;                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="14dp">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <TextView android:text="Recent Activity" android:textSize="16sp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"/>&ndash;&gt;-->
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp">
-                        <TextView android:text="• Patient registered — राम शर्मा • 2 hours ago" android:textColor="@color/muted_text" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                        <TextView android:layout_marginTop="8dp" android:text="• Consultation completed — सीता देवी • 5 hours ago" android:textColor="@color/muted_text" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                        <TextView android:layout_marginTop="8dp" android:text="• Emergency case referred — मोहन गुप्ता • 1 day ago" android:textColor="@color/muted_text" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+<!--&lt;!&ndash;                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <TextView android:text="• Patient registered — राम शर्मा • 2 hours ago" android:textColor="@color/muted_text" android:layout_width="wrap_content" android:layout_height="wrap_content"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <TextView android:layout_marginTop="8dp" android:text="• Consultation completed — सीता देवी • 5 hours ago" android:textColor="@color/muted_text" android:layout_width="wrap_content" android:layout_height="wrap_content"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <TextView android:layout_marginTop="8dp" android:text="• Emergency case referred — मोहन गुप्ता • 1 day ago" android:textColor="@color/muted_text" android:layout_width="wrap_content" android:layout_height="wrap_content"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </LinearLayout>&ndash;&gt;-->
+<!--&lt;!&ndash;                </LinearLayout>&ndash;&gt;-->
+<!--            </androidx.cardview.widget.CardView>-->
 
             <!-- National Health Programs hero -->
             <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" app:cardCornerRadius="12dp" app:cardElevation="0dp">

@@ -18,6 +18,7 @@ import com.sukhayu.patient.ui.asha.registration.RegisterPatientActivity
 import com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity
 import com.sukhayu.patient.ui.asha.family.FamilyListActivity
 import com.sukhayu.patient.ui.asha.emergency.EmergencyContactsActivity
+import com.sukhayu.patient.ui.asha.schedule.AshaScheduleActivity
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
@@ -43,6 +44,11 @@ class AshaDashboardActivity : AppCompatActivity() {
         // Make Emergency card clickable
         findViewById<androidx.cardview.widget.CardView>(R.id.cardEmergency).setOnClickListener {
             startActivity(Intent(this, EmergencyContactsActivity::class.java))
+        }
+
+        // Make My Schedule card clickable
+        findViewById<androidx.cardview.widget.CardView>(R.id.cardMySchedule).setOnClickListener {
+            startActivity(Intent(this, AshaScheduleActivity::class.java))
         }
 
         // Quick action button wiring using direct class Intents (compile-safe)

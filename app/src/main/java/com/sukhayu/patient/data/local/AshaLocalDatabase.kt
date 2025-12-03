@@ -13,6 +13,7 @@ import com.sukhayu.patient.data.local.dao.GeneralSurveyDao
 import com.sukhayu.patient.data.local.dao.PatientDao
 import com.sukhayu.patient.data.local.dao.PregnancyDao
 import com.sukhayu.patient.data.local.dao.PrescriptionDao
+import com.sukhayu.patient.data.local.dao.TaskDao
 import com.sukhayu.patient.data.local.dao.TbFollowUpDao
 import com.sukhayu.patient.data.local.dao.TbScreeningDao
 import com.sukhayu.patient.data.local.entity.AncVisitEntity
@@ -21,6 +22,7 @@ import com.sukhayu.patient.data.local.entity.GeneralSurveyEntity
 import com.sukhayu.patient.data.local.entity.PatientEntity
 import com.sukhayu.patient.data.local.entity.PregnancyEntity
 import com.sukhayu.patient.data.local.entity.PrescriptionItemEntity
+import com.sukhayu.patient.data.local.entity.TaskEntity
 import com.sukhayu.patient.data.local.entity.TbFollowUpEntity
 import com.sukhayu.patient.data.local.entity.TbScreeningEntity
 import kotlinx.coroutines.CoroutineScope
@@ -37,9 +39,10 @@ import kotlinx.coroutines.launch
         AncVisitEntity::class,
         TbScreeningEntity::class,
         TbFollowUpEntity::class,
-        GeneralSurveyEntity::class
+        GeneralSurveyEntity::class,
+        TaskEntity::class
     ],
-    version = 9,                             // Incremented to trigger DB recreation and seeding
+    version = 10,
     exportSchema = false
 )
 abstract class AshaLocalDatabase : RoomDatabase() {
@@ -52,6 +55,7 @@ abstract class AshaLocalDatabase : RoomDatabase() {
     abstract fun tbScreeningDao(): TbScreeningDao
     abstract fun tbFollowUpDao(): TbFollowUpDao
     abstract fun generalSurveyDao(): GeneralSurveyDao
+    abstract fun taskDao(): TaskDao
 
     companion object {
         @Volatile private var INSTANCE: AshaLocalDatabase? = null
