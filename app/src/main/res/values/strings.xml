@@ -43,6 +43,15 @@
     <!-- Calendar & metrics -->
     <string name="desc_calendar">Calendar icon</string>
 
+    <!-- Dashboard UI labels (extracted from activity_dashboard.xml) -->
+    <string name="profile_name_placeholder">Name</string>
+    <string name="profile_phone_placeholder">Phone</string>
+    <string name="logout">Logout</string>
+    <string name="ai_symptom_checker">AI Symptom Checker</string>
+    <string name="consult_doctor_label">Consult Doctor</string>
+    <string name="past_consultations_label">Past Consultations</string>
+    <string name="disease_outbreak_label">Disease Outbreak</string>
+    <string name="emergency_label">⚠️ Emergency</string>
 
 
 

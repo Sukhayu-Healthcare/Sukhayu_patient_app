@@ -1,6 +1,7 @@
 package com.sukhayu.patient.ui.dashboard
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -23,37 +24,40 @@ import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ui.profile.ProfileActivity
 import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.utils.HeaderUtils
+import com.sukhayu.utils.LocaleHelper
 
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var consultSymptomLauncher: ActivityResultLauncher<Intent>
     private lateinit var voiceHelper: VoiceInputHelper
 
+    // ----------------------
+    // APPLY SAVED LOCALE HERE
+    // ----------------------
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = newBase.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val lang = prefs.getString("app_lang", "en") ?: "en"
+
+        val ctx = LocaleHelper.setLocale(newBase, lang)
+        super.attachBaseContext(ctx)
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        // In onCreate() after setContentView()
+
         HeaderUtils.setupRoleInHeader(this)
 
-        // ---------------------------------------------------------
-        // FETCH USER DETAILS FROM SHARED PREFS
-        // ---------------------------------------------------------
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
-
         val userName = prefs.getString("user_name", "") ?: ""
         val userPhone = prefs.getString("user_phone", "") ?: ""
-        val role = prefs.getString("role", "") ?: ""
 
-        // ---------------------------------------------------------
-        // SET VALUES INTO PROFILE CARD
-        // ---------------------------------------------------------
         findViewById<TextView>(R.id.tvUserName)?.text = userName
         findViewById<TextView>(R.id.tvUserPhone)?.text = userPhone
 
 
-        // ---------------------------------------------------------
-        //  RESULT LAUNCHER (For AI Symptom → Consult Doctor)
-        // ---------------------------------------------------------
+        // RESULT HANDLING
         consultSymptomLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -75,69 +79,65 @@ class DashboardActivity : AppCompatActivity() {
         }
 
 
-        // ---------------------------------------------------------
-        //  PROFILE CARD CLICK → OPEN PROFILE PAGE
-        // ---------------------------------------------------------
-        val cardProfile = findViewById<MaterialCardView>(R.id.cardProfile)
-        cardProfile.setOnClickListener {
-
+        // PROFILE CARD
+        findViewById<MaterialCardView>(R.id.cardProfile).setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java).apply {
                 putExtra("patientId", prefs.getString("user_id", ""))
                 putExtra("patientName", prefs.getString("user_name", ""))
             }
-
             startActivity(intent)
         }
 
-
-        // ---------------------------------------------------------
-        //  AI SYMPTOM CHECKER
-        // ---------------------------------------------------------
+        // AI SYMPTOMS
         findViewById<MaterialCardView>(R.id.cardCheckSymptoms).setOnClickListener {
             startActivity(Intent(this, SymptomChatActivity::class.java))
         }
 
-        // ---------------------------------------------------------
-        //  CONSULT DOCTOR → ASK QUESTIONS FIRST
-        // ---------------------------------------------------------
+        // CONSULT DOCTOR
         findViewById<MaterialCardView>(R.id.cardConsultDoctor).setOnClickListener {
-            val intent = Intent(this, CheckSymptomsActivity::class.java)
-            consultSymptomLauncher.launch(intent)
+            consultSymptomLauncher.launch(Intent(this, CheckSymptomsActivity::class.java))
         }
 
-        // ---------------------------------------------------------
-        //  PAST CONSULTATIONS
-        // ---------------------------------------------------------
+        // PAST CONSULTATIONS
         findViewById<MaterialCardView>(R.id.cardPastConsultations).setOnClickListener {
             startActivity(Intent(this, PastConsultationsActivity::class.java))
         }
 
-        // ---------------------------------------------------------
-        //  DISEASE OUTBREAK AWARENESS
-        // ---------------------------------------------------------
+        // DISEASE OUTBREAK
         findViewById<MaterialCardView>(R.id.cardDiseaseOutbreak).setOnClickListener {
             startActivity(Intent(this, DiseaseOutbreakActivity::class.java))
         }
 
-        // ---------------------------------------------------------
-        //  EMERGENCY
-        // ---------------------------------------------------------
+        // EMERGENCY
         findViewById<Button>(R.id.btnEmergency).setOnClickListener {
             startActivity(Intent(this, EmergencyActivity::class.java))
         }
 
-        // ---------------------------------------------------------
-        //  LOGOUT
-        // ---------------------------------------------------------
+        // LOGOUT
         findViewById<Button>(R.id.btnLogout).setOnClickListener {
-
             prefs.edit().clear().apply()
-
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-            startActivity(intent)
+            startActivity(Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            })
             finish()
+        }
+
+        // ----------------------
+        // LANGUAGE TOGGLE BUTTONS (REQUIRED)
+        // ----------------------
+        val tvEnglish = findViewById<TextView>(R.id.tvEnglish)
+        val tvMarathi = findViewById<TextView>(R.id.tvMarathi)
+
+        tvEnglish?.setOnClickListener {
+            getSharedPreferences("settings", MODE_PRIVATE)
+                .edit().putString("app_lang", "en").apply()
+            recreate()
+        }
+
+        tvMarathi?.setOnClickListener {
+            getSharedPreferences("settings", MODE_PRIVATE)
+                .edit().putString("app_lang", "mr").apply()
+            recreate()
         }
 
         requestAudioPermission()
@@ -145,10 +145,16 @@ class DashboardActivity : AppCompatActivity() {
         VoiceInputHelper.attachToAllEditTexts(this)
     }
 
+
     private fun requestAudioPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                200
+            )
         }
     }
 

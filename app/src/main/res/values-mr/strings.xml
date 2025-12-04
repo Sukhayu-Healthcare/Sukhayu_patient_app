@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Marathi translations for Dashboard strings -->
+
+    <!-- Content descriptions / icons -->
+    <string name="profile_icon_desc">प्रोफाइल चिन्ह</string>
+    <string name="symptom_icon_desc">लक्षण चिन्ह</string>
+    <string name="consult_doctor">डॉक्टर सल्ला चिन्ह</string>
+    <string name="past_consultations">मागील सल्लामसलत चिन्ह</string>
+    <string name="medicines">औषधे चिन्ह</string>
+
+    <!-- Visible labels / placeholders -->
+    <string name="profile_name_placeholder">नाव</string>
+    <string name="profile_phone_placeholder">फोन</string>
+    <string name="logout">लॉग आऊट</string>
+    <string name="ai_symptom_checker">AI लक्षण तपासणी</string>
+    <string name="consult_doctor_label">डॉक्टरांचा सल्ला घ्या</string>
+    <string name="past_consultations_label">मागील सल्लामसलत</string>
+    <string name="disease_outbreak_label">रोगाचा उद्रेक</string>
+    <string name="emergency_label">⚠️ आपत्कालीन</string>
+</resources>
+
