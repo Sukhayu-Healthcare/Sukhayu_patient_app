@@ -34,7 +34,6 @@ data class LoginResponsePatient(
 )
 
 
-
 data class AshaInfo(
     val userId: String,
     val ashaId: String,
@@ -114,6 +113,37 @@ data class SelfUpdateRequest(
     val asha_phone: String? = null,
     val asha_profile_pic: String? = null
 )
+
+// ----------------------------
+// New models for consultations
+// ----------------------------
+
+data class PrescriptionItem(
+    val consultation_id: Int,
+    val item_id: Int,
+    val medicine_name: String?,
+    val dosage: String?,
+    val frequency: String?,
+    val duration: String?,
+    val instructions: String?
+)
+
+data class Consultation(
+    val consultation_id: Int,
+    val patient_id: Int,
+    val doctor_id: Int?,
+    val doctor_name: String?,
+    val doctor_phone: String?,
+    val diagnosis: String?,
+    val notes: String?,
+    val consultation_date: String,
+    val items: List<PrescriptionItem>?
+)
+
+data class PatientConsultationsResponse(
+    val consultations: List<Consultation>
+)
+
 
 interface ApiService {
 
@@ -236,5 +266,10 @@ interface ApiService {
         @Body body: AncFollowUpRequest
     ): AncFollowUpResponse
 
-}
+    // New endpoint to fetch patient's consultations (with items)
+    @GET("patient/consultations")
+    suspend fun getPatientConsultations(
+        @Header("Authorization") authHeader: String
+    ): PatientConsultationsResponse
 
+}
