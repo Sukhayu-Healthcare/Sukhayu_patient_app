@@ -7,9 +7,6 @@ import com.sukhayu.patient.data.remote.GeneralSurveyRequest
 
 /**
  * Room Entity for General Health Survey
- *
- * Stores general health screening data collected by ASHA workers
- * for community health surveillance and NCD risk assessment.
  */
 @Entity(tableName = "general_survey")
 data class GeneralSurveyEntity(
@@ -88,6 +85,10 @@ data class GeneralSurveyEntity(
     @ColumnInfo(name = "risk_unhealthy_diet")
     val riskUnhealthyDiet: Boolean?,
 
+    // NEW: physical activity as string: "Less", "Moderate", "High"
+    @ColumnInfo(name = "physical_activity_level")
+    val physicalActivityLevel: String?,
+
     // Section 5: Service Use
     @ColumnInfo(name = "has_regular_checkups")
     val hasRegularCheckups: Boolean?,
@@ -122,9 +123,6 @@ data class GeneralSurveyEntity(
     val syncedToServer: Boolean = false
 )
 
-/**
- * Helper: convert nullable Boolean to backend "yes"/"no"/null
- */
 private fun boolToString(value: Boolean?): String? =
     when (value) {
         true -> "yes"
@@ -132,18 +130,13 @@ private fun boolToString(value: Boolean?): String? =
         null -> null
     }
 
-/**
- * Map local entity → backend request body for POST /survey/genral
- */
 fun GeneralSurveyEntity.toRequest(): GeneralSurveyRequest {
     return GeneralSurveyRequest(
-        // visit_date → screening_date
-        screeningDate = this.visitDate,
+        patientId = this.patientId,
 
-        // location → village (backend expects non-null)
+        screeningDate = this.visitDate,
         village = this.location ?: "",
 
-        // Existing conditions
         diabetes = boolToString(this.hasDiabetes),
         hypertension = boolToString(this.hasHypertension),
         heartDisease = boolToString(this.hasHeartDisease),
@@ -151,7 +144,6 @@ fun GeneralSurveyEntity.toRequest(): GeneralSurveyRequest {
         kidneyProblem = boolToString(this.hasKidneyDisease),
         otherCondition = this.otherConditions,
 
-        // Symptoms
         urination = boolToString(this.symptomFrequentUrination),
         thirst = boolToString(this.symptomExcessiveThirst),
         weightLoss = boolToString(this.symptomWeightLoss),
@@ -160,22 +152,22 @@ fun GeneralSurveyEntity.toRequest(): GeneralSurveyRequest {
         shortnessOfBreath = boolToString(this.symptomShortnessOfBreath),
         weakness = boolToString(this.symptomFatigue),
 
-        // Risk factors
         familyHistory = boolToString(this.riskFamilyHistory),
-        pastHistory = null, // not captured in entity yet
+        pastHistory = null,
         tobacco = boolToString(this.riskTobaccoUse),
         alcohol = boolToString(this.riskAlcoholUse),
-        physicalActivity = boolToString(this.riskPhysicalInactivity),
+
+        // 🔥 Now a string: "Less" / "Moderate" / "High"
+        physicalActivity = this.physicalActivityLevel,
+
         diet = boolToString(this.riskUnhealthyDiet),
 
-        // Service use
         regularHealthCheck = boolToString(this.hasRegularCheckups),
         currentMedication = boolToString(this.onCurrentMedication),
         medicationDetails = this.medicationDetails,
         bpCheck = boolToString(this.hadRecentBpCheck),
         sugarCheck = boolToString(this.hadRecentSugarCheck),
 
-        // Remarks
         remarks = this.remarks
     )
 }

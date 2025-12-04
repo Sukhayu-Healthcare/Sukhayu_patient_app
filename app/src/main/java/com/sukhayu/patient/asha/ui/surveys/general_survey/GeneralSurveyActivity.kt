@@ -303,8 +303,13 @@ class GeneralSurveyActivity : AppCompatActivity() {
             riskFamilyHistory = getRadioGroupValue(rgFamilyHistory),
             riskTobaccoUse = getRadioGroupValue(rgTobaccoUse),
             riskAlcoholUse = getRadioGroupValue(rgAlcoholUse),
-            riskPhysicalInactivity = getRadioGroupValue(rgPhysicalActivity),
+
+            // we don't use boolean physical inactivity anymore
+            riskPhysicalInactivity = null,
             riskUnhealthyDiet = getRadioGroupValue(rgUnhealthyDiet),
+
+            // 🔥 String value for physical activity: "Less" / "Moderate" / "High"
+            physicalActivityLevel = getPhysicalActivityLevel(),
 
             hasRegularCheckups = getRadioGroupValue(rgRegularCheckups),
             onCurrentMedication = getRadioGroupValue(rgCurrentMedication),
@@ -339,7 +344,6 @@ class GeneralSurveyActivity : AppCompatActivity() {
                 }
             }
         )
-
     }
 
     private fun getRadioGroupValue(radioGroup: RadioGroup): Boolean? {
@@ -354,6 +358,15 @@ class GeneralSurveyActivity : AppCompatActivity() {
 
     private fun getReferralFacilityValue(): String? {
         val selectedId = rgReferralFacility.checkedRadioButtonId
+        if (selectedId == -1) return null
+
+        val selectedButton = findViewById<RadioButton>(selectedId)
+        return selectedButton?.text?.toString()
+    }
+
+    // 🔥 NEW: read physical activity level as string: "Less" / "Moderate" / "High"
+    private fun getPhysicalActivityLevel(): String? {
+        val selectedId = rgPhysicalActivity.checkedRadioButtonId
         if (selectedId == -1) return null
 
         val selectedButton = findViewById<RadioButton>(selectedId)
