@@ -703,28 +703,27 @@
                     android:id="@+id/rgPhysicalActivity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="12dp">
+                    android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@+id/rbPhysicalActivityHigh"
-                        android:layout_width="match_parent"
+                        android:id="@+id/rbPhysicalLess"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Active (regular exercise/physical work)" />
+                        android:text="Less" />
 
                     <RadioButton
-                        android:id="@+id/rbPhysicalActivityModerate"
-                        android:layout_width="match_parent"
+                        android:id="@+id/rbPhysicalModerate"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Moderate (some activity)" />
+                        android:text="Moderate" />
 
                     <RadioButton
-                        android:id="@+id/rbPhysicalActivityLow"
-                        android:layout_width="match_parent"
+                        android:id="@+id/rbPhysicalHigh"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sedentary (mostly sitting)" />
-
+                        android:text="High" />
                 </RadioGroup>
+
 
                 <TextView
                     android:layout_width="wrap_content"

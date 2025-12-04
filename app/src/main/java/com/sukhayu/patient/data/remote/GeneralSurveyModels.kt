@@ -3,6 +3,7 @@ package com.sukhayu.patient.data.remote
 import com.google.gson.annotations.SerializedName
 
 data class GeneralSurveyRequest(
+    @SerializedName("patient_id") val patientId: String,
     @SerializedName("screening_date") val screeningDate: String,
     val village: String,
     val diabetes: String?,
@@ -22,7 +23,7 @@ data class GeneralSurveyRequest(
     @SerializedName("past_history") val pastHistory: String?,
     val tobacco: String?,
     val alcohol: String?,
-    @SerializedName("physical_activity") val physicalActivity: String?,
+    @SerializedName("physical_activity") val physicalActivity: String?,   // "Less" / "Moderate" / "High"
     val diet: String?,
     @SerializedName("regular_health_check") val regularHealthCheck: String?,
     @SerializedName("current_medication") val currentMedication: String?,
