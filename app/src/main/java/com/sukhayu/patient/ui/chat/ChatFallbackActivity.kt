@@ -6,8 +6,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.dashboard.DashboardActivity
-import com.sukhayu.patient.ui.videocall.VideoCallActivity
-import com.sukhayu.patient.ui.voicecall.VoiceCallActivity
+import com.sukhayu.patient.ui.teleconsult.VideoCallActivity
+import com.sukhayu.patient.ui.teleconsult.VoiceCallActivity
 
 class ChatFallbackActivity : AppCompatActivity() {
 
