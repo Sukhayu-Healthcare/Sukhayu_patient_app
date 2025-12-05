@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 
 /**
  * Repository for TB Screening data
- * Handles offline-first data persistence and future sync with NIKSHAY/backend
+ * Handles offline-first data persistence and sync helpers
  */
 class TbScreeningRepository(
     private val tbScreeningDao: TbScreeningDao
@@ -37,7 +37,6 @@ class TbScreeningRepository(
 
     /**
      * Get all unsynced TB screenings
-     * TODO: Implement sync with NIKSHAY/backend API
      */
     suspend fun getUnsyncedTbScreenings(): List<TbScreeningEntity> = withContext(Dispatchers.IO) {
         tbScreeningDao.getUnsyncedTbScreenings()
@@ -45,10 +44,8 @@ class TbScreeningRepository(
 
     /**
      * Mark TB screening as synced
-     * TODO: Call this after successful sync with backend
      */
     suspend fun markAsSynced(id: String) = withContext(Dispatchers.IO) {
-        tbScreeningDao.updateSyncStatus(id, true, System.currentTimeMillis())
+        tbScreeningDao.markTbScreeningAsSynced(id, System.currentTimeMillis())
     }
 }
-
