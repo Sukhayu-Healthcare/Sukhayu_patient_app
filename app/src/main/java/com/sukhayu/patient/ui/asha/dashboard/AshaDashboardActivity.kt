@@ -1,6 +1,7 @@
 package com.sukhayu.patient.ui.asha.dashboard
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -21,10 +22,19 @@ import com.sukhayu.patient.ui.asha.emergency.EmergencyContactsActivity
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
+import com.sukhayu.utils.LocaleHelper
 
 class AshaDashboardActivity : AppCompatActivity() {
 
     private lateinit var voiceHelper: VoiceInputHelper
+
+    // Apply saved locale before activity context is used
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = newBase.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val lang = prefs.getString("app_lang", "en") ?: "en"
+        val wrapped = LocaleHelper.setLocale(newBase, lang)
+        super.attachBaseContext(wrapped)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +42,6 @@ class AshaDashboardActivity : AppCompatActivity() {
 
         // Load and display ASHA profile data
         loadProfileData()
-
-
 
         // Make Total Patients card clickable
         findViewById<androidx.cardview.widget.CardView>(R.id.cardTotalPatients).setOnClickListener {
@@ -72,10 +80,29 @@ class AshaDashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterPatientActivity::class.java))
         }
 
-
         // Logout button
         findViewById<Button>(R.id.tv_logout).setOnClickListener {
             logout()
+        }
+
+        // Language toggles: save selection and recreate activity to apply new locale
+        // Use runtime id lookup in case the toggle views are not present in this layout
+        val tvEnglishId = resources.getIdentifier("tvEnglish", "id", packageName)
+        if (tvEnglishId != 0) {
+            findViewById<TextView>(tvEnglishId)?.setOnClickListener {
+                val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+                prefs.edit().putString("app_lang", "en").apply()
+                recreate()
+            }
+        }
+
+        val tvMarathiId = resources.getIdentifier("tvMarathi", "id", packageName)
+        if (tvMarathiId != 0) {
+            findViewById<TextView>(tvMarathiId)?.setOnClickListener {
+                val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+                prefs.edit().putString("app_lang", "mr").apply()
+                recreate()
+            }
         }
 
         requestAudioPermission()

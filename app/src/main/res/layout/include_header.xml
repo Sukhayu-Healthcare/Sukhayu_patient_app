@@ -11,12 +11,6 @@
 
         <TextView android:id="@+id/headerTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AshaJyoti" android:textColor="#0F172A" android:textSize="20sp" android:textStyle="bold" android:layout_marginStart="12dp" />
 
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end|center_vertical" android:orientation="horizontal">
-
-            <ImageView android:id="@+id/headerLanguageIcon" android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/ic_language" app:tint="#0F172A" android:layout_marginEnd="6dp" android:contentDescription="@string/language_icon_desc" />
-
-            <TextView android:id="@+id/headerLanguage" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="English" android:textColor="#0F172A" android:textSize="14sp" />
-        </LinearLayout>
     </LinearLayout>
 
     <!-- Role Badge Row - Full Width, Large & Prominent -->
