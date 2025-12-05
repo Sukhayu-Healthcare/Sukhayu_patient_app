@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.sukhayu.patient.asha.ui.surveys.tb.ResultState
+
 import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.PregnancyEntity
 import com.sukhayu.patient.data.local.entity.toFirstAncVisitRequest
@@ -19,6 +19,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.sukhayu.patient.data.repository.ResultState
 import java.text.SimpleDateFormat
 import com.sukhayu.patient.utils.HeaderUtils
 import java.util.*

@@ -5,11 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sukhayu.patient.asha.ui.surveys.tb.ResultState
+
 import com.sukhayu.patient.data.local.entity.PregnancyEntity
 import com.sukhayu.patient.data.remote.FirstAncVisitRequest
 import com.sukhayu.patient.data.remote.FirstAncVisitResponse
 import com.sukhayu.patient.data.repository.PregnancyRepository
+import com.sukhayu.patient.data.repository.ResultState
 import kotlinx.coroutines.launch
 
 /**
