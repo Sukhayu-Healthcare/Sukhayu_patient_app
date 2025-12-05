@@ -28,16 +28,16 @@ interface TbFollowUpDao {
     suspend fun getTbFollowUpsForPatient(patientId: String): List<TbFollowUpEntity>
 
     /**
-     * Get all unsynced TB follow-ups (for future backend sync with NIKSHAY)
+     * Get all unsynced TB follow-ups (for backend sync)
      */
-    @Query("SELECT * FROM tb_follow_ups WHERE isSynced = 0")
+    @Query("SELECT * FROM tb_follow_ups WHERE isSynced = 0 ORDER BY createdAt ASC")
     suspend fun getUnsyncedTbFollowUps(): List<TbFollowUpEntity>
 
     /**
-     * Update sync status
+     * Mark TB follow-up as synced
      */
-    @Query("UPDATE tb_follow_ups SET isSynced = :synced, updatedAt = :timestamp WHERE id = :id")
-    suspend fun updateSyncStatus(id: String, synced: Boolean, timestamp: Long)
+    @Query("UPDATE tb_follow_ups SET isSynced = 1, updatedAt = :timestamp WHERE id = :id")
+    suspend fun markFollowUpAsSynced(id: String, timestamp: Long)
 
     /**
      * Get all TB follow-ups (for admin/reports)
@@ -51,4 +51,3 @@ interface TbFollowUpDao {
     @Query("SELECT * FROM tb_follow_ups WHERE patientId = :patientId ORDER BY visitDate DESC LIMIT 1")
     suspend fun getLatestFollowUpForPatient(patientId: String): TbFollowUpEntity?
 }
-

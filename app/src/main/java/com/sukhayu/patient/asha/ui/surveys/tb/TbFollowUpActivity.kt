@@ -9,21 +9,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.sukhayu.patient.R
-import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.TbFollowUpEntity
-import com.sukhayu.patient.data.local.entity.toBackendRequest
-import com.sukhayu.patient.data.remote.ApiClient
-import com.sukhayu.patient.data.repository.TbFollowUpRepository
 import com.sukhayu.patient.databinding.ActivityTbFollowUpBinding
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Calendar
+import java.util.Locale
 
 /**
  * TB Treatment Follow-up (DOTS) Activity
  * Template ID: "tb_follow_up_template"
- *
- * Tracks directly observed treatment (DOTS) follow-up visits for TB patients
- * during intensive and continuation phases of treatment.
  */
 class TbFollowUpActivity : AppCompatActivity() {
 
@@ -52,75 +47,28 @@ class TbFollowUpActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        // Initialize ViewModel
-        val dao = AshaLocalDatabase.getInstance(this).tbFollowUpDao()
-        val apiService = ApiClient.retrofit
-        val repository = TbFollowUpRepository(dao, apiService)
-        val factory = TbFollowUpViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[TbFollowUpViewModel::class.java]
+        // AndroidViewModel – no factory needed
+        viewModel = ViewModelProvider(this)[TbFollowUpViewModel::class.java]
 
-        // Read Intent extras and pre-fill patient data
         readIntentExtrasAndPrefillForm()
-
-        // Setup spinners
         setupSpinners()
-
-        // Setup date pickers
         setupDatePickers()
-
-        // Setup conditional visibility
         setupConditionalFields()
-
-        // Observe ViewModel state
         observeViewModel()
-
-        // Setup Save button
         setupSaveButton()
     }
 
     private fun observeViewModel() {
         viewModel.isSaving.observe(this) { saving ->
             binding.btnSaveTbFollowUp.isEnabled = !saving
-            binding.btnSaveTbFollowUp.text = if (saving) "Saving..." else "Save TB Follow-up"
-        }
-
-        // Local DB save result
-        viewModel.saveSuccess.observe(this) { success ->
-            if (success == true) {
-                // Local save is done; don't finish here because we also submit to backend
-                Toast.makeText(this, "TB follow-up saved locally", Toast.LENGTH_LONG).show()
-            }
+            binding.btnSaveTbFollowUp.text =
+                if (saving) "Saving..." else "Save TB Follow-up"
         }
 
         viewModel.errorMessage.observe(this) { msg ->
             msg?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
             }
-        }
-
-        // 🔥 Backend submit result (POST survey/tb-followup)
-        viewModel.submitResult.observe(this) { state ->
-            when (state) {
-
-                is ResultState.Idle -> {
-                    // Do nothing
-                }
-
-                is ResultState.Loading -> {
-                    Toast.makeText(this, "Submitting TB follow-up...", Toast.LENGTH_SHORT).show()
-                }
-
-                is ResultState.Success -> {
-                    Toast.makeText(this, state.data.message, Toast.LENGTH_LONG).show()
-                    finish() // Close only on backend success
-                }
-
-                is ResultState.Error -> {
-                    Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
-                    // Local save already done; ASHA can retry sync later
-                }
-            }
-
         }
     }
 
@@ -131,7 +79,6 @@ class TbFollowUpActivity : AppCompatActivity() {
         val patientGender = intent.getStringExtra(EXTRA_PATIENT_GENDER)
         val patientWeight = intent.getStringExtra(EXTRA_PATIENT_WEIGHT)
 
-        // Display patient details in header
         binding.tvPatientNameHeader.text = "Name: ${patientName ?: "-"}"
         binding.tvPatientPhoneHeader.text = "Phone: ${patientPhone ?: "-"}"
         binding.tvPatientGenderHeader.text = "Gender: ${patientGender ?: "-"}"
@@ -237,7 +184,9 @@ class TbFollowUpActivity : AppCompatActivity() {
         }
 
         // Validate referral reason if referred
-        if (binding.switchReferredForSideEffects.isChecked && binding.etReferralReason.text.isNullOrBlank()) {
+        if (binding.switchReferredForSideEffects.isChecked &&
+            binding.etReferralReason.text.isNullOrBlank()
+        ) {
             binding.tilReferralReason.error = "Required when referred"
             isValid = false
         } else {
@@ -286,18 +235,13 @@ class TbFollowUpActivity : AppCompatActivity() {
             nextFollowUpDate = binding.etNextFollowUpDate.text.toString()
         )
 
-        // Log entity to verify mapping
-        Log.d("TB_FOLLOWUP", "Entity = $entity")
+        Log.d("TB_FOLLOWUP_UI", "Saving entity = $entity")
 
-        // Map to backend request (POST survey/tb-followup)
-        val request = entity.toBackendRequest()
-        Log.d("TB_FOLLOWUP", "Mapped request = $request")
-
-        // Save locally (offline-first)
+        // Save locally only. Sync happens later from dashboard.
         viewModel.saveTbFollowUp(entity)
 
-        // Submit to backend
-        viewModel.submitTbFollowUp(request)
+        // Optionally close screen immediately
+        finish()
     }
 
     private fun showDatePicker(onDateSelected: (Date) -> Unit) {
@@ -323,4 +267,3 @@ class TbFollowUpActivity : AppCompatActivity() {
         return true
     }
 }
-

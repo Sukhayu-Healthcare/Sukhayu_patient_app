@@ -19,6 +19,7 @@ import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity
 import com.sukhayu.patient.asha.ui.surveys.tb.TbScreeningViewModel
+import com.sukhayu.patient.asha.ui.surveys.tb.TbFollowUpViewModel
 import com.sukhayu.patient.ui.asha.emergency.EmergencyContactsActivity
 import com.sukhayu.patient.ui.asha.family.FamilyListActivity
 import com.sukhayu.patient.ui.asha.nhp.NationalHealthProgramsActivity
@@ -32,8 +33,9 @@ class AshaDashboardActivity : AppCompatActivity() {
 
     private lateinit var voiceHelper: VoiceInputHelper
 
-    // TB sync ViewModel
+    // TB sync ViewModels
     private lateinit var tbScreeningViewModel: TbScreeningViewModel
+    private lateinit var tbFollowUpViewModel: TbFollowUpViewModel
 
     // Apply saved locale before activity context is used
     override fun attachBaseContext(newBase: Context) {
@@ -47,8 +49,9 @@ class AshaDashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asha_dashboard)
 
-        tbScreeningViewModel =
-            ViewModelProvider(this)[TbScreeningViewModel::class.java]
+        // Init TB ViewModels
+        tbScreeningViewModel = ViewModelProvider(this)[TbScreeningViewModel::class.java]
+        tbFollowUpViewModel = ViewModelProvider(this)[TbFollowUpViewModel::class.java]
 
         loadProfileData()
 
@@ -115,11 +118,18 @@ class AshaDashboardActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // Whenever dashboard comes to foreground and network is available → sync TB screenings
+        // Whenever dashboard comes to foreground and network is available → sync TB data
         if (isNetworkAvailable()) {
-            Log.d("AshaDashboard", "onResume: Network available, syncing TB screenings")
+            Log.d("AshaDashboard", "onResume: Network available, syncing TB data")
+
+            // TB Screening sync
             tbScreeningViewModel.syncPendingTbScreenings { count ->
-                Log.d("AshaDashboard", "TB sync finished. Synced count = $count")
+                Log.d("AshaDashboard", "TB Screening sync finished. Synced count = $count")
+            }
+
+            // TB Follow-up sync
+            tbFollowUpViewModel.syncPendingTbFollowUps { count ->
+                Log.d("AshaDashboard", "TB Follow-up sync finished. Synced count = $count")
             }
         } else {
             Log.d("AshaDashboard", "onResume: No internet. TB sync skipped.")

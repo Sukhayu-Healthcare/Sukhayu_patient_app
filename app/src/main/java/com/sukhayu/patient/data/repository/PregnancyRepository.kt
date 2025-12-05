@@ -1,7 +1,7 @@
 package com.sukhayu.patient.data.repository
 
 import android.util.Log
-import com.sukhayu.patient.asha.ui.surveys.tb.ResultState
+
 import com.sukhayu.patient.data.local.dao.PregnancyDao
 import com.sukhayu.patient.data.local.entity.PregnancyEntity
 import com.sukhayu.patient.data.remote.AncRecordsResponse

@@ -9,39 +9,6 @@ import java.util.UUID
  * Entity representing a TB treatment follow-up (DOTS) record in the local database.
  *
  * Template ID: "tb_follow_up_template"
- * Title: "TB Treatment Follow-up (DOTS)"
- *
- * This entity tracks directly observed treatment (DOTS) follow-up visits for TB patients
- * during both intensive and continuation phases of treatment. Used by ASHAs to monitor
- * adherence, detect side effects, and ensure treatment completion.
- *
- * ASHA layout (TB Treatment Follow-up):
- * a) Visit details
- *    • TB patient ID / NIKSHAY ID (text, required)
- *    • Date of visit (date, required)
- *    • Phase of treatment (Intensive/Continuation, required)
- *    • Visit type (Home visit/Facility visit, required)
- *
- * b) Adherence and symptoms
- *    • Doses missed since last visit (number, required)
- *    • Any vomiting after medicines (boolean, required)
- *    • Yellow eyes/skin (jaundice) (boolean, required)
- *    • Severe skin rash or itching (boolean, required)
- *    • Joint pain (boolean, required)
- *    • Persistent cough or breathlessness (boolean, required)
- *    • Fever in the last week (boolean, required)
- *    • Weight (kg) this visit (number, required)
- *
- * c) Programmatic details
- *    • DOT provider (ASHA/Family member/Health worker/Other, required)
- *    • Drug box checked and consistent (boolean, required)
- *    • Counselling given (boolean, optional)
- *
- * d) Decision / action
- *    • Treatment continued as planned (boolean, required)
- *    • Referred for side effects (boolean, optional)
- *    • Referral reason (text, optional - if referred)
- *    • Next follow-up date (date, required)
  */
 @Entity(tableName = "tb_follow_ups")
 data class TbFollowUpEntity(
@@ -83,12 +50,10 @@ data class TbFollowUpEntity(
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis(),
     val isSynced: Boolean = false // For offline-first sync tracking
-    // TODO: Implement sync with NIKSHAY/backend when available
 )
 
 /**
  * Convert TbFollowUpEntity to TbFollowUpRequest for backend submission
- * Maps local Room entity fields to backend API request format
  */
 fun TbFollowUpEntity.toBackendRequest(): TbFollowUpRequest {
     return TbFollowUpRequest(

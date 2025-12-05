@@ -1,14 +1,19 @@
 package com.sukhayu.patient.asha.ui.surveys.tb
 
+import android.app.Application
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.getSystemService
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.TbFollowUpEntity
+import com.sukhayu.patient.data.local.entity.toBackendRequest
 import com.sukhayu.patient.data.remote.ApiClient
-import com.sukhayu.patient.data.remote.TbFollowUpRequest
-import com.sukhayu.patient.data.remote.TbFollowUpResponse
 import com.sukhayu.patient.data.repository.TbFollowUpRepository
 import com.sukhayu.patient.utils.TokenManager
 import kotlinx.coroutines.launch
@@ -19,28 +24,29 @@ import retrofit2.HttpException
  *
  * Responsibilities:
  * - Save TB follow-up locally (offline-first)
- * - Submit TB follow-up to backend (POST survey/tb-followup)
+ * - Sync pending follow-ups to backend (POST /survey/tb-followup)
  */
-class TbFollowUpViewModel(
-    private val tbFollowUpRepository: TbFollowUpRepository
-) : ViewModel() {
+class TbFollowUpViewModel(application: Application) : AndroidViewModel(application) {
 
-    // ---- Local save state ----
+    companion object {
+        private const val TAG = "TB_FOLLOW_UP_VM"
+    }
+
+    private val repository: TbFollowUpRepository
+
     private val _isSaving = MutableLiveData<Boolean>()
     val isSaving: LiveData<Boolean> = _isSaving
-
-    private val _saveSuccess = MutableLiveData<Boolean?>()
-    val saveSuccess: LiveData<Boolean?> = _saveSuccess
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
-    // ---- Backend submit state (POST survey/tb-followup) ----
-    private val _submitResult = MutableLiveData<ResultState<TbFollowUpResponse>>(ResultState.Idle)
-    val submitResult: LiveData<ResultState<TbFollowUpResponse>> = _submitResult
+    init {
+        val db = AshaLocalDatabase.getInstance(application)
+        repository = TbFollowUpRepository(db.tbFollowUpDao())
+    }
 
     /**
-     * Save TB follow-up to local database (offline-first)
+     * Save TB follow-up to local database (offline-first).
      */
     fun saveTbFollowUp(entity: TbFollowUpEntity) {
         viewModelScope.launch {
@@ -48,61 +54,100 @@ class TbFollowUpViewModel(
                 _isSaving.value = true
                 _errorMessage.value = null
 
-                tbFollowUpRepository.saveFollowUp(entity)
+                repository.saveFollowUp(entity)
 
-                _saveSuccess.value = true
                 _isSaving.value = false
+
+                Toast.makeText(
+                    getApplication(),
+                    "TB follow-up saved on this phone. It will sync when internet is available.",
+                    Toast.LENGTH_SHORT
+                ).show()
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to save TB follow-up: ${e.message}"
+                Log.e(TAG, "Failed to save TB follow-up", e)
                 _isSaving.value = false
-                _saveSuccess.value = false
-                e.printStackTrace()
+                _errorMessage.value = "Failed to save TB follow-up: ${e.message}"
+
+                Toast.makeText(
+                    getApplication(),
+                    "Failed to save TB follow-up locally.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
     /**
-     * Submit TB follow-up to backend (POST survey/tb-followup)
-     * Uses TokenManager for auth token and ApiClient.retrofit for API
+     * Sync all unsynced TB follow-ups to backend.
+     * Called from dashboard when network is available.
      */
-    fun submitTbFollowUp(request: TbFollowUpRequest) {
+    fun syncPendingTbFollowUps(onFinished: (Int) -> Unit = {}) {
         viewModelScope.launch {
-            val token = TokenManager.getToken()
-            if (token.isBlank()) {
-                _submitResult.value = ResultState.Error("Authentication token missing")
+            val app = getApplication<Application>()
+
+            // Network check
+            val cm = app.getSystemService<ConnectivityManager>()
+            val active = cm?.activeNetwork
+            val caps = active?.let { cm.getNetworkCapabilities(it) }
+            val hasNet =
+                caps?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+            if (!hasNet) {
+                Log.d(TAG, "No internet, skipping TB follow-up sync")
+                onFinished(0)
                 return@launch
             }
 
-            _submitResult.value = ResultState.Loading
+            val token = TokenManager.getToken()
+            if (token.isBlank()) {
+                Log.e(TAG, "Cannot sync TB follow-ups: token missing")
+                onFinished(0)
+                return@launch
+            }
+
             try {
+                val pending = repository.getUnsyncedFollowUps()
+                Log.d(TAG, "Found ${pending.size} pending TB follow-ups to sync")
+
+                if (pending.isEmpty()) {
+                    onFinished(0)
+                    return@launch
+                }
+
                 val api = ApiClient.retrofit
-                val response = api.submitTbFollowUp("Bearer $token", request)
-                _submitResult.value = ResultState.Success(response)
-            } catch (e: HttpException) {
-                val body = e.response()?.errorBody()?.string()
-                Log.e("TB_FOLLOWUP_VM", "HTTP ${e.code()} while submitting TB follow-up. Body: $body", e)
-                _submitResult.value = ResultState.Error("Server error: ${e.code()}")
+                var successCount = 0
+
+                for (entity in pending) {
+                    try {
+                        val request = entity.toBackendRequest()
+                        val response = api.submitTbFollowUp("Bearer $token", request)
+                        Log.d(TAG, "Synced follow-up id=${entity.id}. Response: $response")
+
+                        repository.markAsSynced(entity.id)
+                        successCount++
+                    } catch (e: HttpException) {
+                        val body = e.response()?.errorBody()?.string()
+                        Log.e(
+                            TAG,
+                            "HTTP ${e.code()} while syncing follow-up id=${entity.id}. Body: $body",
+                            e
+                        )
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error syncing follow-up id=${entity.id}", e)
+                    }
+                }
+
+                if (successCount > 0) {
+                    val msg =
+                        if (successCount == 1) "1 TB follow-up synced to server."
+                        else "$successCount TB follow-ups synced to server."
+                    Toast.makeText(app, msg, Toast.LENGTH_SHORT).show()
+                }
+
+                onFinished(successCount)
             } catch (e: Exception) {
-                Log.e("TB_FOLLOWUP_VM", "Error submitting TB follow-up", e)
-                _submitResult.value = ResultState.Error(e.message ?: "Unable to submit TB follow-up")
+                Log.e(TAG, "Error while syncing TB follow-ups", e)
+                onFinished(0)
             }
         }
     }
-
-    /**
-     * Reset save success state
-     */
-    fun resetSaveState() {
-        _saveSuccess.value = null
-    }
-}
-
-/**
- * Generic sealed class to represent result states for backend operations
- */
-sealed class ResultState<out T> {
-    object Idle : ResultState<Nothing>()
-    object Loading : ResultState<Nothing>()
-    data class Success<T>(val data: T) : ResultState<T>()
-    data class Error(val message: String) : ResultState<Nothing>()
 }
