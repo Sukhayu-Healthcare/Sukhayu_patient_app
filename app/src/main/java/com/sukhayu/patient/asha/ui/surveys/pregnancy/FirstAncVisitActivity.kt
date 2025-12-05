@@ -1,28 +1,25 @@
 package com.sukhayu.patient.asha.ui.surveys.pregnancy
 
+import android.Manifest
 import android.app.DatePickerDialog
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-
-import com.sukhayu.patient.data.local.AshaLocalDatabase
-import com.sukhayu.patient.data.local.entity.PregnancyEntity
-import com.sukhayu.patient.data.local.entity.toFirstAncVisitRequest
-import com.sukhayu.patient.data.remote.ApiClient
-import com.sukhayu.patient.data.repository.PregnancyRepository
-import com.sukhayu.patient.databinding.ActivityFirstAncVisitBinding
-import com.sukhayu.utils.VoiceInputHelper
-import android.Manifest
-import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.sukhayu.patient.data.repository.ResultState
+import androidx.lifecycle.ViewModelProvider
+import com.sukhayu.patient.data.local.entity.PregnancyEntity
+
+import com.sukhayu.patient.databinding.ActivityFirstAncVisitBinding
+
+import com.sukhayu.utils.VoiceInputHelper
 import java.text.SimpleDateFormat
-import com.sukhayu.patient.utils.HeaderUtils
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class FirstAncVisitActivity : AppCompatActivity() {
 
@@ -53,12 +50,8 @@ class FirstAncVisitActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        // Initialize ViewModel
-        val dao = AshaLocalDatabase.getInstance(this).pregnancyDao()
-        val apiService = ApiClient.retrofit
-        val repository = PregnancyRepository(dao, apiService)
-        val factory = FirstAncVisitViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[FirstAncVisitViewModel::class.java]
+        // AndroidViewModel – no factory needed
+        viewModel = ViewModelProvider(this)[FirstAncVisitViewModel::class.java]
 
         // 1) Read Intent extras and fill header
         readIntentExtrasAndFillHeader()
@@ -69,7 +62,7 @@ class FirstAncVisitActivity : AppCompatActivity() {
         // 3) Setup conditional visibility for "Other" fields
         setupConditionalFields()
 
-        // 4) Observe ViewModel state
+        // 4) Observe ViewModel state (local save only)
         observeViewModel()
 
         // 5) Basic validation on Save
@@ -85,37 +78,9 @@ class FirstAncVisitActivity : AppCompatActivity() {
             binding.btnSaveFirstAnc.isEnabled = !saving
         }
 
-        // Local DB save result
-        viewModel.saveSuccess.observe(this) { success ->
-            if (success == true) {
-                // Local save is done; don't finish here because we also submit to backend
-                Toast.makeText(this, "First ANC Visit saved locally", Toast.LENGTH_LONG).show()
-            }
-        }
-
         viewModel.errorMessage.observe(this) { msg ->
             msg?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-            }
-        }
-
-        // 🔥 Backend submit result (POST survey/anc)
-        viewModel.submitResult.observe(this) { state ->
-            when (state) {
-                is ResultState.Idle -> Unit
-                is ResultState.Loading -> {
-                    Toast.makeText(this, "Submitting First ANC Visit...", Toast.LENGTH_SHORT).show()
-                }
-                is ResultState.Success -> {
-                    Toast.makeText(this, state.data.message, Toast.LENGTH_LONG).show()
-                    Log.d("FIRST_ANC", "ANC ID from backend: ${state.data.ancId}")
-                    // Close screen only after backend confirms success
-                    finish()
-                }
-                is ResultState.Error -> {
-                    Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
-                    // Local data is already saved; ASHA can retry sync later
-                }
             }
         }
     }
@@ -160,7 +125,6 @@ class FirstAncVisitActivity : AppCompatActivity() {
                 binding.etFirstAncDate.setText(dateFormat.format(date))
             }
         }
-        // Set today's date as default
         binding.etFirstAncDate.setText(dateFormat.format(Date()))
 
         // Next Visit Date (optional)
@@ -192,12 +156,14 @@ class FirstAncVisitActivity : AppCompatActivity() {
     private fun setupConditionalFields() {
         // Show/hide complication note when switch is toggled
         binding.switchPreviousComplication.setOnCheckedChangeListener { _, isChecked ->
-            binding.tilPreviousComplicationNote.visibility = if (isChecked) View.VISIBLE else View.GONE
+            binding.tilPreviousComplicationNote.visibility =
+                if (isChecked) View.VISIBLE else View.GONE
         }
 
         // Show/hide "Other" illness field when "Other" chip is checked
         binding.chipIllnessOther.setOnCheckedChangeListener { _, isChecked ->
-            binding.tilSeriousIllnessOther.visibility = if (isChecked) View.VISIBLE else View.GONE
+            binding.tilSeriousIllnessOther.visibility =
+                if (isChecked) View.VISIBLE else View.GONE
         }
     }
 
@@ -250,7 +216,8 @@ class FirstAncVisitActivity : AppCompatActivity() {
 
         // Validate Delivery place radio group
         if (binding.rgDeliveryPlace.checkedRadioButtonId == -1) {
-            Toast.makeText(this, "Please select planned place of delivery", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please select planned place of delivery", Toast.LENGTH_SHORT)
+                .show()
             isValid = false
         }
 
@@ -285,18 +252,13 @@ class FirstAncVisitActivity : AppCompatActivity() {
             nextVisitDate = binding.etNextVisitDate.text.toString().ifBlank { null }
         )
 
-        // Log entity to verify mapping
-        Log.d("FIRST_ANC", "Entity = $entity")
+        Log.d("FIRST_ANC_UI", "Saving entity = $entity")
 
-        // Map to backend request (POST survey/anc)
-        val request = entity.toFirstAncVisitRequest()
-        Log.d("FIRST_ANC", "Mapped request = $request")
-
-        // Save locally (offline-first)
+        // Save locally only. Sync happens later from dashboard.
         viewModel.savePregnancy(entity)
 
-        // Submit to backend
-        viewModel.submitFirstAncVisit(request)
+        // You can close immediately; DB work continues in background.
+        finish()
     }
 
     /**
@@ -346,9 +308,15 @@ class FirstAncVisitActivity : AppCompatActivity() {
     }
 
     private fun requestAudioPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        if (
+            ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                200
+            )
         }
     }
 
@@ -362,4 +330,3 @@ class FirstAncVisitActivity : AppCompatActivity() {
         return true
     }
 }
-

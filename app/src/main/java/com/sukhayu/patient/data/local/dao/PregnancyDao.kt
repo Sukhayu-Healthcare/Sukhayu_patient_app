@@ -39,8 +39,12 @@ interface PregnancyDao {
     /**
      * Update the sync status of a pregnancy record.
      */
-    @Query("UPDATE pregnancies SET isSynced = :synced WHERE id = :id")
-    suspend fun updateSyncStatus(id: String, synced: Boolean)
+    @Query("UPDATE pregnancies SET isSynced = :synced, updatedAt = :timestamp WHERE id = :id")
+    suspend fun updateSyncStatus(
+        id: String,
+        synced: Boolean,
+        timestamp: Long
+    )
 
     /**
      * Delete a pregnancy record by ID.
@@ -54,4 +58,3 @@ interface PregnancyDao {
     @Query("DELETE FROM pregnancies")
     suspend fun deleteAll()
 }
-

@@ -16,10 +16,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.sukhayu.patient.R
-import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity
-import com.sukhayu.patient.asha.ui.surveys.tb.TbScreeningViewModel
+import com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyViewModel
+import com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySyncViewModel
 import com.sukhayu.patient.asha.ui.surveys.tb.TbFollowUpViewModel
+import com.sukhayu.patient.asha.ui.surveys.tb.TbScreeningViewModel
+import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.ui.asha.emergency.EmergencyContactsActivity
 import com.sukhayu.patient.ui.asha.family.FamilyListActivity
 import com.sukhayu.patient.ui.asha.nhp.NationalHealthProgramsActivity
@@ -33,9 +35,11 @@ class AshaDashboardActivity : AppCompatActivity() {
 
     private lateinit var voiceHelper: VoiceInputHelper
 
-    // TB sync ViewModels
+    // Sync ViewModels
     private lateinit var tbScreeningViewModel: TbScreeningViewModel
     private lateinit var tbFollowUpViewModel: TbFollowUpViewModel
+    private lateinit var generalSurveyViewModel: GeneralSurveyViewModel
+    private lateinit var pregnancySyncViewModel: PregnancySyncViewModel
 
     // Apply saved locale before activity context is used
     override fun attachBaseContext(newBase: Context) {
@@ -49,12 +53,16 @@ class AshaDashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asha_dashboard)
 
-        // Init TB ViewModels
+        // --- ViewModels for sync jobs ---
         tbScreeningViewModel = ViewModelProvider(this)[TbScreeningViewModel::class.java]
         tbFollowUpViewModel = ViewModelProvider(this)[TbFollowUpViewModel::class.java]
+        generalSurveyViewModel = ViewModelProvider(this)[GeneralSurveyViewModel::class.java]
+        pregnancySyncViewModel = ViewModelProvider(this)[PregnancySyncViewModel::class.java]
 
+        // Load and display ASHA profile data
         loadProfileData()
 
+        // --- Card clicks ---
         findViewById<androidx.cardview.widget.CardView>(R.id.cardTotalPatients).setOnClickListener {
             startActivity(Intent(this, FamilyListActivity::class.java))
         }
@@ -63,10 +71,14 @@ class AshaDashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, EmergencyContactsActivity::class.java))
         }
 
+        // --- Buttons ---
+
+        // View Surveys / NHP
         findViewById<Button>(R.id.btn_view_surveys).setOnClickListener {
             startActivity(Intent(this, NationalHealthProgramsActivity::class.java))
         }
 
+        // Conduct Survey → AshaSurveyHomeActivity
         findViewById<Button>(R.id.btnSurveys).setOnClickListener {
             try {
                 val intent = Intent(this, AshaSurveyHomeActivity::class.java)
@@ -80,18 +92,22 @@ class AshaDashboardActivity : AppCompatActivity() {
             }
         }
 
+        // Health drives (NHP)
         findViewById<Button>(R.id.btn_health_drives).setOnClickListener {
             startActivity(Intent(this, NationalHealthProgramsActivity::class.java))
         }
 
+        // Register patient
         findViewById<Button>(R.id.btn_register_patient).setOnClickListener {
             startActivity(Intent(this, RegisterPatientActivity::class.java))
         }
 
+        // Logout button
         findViewById<Button>(R.id.tv_logout).setOnClickListener {
             logout()
         }
 
+        // --- Language toggles ---
         val tvEnglishId = resources.getIdentifier("tvEnglish", "id", packageName)
         if (tvEnglishId != 0) {
             findViewById<TextView>(tvEnglishId)?.setOnClickListener {
@@ -110,6 +126,7 @@ class AshaDashboardActivity : AppCompatActivity() {
             }
         }
 
+        // Voice input
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
         VoiceInputHelper.attachToAllEditTexts(this)
@@ -118,26 +135,32 @@ class AshaDashboardActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // Whenever dashboard comes to foreground and network is available → sync TB data
         if (isNetworkAvailable()) {
-            Log.d("AshaDashboard", "onResume: Network available, syncing TB data")
+            Log.d("AshaDashboard", "onResume: Network available, starting sync jobs")
 
-            // TB Screening sync
+            // 1) TB Screening sync
             tbScreeningViewModel.syncPendingTbScreenings { count ->
-                Log.d("AshaDashboard", "TB Screening sync finished. Synced count = $count")
+                Log.d("AshaDashboard", "TB screening sync finished. Synced count = $count")
             }
 
-            // TB Follow-up sync
+            // 2) TB Follow-up sync
             tbFollowUpViewModel.syncPendingTbFollowUps { count ->
-                Log.d("AshaDashboard", "TB Follow-up sync finished. Synced count = $count")
+                Log.d("AshaDashboard", "TB follow-up sync finished. Synced count = $count")
+            }
+
+
+            // 4) Pregnancy / First ANC sync
+            pregnancySyncViewModel.syncPendingPregnancies { count ->
+                Log.d("AshaDashboard", "Pregnancy (ANC first visit) sync finished. Synced count = $count")
             }
         } else {
-            Log.d("AshaDashboard", "onResume: No internet. TB sync skipped.")
+            Log.d("AshaDashboard", "onResume: No internet. Sync skipped.")
         }
     }
 
     private fun requestAudioPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+        if (
+            ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
             != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
@@ -153,12 +176,14 @@ class AshaDashboardActivity : AppCompatActivity() {
         val ashaName = prefs.getString("user_name", "ASHA Worker") ?: "ASHA Worker"
         val ashaId = prefs.getString("user_id", "N/A") ?: "N/A"
 
+        // Set default values first
         findViewById<TextView>(R.id.tv_asha_name).text = ashaName
         findViewById<TextView>(R.id.tvAshaId).text = "ID: $ashaId"
         findViewById<TextView>(R.id.tv_asha_village).text = "Village: -"
         findViewById<TextView>(R.id.tv_asha_taluka).text = "Taluka: -"
         findViewById<TextView>(R.id.tv_asha_district).text = "District: -"
 
+        // Fetch complete profile from API
         val token = TokenManager.getToken()
         if (token.isNotEmpty()) {
             ApiClient.retrofit.getSupervisorProfile("Bearer $token")
@@ -189,15 +214,20 @@ class AshaDashboardActivity : AppCompatActivity() {
                         t: Throwable
                     ) {
                         Log.e("AshaDashboard", "Failed to load profile: ${t.message}")
+                        // Keep default values
                     }
                 })
         }
     }
 
     private fun logout() {
+        // Clear shared preferences
         getSharedPreferences("auth", MODE_PRIVATE).edit().clear().apply()
+
+        // Clear TokenManager
         TokenManager.clearToken()
 
+        // Navigate to login with clear task flag
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
@@ -206,7 +236,6 @@ class AshaDashboardActivity : AppCompatActivity() {
 
     private fun isNetworkAvailable(): Boolean {
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
         val network = cm.activeNetwork ?: return false
         val caps = cm.getNetworkCapabilities(network) ?: return false
         return caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)

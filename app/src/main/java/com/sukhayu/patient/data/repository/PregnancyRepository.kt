@@ -1,15 +1,14 @@
 package com.sukhayu.patient.data.repository
 
 import android.util.Log
-
 import com.sukhayu.patient.data.local.dao.PregnancyDao
 import com.sukhayu.patient.data.local.entity.PregnancyEntity
 import com.sukhayu.patient.data.remote.AncRecordsResponse
+import com.sukhayu.patient.data.remote.AncFollowUpRequest
+import com.sukhayu.patient.data.remote.AncFollowUpResponse
 import com.sukhayu.patient.data.remote.ApiService
 import com.sukhayu.patient.data.remote.FirstAncVisitRequest
 import com.sukhayu.patient.data.remote.FirstAncVisitResponse
-import com.sukhayu.patient.data.remote.AncFollowUpRequest
-import com.sukhayu.patient.data.remote.AncFollowUpResponse
 import com.sukhayu.patient.utils.TokenManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,7 +32,6 @@ class PregnancyRepository(
             isSynced = false // Mark as unsynced for background sync
         )
         pregnancyDao.upsertPregnancy(updatedEntity)
-        // TODO: enqueue for sync (e.g., insert into SyncQueue with entity id and type)
     }
 
     /**
@@ -62,7 +60,7 @@ class PregnancyRepository(
      * Mark a pregnancy record as synced after successful API upload.
      */
     suspend fun markAsSynced(id: String) = withContext(Dispatchers.IO) {
-        pregnancyDao.updateSyncStatus(id, true)
+        pregnancyDao.updateSyncStatus(id, true, System.currentTimeMillis())
     }
 
     /**
@@ -89,7 +87,11 @@ class PregnancyRepository(
                 ResultState.Success(response)
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
-                Log.e("ANC_REPO", "HTTP ${e.code()} while submitting first ANC visit. Body: $body", e)
+                Log.e(
+                    "ANC_REPO",
+                    "HTTP ${e.code()} while submitting first ANC visit. Body: $body",
+                    e
+                )
                 ResultState.Error("Server error: ${e.code()}")
             } catch (e: Exception) {
                 Log.e("ANC_REPO", "Error submitting first ANC visit", e)
@@ -114,7 +116,11 @@ class PregnancyRepository(
                 ResultState.Success(response)
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
-                Log.e("ANC_REPO", "HTTP ${e.code()} while fetching ANC records. Body: $body", e)
+                Log.e(
+                    "ANC_REPO",
+                    "HTTP ${e.code()} while fetching ANC records. Body: $body",
+                    e
+                )
                 ResultState.Error("Server error: ${e.code()}")
             } catch (e: Exception) {
                 Log.e("ANC_REPO", "Error fetching ANC records", e)
@@ -140,7 +146,11 @@ class PregnancyRepository(
                 ResultState.Success(response)
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
-                Log.e("ANC_REPO", "HTTP ${e.code()} while submitting ANC follow-up. Body: $body", e)
+                Log.e(
+                    "ANC_REPO",
+                    "HTTP ${e.code()} while submitting ANC follow-up. Body: $body",
+                    e
+                )
                 ResultState.Error("Server error: ${e.code()}")
             } catch (e: Exception) {
                 Log.e("ANC_REPO", "Error submitting ANC follow-up", e)
