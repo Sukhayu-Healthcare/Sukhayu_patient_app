@@ -24,6 +24,7 @@ import com.sukhayu.patient.utils.NetworkUtils
 import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.utils.formatDate
 import kotlinx.coroutines.launch
+import com.sukhayu.patient.utils.HeaderUtils
 import java.io.File
 import java.io.FileOutputStream
 
@@ -36,7 +37,7 @@ class PastConsultationsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_past_consultations)
-
+        HeaderUtils.setupRoleInHeader(this)
         val ll = findViewById<LinearLayout>(R.id.llPast)
 
         val db = AshaLocalDatabase.getInstance(this)

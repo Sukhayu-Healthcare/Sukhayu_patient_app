@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
 import com.sukhayu.utils.VoiceInputHelper
+import com.sukhayu.patient.utils.HeaderUtils
 
 class ChildSurveyActivity : AppCompatActivity() {
 
@@ -16,7 +17,7 @@ class ChildSurveyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_child_survey)
-
+        HeaderUtils.setupRoleInHeader(this)
         supportActionBar?.apply {
             title = "Child Health & Immunisation"
             setDisplayHomeAsUpEnabled(true)

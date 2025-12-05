@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.R
+import com.sukhayu.patient.utils.HeaderUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,7 +44,7 @@ class CreateDriveActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_drive)
-
+        HeaderUtils.setupRoleInHeader(this)
         initViews()
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)

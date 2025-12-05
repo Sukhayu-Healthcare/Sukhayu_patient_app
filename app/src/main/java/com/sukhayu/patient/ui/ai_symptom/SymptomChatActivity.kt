@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
 import com.sukhayu.patient.databinding.ActivitySymptomChatBinding
 import com.sukhayu.utils.VoiceInputHelper
+import com.sukhayu.patient.utils.HeaderUtils
 
 class SymptomChatActivity : AppCompatActivity() {
 

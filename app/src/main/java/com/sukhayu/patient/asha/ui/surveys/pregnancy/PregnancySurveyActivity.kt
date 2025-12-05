@@ -24,6 +24,7 @@ import com.sukhayu.patient.data.local.entity.PatientEntity
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.repository.PatientRepository
 import com.sukhayu.utils.VoiceInputHelper
+import com.sukhayu.patient.utils.HeaderUtils
 
 class PregnancySurveyActivity : AppCompatActivity() {
 
@@ -46,7 +47,7 @@ class PregnancySurveyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pregnancy_survey)
-
+        HeaderUtils.setupRoleInHeader(this)
         // Set toolbar title
         supportActionBar?.apply {
             title = "Pregnancy / ANC Survey"

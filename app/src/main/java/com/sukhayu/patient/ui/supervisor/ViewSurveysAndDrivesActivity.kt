@@ -20,6 +20,7 @@ import com.sukhayu.patient.data.remote.SupervisorSurveyDataResponse
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
+import com.sukhayu.patient.utils.HeaderUtils
 import java.util.*
 
 class ViewSurveysAndDrivesActivity : AppCompatActivity() {
@@ -44,7 +45,7 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_surveys_and_drives)
-
+        HeaderUtils.setupRoleInHeader(this)
         initViews()
         setupSpinner()
         setupListeners()
@@ -99,8 +100,8 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
             return
         }
 
-        val token = getSharedPreferences("auth", MODE_PRIVATE)
-            .getString("token", "") ?: ""
+        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+        val token = prefs.getString("token", "") ?: ""
 
         if (token.isEmpty()) {
             Toast.makeText(this, "Authentication token not found", Toast.LENGTH_SHORT).show()
@@ -112,7 +113,8 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
                 btnFetchData.isEnabled = false
                 btnFetchData.text = "Loading..."
 
-                val response = ApiClient.retrofit.getSupervisorSurveyData(
+                // Remove supervisorId from API call
+                val response = ApiClient.retrofit.getSupervisorSurveyDataByTableAndDate(
                     "Bearer $token",
                     tableName,
                     date

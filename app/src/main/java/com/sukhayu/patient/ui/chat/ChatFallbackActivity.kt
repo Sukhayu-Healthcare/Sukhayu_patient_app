@@ -8,6 +8,7 @@ import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.dashboard.DashboardActivity
 import com.sukhayu.patient.ui.teleconsult.VideoCallActivity
 import com.sukhayu.patient.ui.teleconsult.VoiceCallActivity
+import com.sukhayu.patient.utils.HeaderUtils
 
 class ChatFallbackActivity : AppCompatActivity() {
 
@@ -25,7 +26,7 @@ class ChatFallbackActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_fallback)
-
+        HeaderUtils.setupRoleInHeader(this)
         emergencyMode = intent.getBooleanExtra("EMERGENCY_MODE", false)
         doctorName = intent.getStringExtra("DOCTOR_NAME") ?: "Dr. अमित कुमार"
 

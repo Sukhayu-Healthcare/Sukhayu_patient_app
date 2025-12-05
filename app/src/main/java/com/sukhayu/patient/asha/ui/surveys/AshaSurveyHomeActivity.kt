@@ -17,6 +17,7 @@ import com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyActivity
 import com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySurveyActivity
 import com.sukhayu.patient.asha.ui.surveys.tb.TbSurveyActivity
 import com.sukhayu.patient.ui.asha.search.PatientSearchForGeneralSurveyActivity
+import com.sukhayu.patient.utils.HeaderUtils
 import com.sukhayu.utils.VoiceInputHelper
 
 class AshaSurveyHomeActivity : AppCompatActivity() {
@@ -27,7 +28,7 @@ class AshaSurveyHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d("AshaSurveyHome", "Activity onCreate called")
         setContentView(R.layout.activity_asha_survey_home)
-
+        HeaderUtils.setupRoleInHeader(this)
 
         // Wire survey button clicks
         findViewById<MaterialCardView>(R.id.btnPregnancySurvey).setOnClickListener {

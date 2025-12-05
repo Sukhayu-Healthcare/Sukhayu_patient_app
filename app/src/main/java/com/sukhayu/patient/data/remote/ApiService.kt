@@ -208,6 +208,13 @@ interface ApiService {
         @Query("date") date: String
     ): SupervisorSurveyDataResponse
 
+    // Corrected endpoint: /supervisor/data/{table}/{date}
+    @GET("survey/supervisor/data/{table}/{date}")
+    suspend fun getSupervisorSurveyDataByTableAndDate(
+        @Header("Authorization") authHeader: String,
+        @Path("table") table: String,
+        @Path("date") date: String
+    ): SupervisorSurveyDataResponse
 
 
     @POST("survey/genral")

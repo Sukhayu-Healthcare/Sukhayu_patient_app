@@ -3,6 +3,7 @@ package com.sukhayu.patient.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
+import com.sukhayu.patient.utils.HeaderUtils
 import com.sukhayu.patient.utils.TtsHelper
 
 class AppointmentActivity : AppCompatActivity() {
@@ -12,6 +13,7 @@ class AppointmentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_appointment)
+        HeaderUtils.setupRoleInHeader(this)
 
         ttsHelper = TtsHelper(this)
         ttsHelper.setLanguage("en")

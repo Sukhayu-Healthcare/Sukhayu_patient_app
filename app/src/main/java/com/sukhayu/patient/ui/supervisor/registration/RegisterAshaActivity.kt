@@ -20,6 +20,7 @@ import com.sukhayu.patient.data.remote.RegisterAshaResponse
 import com.sukhayu.patient.databinding.ActivitySupervisorRegisterAshaBinding
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
+import com.sukhayu.patient.utils.HeaderUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,7 +63,7 @@ class RegisterAshaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySupervisorRegisterAshaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        HeaderUtils.setupRoleInHeader(this)
         // Initialize TokenManager
         TokenManager.init(this)
 

@@ -21,6 +21,7 @@ import com.sukhayu.patient.utils.TokenManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.launch
+import com.sukhayu.patient.utils.HeaderUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -78,6 +79,7 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
         
         try {
             setContentView(R.layout.activity_supervisor_profile)
+            HeaderUtils.setupRoleInHeader(this)
             TokenManager.init(this)
             
             repository = SupervisorRepository(this)

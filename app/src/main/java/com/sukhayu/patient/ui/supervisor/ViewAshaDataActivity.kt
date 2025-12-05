@@ -23,6 +23,7 @@ import com.sukhayu.patient.data.remote.AshaWorker
 import com.sukhayu.patient.data.repository.SupervisorRepository
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
+import com.sukhayu.patient.utils.HeaderUtils
 import kotlinx.coroutines.launch
 
 class ViewAshaDataActivity : AppCompatActivity() {
@@ -42,7 +43,7 @@ class ViewAshaDataActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_asha_data)
-
+        HeaderUtils.setupRoleInHeader(this)
         repository = SupervisorRepository(this)
 
         recyclerView = findViewById(R.id.recyclerViewAsha)

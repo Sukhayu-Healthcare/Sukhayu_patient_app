@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity
 import com.sukhayu.utils.VoiceInputHelper
+import com.sukhayu.patient.utils.HeaderUtils
 
 class ConsultDoctorActivity : AppCompatActivity() {
 
@@ -20,7 +21,7 @@ class ConsultDoctorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_consult_doctor)
-
+        HeaderUtils.setupRoleInHeader(this)
         // ------------ Start Questionnaire  ------------
         val startView = findViewById<View>(R.id.cardStart) // replace with your ID
         startView?.setOnClickListener {

@@ -27,6 +27,7 @@ import com.sukhayu.patient.ui.login.LoginActivity
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
+import com.sukhayu.patient.utils.HeaderUtils
 import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
@@ -87,7 +88,7 @@ class ProfileActivity : AppCompatActivity() {
         val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genders)
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerGender.adapter = genderAdapter
-
+        HeaderUtils.setupRoleInHeader(this)
         // read extras with safe fallbacks
         val patientId = intent.getStringExtra(EXTRA_PATIENT_ID) ?: "P001"
         val patientName = intent.getStringExtra(EXTRA_PATIENT_NAME) ?: "Dummy Patient"

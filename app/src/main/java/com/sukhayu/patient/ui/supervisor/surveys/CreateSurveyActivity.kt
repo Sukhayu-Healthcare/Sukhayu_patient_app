@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
 import com.sukhayu.utils.VoiceInputHelper
 import java.text.SimpleDateFormat
+import com.sukhayu.patient.utils.HeaderUtils
 import java.util.*
 
 class CreateSurveyActivity : AppCompatActivity() {
@@ -30,7 +31,7 @@ class CreateSurveyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_survey)
-
+        HeaderUtils.setupRoleInHeader(this)
         initViews()
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)

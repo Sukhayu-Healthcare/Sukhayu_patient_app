@@ -13,6 +13,7 @@ import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.patient.webrtc.WebRTCManager
 import com.sukhayu.utils.VoiceInputHelper
 import org.webrtc.RendererCommon
+import com.sukhayu.patient.utils.HeaderUtils
 import org.webrtc.EglBase
 
 class EmergencyVCActivity : AppCompatActivity() {

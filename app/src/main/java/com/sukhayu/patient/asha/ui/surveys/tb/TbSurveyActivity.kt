@@ -21,6 +21,7 @@ import com.sukhayu.patient.data.local.entity.PatientEntity
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.repository.PatientRepository
 import com.sukhayu.utils.VoiceInputHelper
+import com.sukhayu.patient.utils.HeaderUtils
 
 /**
  * TbSurveyActivity - Main entry point for TB workflows
@@ -59,7 +60,7 @@ class TbSurveyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tb_survey)
-
+        HeaderUtils.setupRoleInHeader(this)
         supportActionBar?.apply {
             title = "TB Survey"
             setDisplayHomeAsUpEnabled(true)

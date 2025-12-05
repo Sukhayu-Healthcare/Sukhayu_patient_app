@@ -18,6 +18,7 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
+import com.sukhayu.patient.utils.HeaderUtils
 import java.util.*
 
 class GeneralSurveyActivity : AppCompatActivity() {
@@ -91,7 +92,7 @@ class GeneralSurveyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_general_survey)
-
+        HeaderUtils.setupRoleInHeader(this)
         supportActionBar?.apply {
             title = "General Health Survey"
             setDisplayHomeAsUpEnabled(true)

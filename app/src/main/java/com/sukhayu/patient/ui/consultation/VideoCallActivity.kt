@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.patient.webrtc.WebRTCManager
+import com.sukhayu.patient.utils.HeaderUtils
 import org.webrtc.EglBase
 import org.webrtc.SurfaceViewRenderer
 
@@ -34,7 +35,7 @@ class VideoCallActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_call)
-
+        HeaderUtils.setupRoleInHeader(this)
         localVideoView = findViewById(R.id.localVideoView)
         remoteVideoView = findViewById(R.id.remoteVideoView)
         btnEndCall = findViewById(R.id.btnEndCall)
