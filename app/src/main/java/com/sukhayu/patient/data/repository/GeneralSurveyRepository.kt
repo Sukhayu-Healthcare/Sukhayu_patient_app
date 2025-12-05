@@ -76,4 +76,3 @@ class GeneralSurveyRepository(
         dao.markAsSynced(surveyId)
     }
 }
-

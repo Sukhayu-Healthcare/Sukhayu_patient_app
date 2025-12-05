@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.GeneralSurveyEntity
+import com.sukhayu.patient.data.local.entity.toRequest
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.GeneralScreeningsResponse
 import com.sukhayu.patient.data.remote.GeneralSurveyRequest
@@ -100,6 +101,9 @@ class GeneralSurveyViewModel(application: Application) : AndroidViewModel(applic
 
     /**
      * Submit general survey to backend (POST /survey/genral)
+     *
+     * NOTE: This submits a single request object.
+     * For offline-first flow, prefer syncPendingSurveys() which works off local DB.
      */
     fun submitGeneralSurvey(request: GeneralSurveyRequest) {
         viewModelScope.launch {
@@ -140,6 +144,56 @@ class GeneralSurveyViewModel(application: Application) : AndroidViewModel(applic
                 Log.e(TAG, "Error loading screenings", e)
                 _screenings.value =
                     ResultState.Error(e.message ?: "Unable to load screenings")
+            }
+        }
+    }
+
+    /**
+     * Sync all pending (unsynced) general surveys from local DB to backend.
+     *
+     * - Reads all records where synced_to_server = 0
+     * - Converts them to GeneralSurveyRequest using toRequest()
+     * - Calls POST /survey/genral for each
+     * - Marks them as synced in local DB on success
+     */
+    fun syncPendingSurveys(onFinished: (Int) -> Unit = {}) {
+        viewModelScope.launch {
+            val token = TokenManager.getToken()
+            if (token.isBlank()) {
+                Log.e(TAG, "Cannot sync general surveys: Authentication token missing")
+                onFinished(0)
+                return@launch
+            }
+
+            try {
+                val pending = repository.getUnsyncedSurveys()
+                Log.d(TAG, "Found ${pending.size} pending general surveys to sync")
+
+                var successCount = 0
+
+                for (survey in pending) {
+                    try {
+                        val request: GeneralSurveyRequest = survey.toRequest()
+                        val response = patientRepository.submitGeneralSurvey(token, request)
+
+                        Log.d(
+                            TAG,
+                            "Synced general survey id=${survey.id} successfully. Response: $response"
+                        )
+
+                        repository.markAsSynced(survey.id)
+                        successCount++
+                    } catch (e: Exception) {
+                        // Keep it unsynced for future retry
+                        Log.e(TAG, "Failed to sync general survey id=${survey.id}", e)
+                    }
+                }
+
+                Log.d(TAG, "General survey sync finished. Successfully synced = $successCount")
+                onFinished(successCount)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error while syncing pending general surveys", e)
+                onFinished(0)
             }
         }
     }

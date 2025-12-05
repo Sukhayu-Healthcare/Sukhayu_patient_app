@@ -61,4 +61,3 @@ interface GeneralSurveyDao {
     @Query("DELETE FROM general_survey")
     suspend fun deleteAllSurveys()
 }
-
