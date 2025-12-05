@@ -24,25 +24,24 @@ interface TbScreeningDao {
     /**
      * Get all TB screenings for a specific patient
      */
-    @Query("SELECT * FROM tb_screenings WHERE patientId = :patientId ORDER BY dateOfScreening DESC")
+    @Query("SELECT * FROM tb_screenings WHERE patientId = :patientId ORDER BY createdAt DESC")
     suspend fun getTbScreeningsForPatient(patientId: String): List<TbScreeningEntity>
 
     /**
-     * Get all unsynced TB screenings (for future backend sync)
+     * Get all unsynced TB screenings (for backend sync)
      */
-    @Query("SELECT * FROM tb_screenings WHERE isSynced = 0")
+    @Query("SELECT * FROM tb_screenings WHERE isSynced = 0 ORDER BY createdAt ASC")
     suspend fun getUnsyncedTbScreenings(): List<TbScreeningEntity>
 
     /**
-     * Update sync status
+     * Mark TB screening as synced
      */
-    @Query("UPDATE tb_screenings SET isSynced = :synced, updatedAt = :timestamp WHERE id = :id")
-    suspend fun updateSyncStatus(id: String, synced: Boolean, timestamp: Long)
+    @Query("UPDATE tb_screenings SET isSynced = 1, updatedAt = :timestamp WHERE id = :id")
+    suspend fun markTbScreeningAsSynced(id: String, timestamp: Long)
 
     /**
-     * Get all TB screenings (for admin/reports)
+     * Get all TB screenings (for debug/reports)
      */
     @Query("SELECT * FROM tb_screenings ORDER BY createdAt DESC")
     suspend fun getAllTbScreenings(): List<TbScreeningEntity>
 }
-
