@@ -144,6 +144,31 @@ data class PatientConsultationsResponse(
     val consultations: List<Consultation>
 )
 
+data class CreateNoticeRequest(
+    val title: String,
+    val body: String,
+    val target_village: String?,
+    val target_district: String?,
+    val target_taluka: String?
+)
+
+data class Notice(
+    val notice_id: Int,
+    val created_by: Int,
+    val title: String,
+    val body: String,
+    val target_village: String?,
+    val target_district: String?,
+    val target_taluka: String?,
+    val created_at: String
+)
+
+data class CreateNoticeResponse(
+    val success: Boolean,
+    val message: String,
+    val notice: Notice
+)
+
 
 interface ApiService {
 
@@ -278,5 +303,11 @@ interface ApiService {
     suspend fun getPatientConsultations(
         @Header("Authorization") authHeader: String
     ): PatientConsultationsResponse
+
+    @POST("notice/create-notice")
+    fun createNotice(
+        @Header("Authorization") token: String,
+        @Body body: CreateNoticeRequest
+    ): Call<CreateNoticeResponse>
 
 }

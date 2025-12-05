@@ -11,9 +11,16 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.R
+import com.sukhayu.patient.data.remote.ApiClient
+import com.sukhayu.patient.data.remote.CreateNoticeRequest
+import com.sukhayu.patient.data.remote.CreateNoticeResponse
 import com.sukhayu.patient.utils.HeaderUtils
+import com.sukhayu.patient.utils.TokenManager
 import java.text.SimpleDateFormat
 import java.util.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CreateDriveActivity : AppCompatActivity() {
 
@@ -41,6 +48,10 @@ class CreateDriveActivity : AppCompatActivity() {
         "Audit"
     )
 
+    // TODO: Replace with actual token retrieval logic
+    private val authToken: String
+        get() = "Bearer ${TokenManager.getToken()}"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_drive)
@@ -48,6 +59,7 @@ class CreateDriveActivity : AppCompatActivity() {
         initViews()
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
+        TokenManager.init(applicationContext)
         setupAnnouncementTypeSpinner()
         setupListeners()
     }
@@ -133,11 +145,43 @@ class CreateDriveActivity : AppCompatActivity() {
             return
         }
 
-        // TODO: Call API to create announcement and send to ASHA workers
-        val venueText = if (venue.isNotEmpty()) "\nVenue: $venue" else ""
-        val successMessage = "Announcement sent to ASHA workers:\nType: $selectedAnnouncementType\nDate: $selectedDate$venueText"
-        Toast.makeText(this, successMessage, Toast.LENGTH_LONG).show()
-        finish()
+        // Prepare title and body for notice
+        val title = "$selectedAnnouncementType - $selectedDate"
+        val body = buildString {
+            append(message)
+            if (venue.isNotEmpty()) append("\nVenue: $venue")
+            if (notes.isNotEmpty()) append("\nNotes: $notes")
+        }
+
+        // TODO: Replace with actual village/district/taluka if available
+        val request = CreateNoticeRequest(
+            title = title,
+            body = body,
+            target_village = null,
+            target_district = null,
+            target_taluka = null
+        )
+
+        // Show progress
+        btnCreate.isEnabled = false
+
+        ApiClient.retrofit.createNotice(authToken, request)
+            .enqueue(object : Callback<CreateNoticeResponse> {
+                override fun onResponse(call: Call<CreateNoticeResponse>, response: Response<CreateNoticeResponse>) {
+                    btnCreate.isEnabled = true
+                    if (response.isSuccessful && response.body()?.success == true) {
+                        Toast.makeText(this@CreateDriveActivity, "Announcement sent: ${response.body()?.message}", Toast.LENGTH_LONG).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this@CreateDriveActivity, "Failed to send announcement", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<CreateNoticeResponse>, t: Throwable) {
+                    btnCreate.isEnabled = true
+                    Toast.makeText(this@CreateDriveActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     private fun requestAudioPermission() {
