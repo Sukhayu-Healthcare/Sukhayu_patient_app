@@ -4,6 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -12,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.ui.asha.nhp.NationalHealthProgramsActivity
@@ -23,10 +28,18 @@ import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.utils.LocaleHelper
+import com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyViewModel
 
 class AshaDashboardActivity : AppCompatActivity() {
 
     private lateinit var voiceHelper: VoiceInputHelper
+
+    // ViewModel for syncing General Surveys
+    private lateinit var generalSurveyViewModel: GeneralSurveyViewModel
+
+    // Network monitoring
+    private var connectivityManager: ConnectivityManager? = null
+    private var networkCallback: ConnectivityManager.NetworkCallback? = null
 
     // Apply saved locale before activity context is used
     override fun attachBaseContext(newBase: Context) {
@@ -39,6 +52,10 @@ class AshaDashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asha_dashboard)
+
+        // Init ViewModel for general survey sync
+        generalSurveyViewModel =
+            ViewModelProvider(this)[GeneralSurveyViewModel::class.java]
 
         // Load and display ASHA profile data
         loadProfileData()
@@ -68,7 +85,11 @@ class AshaDashboardActivity : AppCompatActivity() {
                 Log.d("AshaDashboard", "Survey Home Activity started successfully")
             } catch (e: Exception) {
                 Log.e("AshaDashboard", "Error starting survey activity: ${e.message}")
-                Toast.makeText(this, "Error opening surveys: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Error opening surveys: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -86,7 +107,6 @@ class AshaDashboardActivity : AppCompatActivity() {
         }
 
         // Language toggles: save selection and recreate activity to apply new locale
-        // Use runtime id lookup in case the toggle views are not present in this layout
         val tvEnglishId = resources.getIdentifier("tvEnglish", "id", packageName)
         if (tvEnglishId != 0) {
             findViewById<TextView>(tvEnglishId)?.setOnClickListener {
@@ -108,12 +128,76 @@ class AshaDashboardActivity : AppCompatActivity() {
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
         VoiceInputHelper.attachToAllEditTexts(this)
+
+        // 🔌 Setup network listener so we sync when internet comes back
+        setupNetworkCallback()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Backup: also try syncing whenever dashboard comes to foreground
+        if (isNetworkAvailable()) {
+            Log.d("AshaDashboard", "onResume: Network available, syncing pending general surveys")
+            generalSurveyViewModel.syncPendingSurveys { count ->
+                Log.d("AshaDashboard", "onResume: Synced $count pending general surveys")
+            }
+        } else {
+            Log.d("AshaDashboard", "onResume: No internet. General survey sync skipped.")
+        }
+    }
+
+    private fun setupNetworkCallback() {
+        connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            networkCallback = object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    super.onAvailable(network)
+                    Log.d("AshaDashboard", "NetworkCallback: Network became AVAILABLE")
+                    runOnUiThread {
+                        generalSurveyViewModel.syncPendingSurveys { count ->
+                            Log.d(
+                                "AshaDashboard",
+                                "NetworkCallback: Synced $count pending general surveys"
+                            )
+                            // If you want to SEE something while testing, uncomment:
+                            // Toast.makeText(this@AshaDashboardActivity, "Synced $count general surveys", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                override fun onLost(network: Network) {
+                    super.onLost(network)
+                    Log.d("AshaDashboard", "NetworkCallback: Network LOST")
+                }
+            }
+
+            try {
+                connectivityManager?.registerDefaultNetworkCallback(networkCallback!!)
+                Log.d("AshaDashboard", "NetworkCallback: Registered default network callback")
+            } catch (e: Exception) {
+                Log.e("AshaDashboard", "Failed to register network callback: ${e.message}", e)
+            }
+        } else {
+            // For older versions, we only rely on onResume + isNetworkAvailable()
+            Log.d(
+                "AshaDashboard",
+                "NetworkCallback: API < 24, using onResume() based sync only"
+            )
+        }
     }
 
     private fun requestAudioPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                200
+            )
         }
     }
 
@@ -133,7 +217,8 @@ class AshaDashboardActivity : AppCompatActivity() {
         val token = TokenManager.getToken()
         if (token.isNotEmpty()) {
             ApiClient.retrofit.getSupervisorProfile("Bearer $token")
-                .enqueue(object : retrofit2.Callback<com.sukhayu.patient.data.remote.SupervisorProfile> {
+                .enqueue(object :
+                    retrofit2.Callback<com.sukhayu.patient.data.remote.SupervisorProfile> {
                     override fun onResponse(
                         call: retrofit2.Call<com.sukhayu.patient.data.remote.SupervisorProfile>,
                         response: retrofit2.Response<com.sukhayu.patient.data.remote.SupervisorProfile>
@@ -141,11 +226,16 @@ class AshaDashboardActivity : AppCompatActivity() {
                         if (response.isSuccessful && response.body() != null) {
                             val profile = response.body()!!
 
-                            findViewById<TextView>(R.id.tv_asha_name).text = profile.user_name ?: ashaName
-                            findViewById<TextView>(R.id.tvAshaId).text = "ID: ${profile.asha_id ?: ashaId}"
-                            findViewById<TextView>(R.id.tv_asha_village).text = "Village: ${profile.village ?: "-"}"
-                            findViewById<TextView>(R.id.tv_asha_taluka).text = "Taluka: ${profile.taluka ?: "-"}"
-                            findViewById<TextView>(R.id.tv_asha_district).text = "District: ${profile.district ?: "-"}"
+                            findViewById<TextView>(R.id.tv_asha_name).text =
+                                profile.user_name ?: ashaName
+                            findViewById<TextView>(R.id.tvAshaId).text =
+                                "ID: ${profile.asha_id ?: ashaId}"
+                            findViewById<TextView>(R.id.tv_asha_village).text =
+                                "Village: ${profile.village ?: "-"}"
+                            findViewById<TextView>(R.id.tv_asha_taluka).text =
+                                "Taluka: ${profile.taluka ?: "-"}"
+                            findViewById<TextView>(R.id.tv_asha_district).text =
+                                "District: ${profile.district ?: "-"}"
                         }
                     }
 
@@ -174,8 +264,34 @@ class AshaDashboardActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun isNetworkAvailable(): Boolean {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = cm.activeNetwork ?: return false
+            val caps = cm.getNetworkCapabilities(network) ?: return false
+            caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } else {
+            @Suppress("DEPRECATION")
+            val activeNetwork = cm.activeNetworkInfo
+            @Suppress("DEPRECATION")
+            activeNetwork != null && activeNetwork.isConnected
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         voiceHelper.destroy()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                if (networkCallback != null) {
+                    connectivityManager?.unregisterNetworkCallback(networkCallback!!)
+                    Log.d("AshaDashboard", "NetworkCallback: Unregistered")
+                }
+            } catch (e: Exception) {
+                Log.e("AshaDashboard", "Error unregistering network callback: ${e.message}", e)
+            }
+        }
     }
 }
