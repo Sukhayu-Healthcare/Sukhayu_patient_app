@@ -41,11 +41,13 @@
 
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Password" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
 
-            <EditText android:id="@+id/etPassword" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Password" android:inputType="textPassword" android:layout_marginBottom="16dp" android:paddingStart="12dp" android:paddingEnd="12dp" android:background="@android:color/white" />
+            <EditText android:id="@+id/etPassword" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Password" android:inputType="textPassword" android:layout_marginBottom="8dp" android:paddingStart="12dp" android:paddingEnd="44dp" android:background="@android:color/white" android:drawableEnd="@android:drawable/ic_menu_view" />
+
+            <TextView android:id="@+id/tv_password_criteria" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Password must be ≥8 chars, include upper and lower case, a digit and a special character." android:textSize="12sp" android:textColor="#666666" android:layout_marginBottom="16dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
 
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Confirm Password" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
 
-            <EditText android:id="@+id/et_confirm_password" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Confirm Password" android:inputType="textPassword" android:layout_marginBottom="24dp" android:paddingStart="12dp" android:paddingEnd="12dp" android:background="@android:color/white" />
+            <EditText android:id="@+id/et_confirm_password" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Confirm Password" android:inputType="textPassword" android:layout_marginBottom="24dp" android:paddingStart="12dp" android:paddingEnd="44dp" android:background="@android:color/white" android:drawableEnd="@android:drawable/ic_menu_view" />
 
             <Button android:id="@+id/btn_register" android:layout_width="match_parent" android:layout_height="48dp" android:text="Register" android:textSize="16sp" android:layout_marginTop="16dp" android:backgroundTint="#00AA00" />
 

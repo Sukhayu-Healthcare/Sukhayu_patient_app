@@ -155,8 +155,7 @@ class LoginActivity : AppCompatActivity() {
             // Prefer patientId, fall back to userId, otherwise empty
             putString(
                 "user_id",
-                data.patient.patientId ?: data.patient.userId ?: ""
-            )
+                data.patient.patientId ?: data.patient.userId ?: "")
             putString("user_name", data.patient.name ?: "")
             putString("user_phone", data.patient.phone ?: "")
 

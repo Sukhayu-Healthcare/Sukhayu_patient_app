@@ -10,6 +10,8 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -17,16 +19,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.R
-import com.sukhayu.patient.data.remote.ApiClient
-import com.sukhayu.patient.data.remote.AshaListResponse
 import com.sukhayu.patient.data.remote.AshaWorker
 import com.sukhayu.patient.data.repository.SupervisorRepository
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ViewAshaDataActivity : AppCompatActivity() {
 
@@ -39,6 +36,9 @@ class ViewAshaDataActivity : AppCompatActivity() {
     private lateinit var voiceHelper: VoiceInputHelper
     private lateinit var repository: SupervisorRepository
 
+    // new: launcher to open detail and receive result
+    private lateinit var ashaDetailLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_asha_data)
@@ -50,6 +50,18 @@ class ViewAshaDataActivity : AppCompatActivity() {
         
         etSearchAsha = findViewById(R.id.etSearchAsha)
         tvAshaCount = findViewById(R.id.tvAshaCount)
+
+        // register launcher before using
+        ashaDetailLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data
+                if (data?.getBooleanExtra("ASHA_UPDATED", false) == true) {
+                    // refresh list after edits
+                    fetchAshaList()
+                    Toast.makeText(this, "ASHA profile updated", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         ashaAdapter = AshaAdapter(emptyList()) { ashaWorker ->
             navigateToAshaDetails(ashaWorker)
@@ -113,7 +125,8 @@ class ViewAshaDataActivity : AppCompatActivity() {
             putExtra("TALUKA", ashaWorker.taluka)
             putExtra("PROFILE_PIC", ashaWorker.profile_pic)
         }
-        startActivity(intent)
+        // use launcher to receive possible "edited" result
+        ashaDetailLauncher.launch(intent)
     }
 
     private fun fetchAshaList() {

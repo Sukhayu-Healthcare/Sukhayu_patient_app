@@ -12,12 +12,14 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
+import java.util.Locale
 
 class VoiceInputHelper(private val context: Context) {
 
     private var speechRecognizer: SpeechRecognizer? = null
     private var currentEditText: EditText? = null
     private val translator = MarathiTranslator.getInstance(context)
+    private var currentLanguage: String? = null
 
     fun attachVoiceToEditText(editText: EditText, language: String? = null) {
         if (isPasswordField(editText)) return
@@ -62,23 +64,38 @@ class VoiceInputHelper(private val context: Context) {
         }
 
         currentEditText = editText
-        
+        // Keep currentLanguage as null when caller didn't request a specific language
+        currentLanguage = language
+
         if (speechRecognizer == null) {
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
         }
 
+        // If language param is provided (e.g. "mr-IN" or "en-IN"), request that language explicitly.
+        // If language param is null, do NOT set EXTRA_LANGUAGE so Android's inbuilt recognizer
+        // can choose the best language automatically (device/default / user selection).
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE, language ?: "en-IN")
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "mr-IN")
-            putExtra(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES, arrayListOf("en-IN", "mr-IN"))
             putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
             putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
+            if (!language.isNullOrBlank()) {
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE, language)
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language)
+                // Optionally hint supported languages when explicit language requested
+                putExtra(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES, arrayListOf("en-IN", "mr-IN"))
+            } else {
+                // Let Android choose/detect language (use inbuilt multi-language support)
+            }
         }
 
         speechRecognizer?.setRecognitionListener(object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
-                Toast.makeText(context, "Listening...", Toast.LENGTH_SHORT).show()
+                val langLabel = when {
+                    currentLanguage == "mr-IN" -> "Marathi"
+                    currentLanguage == "en-IN" -> "English"
+                    else -> "Detecting"
+                }
+                Toast.makeText(context, "Listening ($langLabel)...", Toast.LENGTH_SHORT).show()
             }
 
             override fun onBeginningOfSpeech() {}
@@ -118,19 +135,63 @@ class VoiceInputHelper(private val context: Context) {
     }
 
     private fun processVoiceResult(text: String) {
-        val finalText = if (isMarathi(text)) {
-            translator.translateMarathiToEnglish(text)
-        } else {
-            text
+        // Detect language using improved detector
+        val detected = detectLanguage(text)
+        val originalText = text
+        val finalText: String
+        val toastMessage: String
+
+        when {
+            currentLanguage == "mr-IN" -> {
+                // Caller explicitly requested Marathi — keep Marathi text as-is
+                finalText = originalText
+                toastMessage = "Detected: Marathi\nRecognized: $originalText"
+            }
+            detected == "mr" -> {
+                // Marathi speech detected — show Marathi only (do not translate)
+                finalText = originalText
+                toastMessage = "Detected: Marathi\nRecognized: $originalText"
+            }
+            else -> {
+                // English or other detected — keep as-is
+                finalText = originalText
+                toastMessage = "Detected: English\nRecognized: $originalText"
+            }
         }
-        
+
         currentEditText?.setText(finalText)
-        Toast.makeText(context, "Text entered: $finalText", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show()
     }
 
-    fun isMarathi(text: String): Boolean {
-        val marathiPattern = Regex("[\u0900-\u097F]+")
-        return marathiPattern.containsMatchIn(text)
+    /**
+     * Detects whether given text is Marathi or English.
+     * Returns "mr" for Marathi, "en" for English.
+     *
+     * Strategy:
+     *  - Count Devanagari characters and alphabetic letters; compute ratio.
+     *  - Check for a small list of common Marathi words as a heuristic.
+     *  - If Devanagari ratio is significant or common Marathi words are found => Marathi.
+     */
+    fun detectLanguage(text: String): String {
+        if (text.isBlank()) return "en"
+
+        val devanagariRegex = Regex("[\u0900-\u097F]")
+        val letterRegex = Regex("\\p{L}")
+
+        val devanagariCount = devanagariRegex.findAll(text).count()
+        val lettersCount = letterRegex.findAll(text).count().coerceAtLeast(1)
+
+        val ratio = devanagariCount.toDouble() / lettersCount.toDouble()
+
+        val commonMarathiWords = setOf(
+            "आहे", "नाही", "हो", "काय", "मला", "तुमचा", "तुमच्या", "कृपया", "धन्यवाद", "बघा", "आहेत"
+        )
+        val lower = text.toLowerCase(Locale.getDefault())
+        val containsCommon = commonMarathiWords.any { lower.contains(it) }
+
+        // Heuristic thresholds:
+        // - If any Devanagari present and ratio is > 30% OR common Marathi words are found => Marathi
+        return if (devanagariCount > 0 && (ratio > 0.30 || containsCommon)) "mr" else "en"
     }
 
     private fun isPasswordField(editText: EditText): Boolean {
@@ -144,13 +205,30 @@ class VoiceInputHelper(private val context: Context) {
     }
 
     companion object {
+        // Keep map of helpers per activity so we can destroy them later
+        private val helpers = mutableMapOf<Activity, VoiceInputHelper>()
+
         fun attachToAllEditTexts(activity: Activity) {
             try {
+                // If already attached for this activity, skip re-attaching
+                if (helpers.containsKey(activity)) return
                 val helper = VoiceInputHelper(activity)
+                helpers[activity] = helper
                 val rootView = activity.window.decorView.rootView
                 attachToViewGroup(rootView, helper)
             } catch (e: Exception) {
                 android.util.Log.e("VoiceInputHelper", "Error attaching to all EditTexts", e)
+            }
+        }
+
+        /**
+         * Destroy and remove helper for the given activity to free SpeechRecognizer resources.
+         */
+        fun destroyForActivity(activity: Activity) {
+            try {
+                helpers.remove(activity)?.destroy()
+            } catch (e: Exception) {
+                android.util.Log.e("VoiceInputHelper", "Error destroying helper for activity", e)
             }
         }
 
@@ -164,4 +242,4 @@ class VoiceInputHelper(private val context: Context) {
             }
         }
     }
-}
+ }

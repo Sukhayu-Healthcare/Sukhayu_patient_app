@@ -17,7 +17,7 @@ import com.sukhayu.patient.ui.supervisor.ViewAshaDataActivity
 import com.sukhayu.patient.ui.supervisor.ViewSurveysAndDrivesActivity
 import com.sukhayu.patient.ui.supervisor.profile.SupervisorAshaProfileActivity
 import com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity
-import com.sukhayu.patient.ui.supervisor.surveys.CreateSurveyActivity
+// import com.sukhayu.patient.ui.supervisor.surveys.CreateSurveyActivity
 import com.sukhayu.patient.ui.supervisor.drives.CreateDriveActivity
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.patient.utils.HeaderUtils
@@ -34,7 +34,7 @@ class SupervisorHomeActivity : AppCompatActivity() {
 
     private lateinit var cardRegisterAsha: MaterialCardView
     private lateinit var cardViewAsha: MaterialCardView
-    private lateinit var cardCreateSurvey: MaterialCardView
+    // private lateinit var cardCreateSurvey: MaterialCardView
     private lateinit var cardCreateDrive: MaterialCardView
     private lateinit var cardProfile: MaterialCardView
     private lateinit var cardViewSurveysAndDrives: MaterialCardView
@@ -62,7 +62,7 @@ class SupervisorHomeActivity : AppCompatActivity() {
 
         cardRegisterAsha = findViewById(R.id.cardRegisterAsha)
         cardViewAsha = findViewById(R.id.cardViewAsha)
-        cardCreateSurvey = findViewById(R.id.cardCreateSurvey)
+        // cardCreateSurvey = findViewById(R.id.cardCreateSurvey)
         cardCreateDrive = findViewById(R.id.cardCreateDrive)
         cardProfile = findViewById(R.id.cardProfile)
         cardViewSurveysAndDrives = findViewById(R.id.cardViewSurveysAndDrives)
@@ -127,9 +127,9 @@ class SupervisorHomeActivity : AppCompatActivity() {
             startActivity(Intent(this, ViewAshaDataActivity::class.java))
         }
 
-        cardCreateSurvey.setOnClickListener {
-            startActivity(Intent(this, CreateSurveyActivity::class.java))
-        }
+        // cardCreateSurvey.setOnClickListener {
+        //     startActivity(Intent(this, CreateSurveyActivity::class.java))
+        // }
 
         cardCreateDrive.setOnClickListener {
             startActivity(Intent(this, CreateDriveActivity::class.java))

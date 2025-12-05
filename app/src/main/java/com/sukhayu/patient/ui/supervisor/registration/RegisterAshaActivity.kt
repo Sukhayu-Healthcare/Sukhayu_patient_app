@@ -4,10 +4,13 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import android.text.method.PasswordTransformationMethod
+import android.text.method.SingleLineTransformationMethod
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,8 +27,10 @@ import retrofit2.Response
 class RegisterAshaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySupervisorRegisterAshaBinding
-    private lateinit var voiceHelper: VoiceInputHelper
     private val TAG = "RegisterAshaActivity"
+
+    // Voice helper attached only to specific fields
+    private lateinit var voiceHelper: VoiceInputHelper
 
     // Hierarchical data structure
     private val districtTalukaVillageData = mapOf(
@@ -62,15 +67,15 @@ class RegisterAshaActivity : AppCompatActivity() {
         TokenManager.init(this)
 
         requestAudioPermission()
+        // Attach voice helper only to fields which should have mic icons (previously only full name)
         voiceHelper = VoiceInputHelper(this)
-        
-        // Attach voice input only to specific fields (exclude age and password fields)
         voiceHelper.attachVoiceToEditText(binding.etFullName)
-        // Note: Spinners (district, taluka, village) don't need voice input
-        // age, password, and confirm password are excluded from voice input
 
         setupSpinners()
         setupClickListeners()
+
+        // new: setup password toggle and criteria
+        setupPasswordToggle()
     }
 
     private fun requestAudioPermission() {
@@ -272,6 +277,53 @@ class RegisterAshaActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupPasswordToggle() {
+        // Toggle for password field
+        binding.etPassword.setOnTouchListener { v, event ->
+            handleDrawableToggle(binding.etPassword, event)
+        }
+        // Toggle for confirm password field
+        binding.etConfirmPassword.setOnTouchListener { v, event ->
+            handleDrawableToggle(binding.etConfirmPassword, event)
+        }
+    }
+
+    private fun handleDrawableToggle(editText: android.widget.EditText, event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_UP) {
+            val drawableEnd = 2 // index for drawableEnd in getCompoundDrawablesRelative()
+            val drawables = editText.compoundDrawablesRelative
+            val drawable = drawables[drawableEnd] ?: return false
+            // check if touch is within drawable bounds (right side)
+            val touchX = event.x
+            val width = editText.width
+            val paddingRight = editText.paddingEnd
+            val drawableWidth = drawable.intrinsicWidth
+            if (touchX >= (width - paddingRight - drawableWidth)) {
+                // toggle transformation
+                val isPasswordShown = editText.transformationMethod == null
+                if (isPasswordShown) {
+                    // hide
+                    editText.transformationMethod = PasswordTransformationMethod.getInstance()
+                } else {
+                    // show
+                    editText.transformationMethod = null
+                }
+                // move cursor to end
+                editText.setSelection(editText.text?.length ?: 0)
+                return true
+            }
+        }
+        return false
+    }
+
+    // new: strong password validator
+    private fun isStrongPassword(password: String): Boolean {
+        if (password.length < 8) return false
+        // at least one digit, one lower, one upper, one special char, no whitespace
+        val strongRegex = Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%^&+=!()\\-\\[\\]{};:'\"\\\\|,<.>/?_`~])(?=\\S+\$).{8,}\$")
+        return strongRegex.containsMatchIn(password)
+    }
+
     private fun validateInputs(
         fullName: String,
         phoneNo: String,
@@ -327,7 +379,14 @@ class RegisterAshaActivity : AppCompatActivity() {
                 false
             }
             password.length < 6 -> {
+                // keep previous quick length check but prefer strong check below
                 binding.etPassword.error = "Password must be at least 6 characters"
+                binding.etPassword.requestFocus()
+                false
+            }
+            !isStrongPassword(password) -> {
+                binding.etPassword.error = "Weak password"
+                Toast.makeText(this, "Password must be at least 8 chars, include uppercase, lowercase, digit and special character.", Toast.LENGTH_LONG).show()
                 binding.etPassword.requestFocus()
                 false
             }
@@ -346,8 +405,9 @@ class RegisterAshaActivity : AppCompatActivity() {
         }
     }
 
+    // Clean up any SpeechRecognizer resources associated with this activity
     override fun onDestroy() {
-        super.onDestroy()
         voiceHelper.destroy()
+        super.onDestroy()
     }
 }
