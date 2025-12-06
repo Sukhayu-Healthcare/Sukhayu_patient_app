@@ -1,6 +1,8 @@
 package com.sukhayu.patient.ui.asha.dashboard
 
 import android.Manifest
+import com.sukhayu.patient.asha.ui.surveys.AshaViewSurveysActivity
+
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -76,10 +78,11 @@ class AshaDashboardActivity : AppCompatActivity() {
 
         // --- Buttons ---
 
-        // View Surveys / NHP
+        // View Surveys screen
         findViewById<Button>(R.id.btn_view_surveys).setOnClickListener {
-            startActivity(Intent(this, NationalHealthProgramsActivity::class.java))
+            startActivity(Intent(this, AshaViewSurveysActivity::class.java))
         }
+
 
         // Conduct Survey → AshaSurveyHomeActivity
         findViewById<Button>(R.id.btnSurveys).setOnClickListener {

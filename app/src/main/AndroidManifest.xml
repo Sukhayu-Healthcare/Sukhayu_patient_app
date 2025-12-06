@@ -9,7 +9,8 @@
     <!-- Camera and Storage permissions for image picking -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
     <!-- Audio recording -->
@@ -21,9 +22,9 @@
         android:allowBackup="true"
         android:icon="@drawable/asha_jyoti_app_logo"
         android:label="@string/app_name"
-        android:theme="@style/Theme.RoleBasedTelemedicinePatient"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:requestLegacyExternalStorage="true">
+        android:theme="@style/Theme.RoleBasedTelemedicinePatient">
 
         <!-- Login -->
         <activity
@@ -36,78 +37,164 @@
         </activity>
 
         <!-- Core Patient Screens -->
-        <activity android:name="com.sukhayu.patient.ui.dashboard.DashboardActivity" android:exported="true" />
-        <activity android:name="com.sukhayu.patient.ui.profile.ProfileActivity" android:exported="true" />
-        <activity android:name="com.sukhayu.patient.ui.consultation.ConsultDoctorActivity" android:exported="true" />
-        <activity android:name="com.sukhayu.patient.ui.consultation.PastConsultationsActivity" android:exported="true" />
-        <activity android:name="com.sukhayu.patient.ui.consultation.DoctorDetailActivity" android:exported="false" />
+        <activity
+            android:name="com.sukhayu.patient.ui.dashboard.DashboardActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.profile.ProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.consultation.ConsultDoctorActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.consultation.PastConsultationsActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.consultation.DoctorDetailActivity"
+            android:exported="false" />
 
         <!-- WebRTC -->
         <activity
             android:name="com.sukhayu.patient.ui.consultation.VideoCallActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+            android:screenOrientation="portrait" />
 
         <!-- AI Symptom Checker -->
-        <activity android:name="com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity" android:exported="true" />
-        <activity android:name="com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity" android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity"
+            android:exported="true" />
 
         <!-- Prescription -->
-        <activity android:name="com.sukhayu.patient.ui.consultation.PrescriptionActivity" android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.consultation.PrescriptionActivity"
+            android:exported="true" />
 
         <!-- Health Awareness -->
-        <activity android:name="com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity" android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity"
+            android:exported="true" />
 
         <!-- Supervisor -->
-        <activity android:name="com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity" android:exported="true" />
-        <activity android:name="com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity" android:exported="true" />
-        <activity android:name="com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity" android:exported="true" />
-        <activity android:name="com.sukhayu.patient.ui.supervisor.profile.SupervisorAshaProfileActivity" android:exported="true" />
-        <activity android:name=".ui.supervisor.ViewAshaDataActivity" android:exported="false" />
-        <activity android:name="com.sukhayu.patient.ui.supervisor.surveys.CreateSurveyActivity" android:exported="false" />
-        <activity android:name="com.sukhayu.patient.ui.supervisor.drives.CreateDriveActivity" android:exported="false" />
-        <activity android:name="com.sukhayu.patient.ui.supervisor.ViewSurveysAndDrivesActivity" android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.supervisor.dashboard.SupervisorHomeActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.supervisor.registration.RegisterAshaActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.supervisor.profile.AshaProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.supervisor.profile.SupervisorAshaProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.supervisor.ViewAshaDataActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.sukhayu.patient.ui.supervisor.surveys.CreateSurveyActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.sukhayu.patient.ui.supervisor.drives.CreateDriveActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.sukhayu.patient.ui.supervisor.ViewSurveysAndDrivesActivity"
+            android:exported="true" />
 
         <!-- ASHA Dashboard -->
-        <activity android:name="com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity" android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity"
+            android:exported="true" />
 
         <!-- ASHA Register Patient -->
-        <activity android:name="com.sukhayu.patient.ui.asha.registration.RegisterPatientActivity" android:exported="false" android:label="Register Patient" />
+        <activity
+            android:name="com.sukhayu.patient.ui.asha.registration.RegisterPatientActivity"
+            android:exported="false"
+            android:label="Register Patient" />
 
         <!-- ASHA Survey Home -->
-        <activity android:name="com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity" android:exported="false" android:label="Surveys" />
+        <activity
+            android:name="com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity"
+            android:exported="false"
+            android:label="Surveys" />
+
+        <!-- 🔥 NEW: ASHA View Surveys -->
+        <activity
+            android:name="com.sukhayu.patient.asha.ui.surveys.AshaViewSurveysActivity"
+            android:exported="false"
+            android:label="View Surveys" />
 
         <!-- Pregnancy / ANC -->
-        <activity android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySurveyActivity" android:exported="false" android:label="Pregnancy / ANC Survey" />
-        <activity android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.FirstAncVisitActivity" android:exported="false" android:label="First ANC Visit" />
-        <activity android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.FollowUpAncVisitActivity" android:exported="false" android:label="Follow-up ANC Visit" />
+        <activity
+            android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySurveyActivity"
+            android:exported="false"
+            android:label="Pregnancy / ANC Survey" />
+        <activity
+            android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.FirstAncVisitActivity"
+            android:exported="false"
+            android:label="First ANC Visit" />
+        <activity
+            android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.FollowUpAncVisitActivity"
+            android:exported="false"
+            android:label="Follow-up ANC Visit" />
 
         <!-- Child Health -->
-        <activity android:name="com.sukhayu.patient.asha.ui.surveys.child.ChildSurveyActivity" android:exported="false" android:label="Child Health &amp; Immunisation" />
+        <activity
+            android:name="com.sukhayu.patient.asha.ui.surveys.child.ChildSurveyActivity"
+            android:exported="false"
+            android:label="Child Health &amp; Immunisation" />
 
         <!-- TB -->
-        <activity android:name="com.sukhayu.patient.asha.ui.surveys.tb.TbSurveyActivity" android:exported="false" android:label="TB Symptoms Survey" />
-        <activity android:name="com.sukhayu.patient.asha.ui.surveys.tb.TbScreeningActivity" android:exported="false" android:label="TB Screening / Suspect Form" />
-        <activity android:name="com.sukhayu.patient.asha.ui.surveys.tb.TbFollowUpActivity" android:exported="false" android:label="TB Treatment Follow-up (DOTS)" />
+        <activity
+            android:name="com.sukhayu.patient.asha.ui.surveys.tb.TbSurveyActivity"
+            android:exported="false"
+            android:label="TB Symptoms Survey" />
+        <activity
+            android:name="com.sukhayu.patient.asha.ui.surveys.tb.TbScreeningActivity"
+            android:exported="false"
+            android:label="TB Screening / Suspect Form" />
+        <activity
+            android:name="com.sukhayu.patient.asha.ui.surveys.tb.TbFollowUpActivity"
+            android:exported="false"
+            android:label="TB Treatment Follow-up (DOTS)" />
 
         <!-- Patient Search for General Survey -->
-        <activity android:name="com.sukhayu.patient.ui.asha.search.PatientSearchForGeneralSurveyActivity" android:exported="false" android:label="Search Patient - General Survey" />
+        <activity
+            android:name="com.sukhayu.patient.ui.asha.search.PatientSearchForGeneralSurveyActivity"
+            android:exported="false"
+            android:label="Search Patient - General Survey" />
 
         <!-- General Survey -->
-        <activity android:name="com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyActivity" android:exported="false" android:label="General Screening" />
+        <activity
+            android:name="com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyActivity"
+            android:exported="false"
+            android:label="General Screening" />
 
         <!-- Family List -->
-        <activity android:name="com.sukhayu.patient.ui.asha.family.FamilyListActivity" android:exported="false" android:label="Family List" />
-        <activity android:name="com.sukhayu.patient.ui.asha.family.MemberListActivity" android:exported="false" android:label="Family Members" />
+        <activity
+            android:name="com.sukhayu.patient.ui.asha.family.FamilyListActivity"
+            android:exported="false"
+            android:label="Family List" />
+        <activity
+            android:name="com.sukhayu.patient.ui.asha.family.MemberListActivity"
+            android:exported="false"
+            android:label="Family Members" />
 
         <!-- Emergency Contacts -->
-        <activity android:name="com.sukhayu.patient.ui.asha.emergency.EmergencyContactsActivity" android:exported="false" android:label="Emergency Contacts" />
+        <activity
+            android:name="com.sukhayu.patient.ui.asha.emergency.EmergencyContactsActivity"
+            android:exported="false"
+            android:label="Emergency Contacts" />
 
         <!-- Supervisor ASHA Detail -->
-        <activity android:name="com.sukhayu.patient.ui.supervisor.AshaDetailActivity" android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.supervisor.AshaDetailActivity"
+            android:exported="true" />
 
-        <!-- 🔥 NEW: Total Patients Search Screen -->
+        <!-- Total Patients Search Screen -->
         <activity
             android:name="com.sukhayu.patient.ui.asha.search.SearchPatientActivity"
             android:exported="false"
@@ -125,15 +212,31 @@
         </provider>
 
         <!-- Emergency -->
-        <activity android:name=".ui.emergency.EmergencyActivity" android:exported="false" android:screenOrientation="portrait" />
-        <activity android:name=".ui.emergency.EmergencyVCActivity" android:exported="false" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name=".ui.emergency.EmergencyActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.emergency.EmergencyVCActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <!-- Calls -->
-        <activity android:name=".ui.videocall.VideoCallActivity" android:exported="false" android:screenOrientation="portrait" />
-        <activity android:name=".ui.voicecall.VoiceCallActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.videocall.VideoCallActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.voicecall.VoiceCallActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <!-- Chat fallback -->
-        <activity android:name=".ui.chat.ChatFallbackActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.chat.ChatFallbackActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
     </application>
 

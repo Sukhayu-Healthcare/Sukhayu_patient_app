@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC">
+
+    <!-- Common header at top -->
+    <include
+        layout="@layout/include_header" />
+
+    <!-- Content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tv_title_view_surveys"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Surveys"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#0F172A"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Filters row (very simple for now) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <Spinner
+                android:id="@+id/spinner_survey_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:prompt="@string/action_view_surveys" />
+
+            <SearchView
+                android:id="@+id/search_patients"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:iconifiedByDefault="false"
+                android:queryHint="Search by name or phone" />
+        </LinearLayout>
+
+        <!-- Summary line (later we can bind real counts) -->
+        <TextView
+            android:id="@+id/tv_sync_summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Synced: 2 | Pending: 1"
+            android:textSize="14sp"
+            android:textColor="#64748B"
+            android:layout_marginBottom="8dp" />
+
+        <!-- RecyclerView for survey list -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_surveys"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:overScrollMode="ifContentScrolls" />
+
+    </LinearLayout>
+
+</LinearLayout>

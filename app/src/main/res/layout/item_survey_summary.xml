@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- First row: name + sync icon -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_patient_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Patient Name"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#0F172A" />
+
+            <ImageView
+                android:id="@+id/iv_sync_status"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_cloud_done" />
+        </LinearLayout>
+
+        <!-- Second row: type -->
+        <TextView
+            android:id="@+id/tv_survey_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TB Screening"
+            android:textSize="14sp"
+            android:textColor="#475569"
+            android:layout_marginTop="4dp" />
+
+        <!-- Date -->
+        <TextView
+            android:id="@+id/tv_survey_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="03 Dec 2025"
+            android:textSize="13sp"
+            android:textColor="#64748B"
+            android:layout_marginTop="2dp" />
+
+        <!-- Third row: village + status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:id="@+id/tv_village"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Village: Shivpur"
+                android:textSize="13sp"
+                android:textColor="#64748B" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="COMPLETED"
+                android:textSize="13sp"
+                android:textColor="#16A34A" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
