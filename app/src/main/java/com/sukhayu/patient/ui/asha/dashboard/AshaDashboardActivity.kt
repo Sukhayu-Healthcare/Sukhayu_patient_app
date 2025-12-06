@@ -24,6 +24,8 @@ import com.sukhayu.patient.asha.ui.surveys.tb.TbScreeningViewModel
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.ui.asha.emergency.EmergencyContactsActivity
 import com.sukhayu.patient.ui.asha.family.FamilyListActivity
+import com.sukhayu.patient.ui.asha.search.SearchPatientActivity
+
 import com.sukhayu.patient.ui.asha.nhp.NationalHealthProgramsActivity
 import com.sukhayu.patient.ui.asha.registration.RegisterPatientActivity
 import com.sukhayu.patient.ui.login.LoginActivity
@@ -64,8 +66,9 @@ class AshaDashboardActivity : AppCompatActivity() {
 
         // --- Card clicks ---
         findViewById<androidx.cardview.widget.CardView>(R.id.cardTotalPatients).setOnClickListener {
-            startActivity(Intent(this, FamilyListActivity::class.java))
+            startActivity(Intent(this, SearchPatientActivity::class.java))
         }
+
 
         findViewById<androidx.cardview.widget.CardView>(R.id.cardEmergency).setOnClickListener {
             startActivity(Intent(this, EmergencyContactsActivity::class.java))

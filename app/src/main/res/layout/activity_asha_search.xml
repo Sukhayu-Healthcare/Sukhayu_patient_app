@@ -1,15 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Existing search box -->
     <EditText
         android:id="@+id/etSearchQuery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Search by name or phone" />
+
+    <!-- NEW: toggle for Patients / Families -->
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggleViewMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:singleSelection="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPatientsMode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Patients"
+            android:checked="true"
+            style="?attr/materialButtonOutlinedStyle" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFamiliesMode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Families"
+            style="?attr/materialButtonOutlinedStyle" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <ProgressBar
         android:id="@+id/progressBar"

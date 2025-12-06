@@ -34,11 +34,39 @@ class LoginActivity : AppCompatActivity() {
 
     private val gson = Gson()
 
+    // 🔹 Auto-login if already logged in
+    override fun onStart() {
+        super.onStart()
+
+        // Ensure TokenManager is initialized
+        TokenManager.init(this)
+
+        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+        val token = prefs.getString("token", null)
+        val role = prefs.getString("role", null)?.lowercase()
+
+        // If token & role exist → skip login screen
+        if (!token.isNullOrEmpty() && !role.isNullOrEmpty()) {
+            when (role) {
+                "asha" -> {
+                    startActivity(Intent(this, AshaDashboardActivity::class.java))
+                }
+                "supervisor" -> {
+                    startActivity(Intent(this, SupervisorHomeActivity::class.java))
+                }
+                "patient" -> {
+                    startActivity(Intent(this, DashboardActivity::class.java))
+                }
+            }
+            finish() // don’t allow back press to return to login
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Initialize TokenManager
+        // Initialize TokenManager (safe to call again)
         TokenManager.init(this)
 
         val etUsername = findViewById<EditText>(R.id.etUsername)
@@ -66,7 +94,11 @@ class LoginActivity : AppCompatActivity() {
                     response: Response<Map<String, Any>>
                 ) {
                     if (!response.isSuccessful || response.body() == null) {
-                        Toast.makeText(this@LoginActivity, "Invalid login response", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Invalid login response",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return
                     }
 
@@ -81,35 +113,53 @@ class LoginActivity : AppCompatActivity() {
 
                             savePatientLogin(parsed)
 
-                            // 🔥 guard cache so it can't crash the app
+                            // guard cache so it can't crash the app
                             try {
                                 cachePatient(parsed.patient)
                             } catch (e: Exception) {
                                 Log.e("LoginActivity", "Failed to cache patient locally", e)
                             }
 
-                            startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
+                            startActivity(
+                                Intent(
+                                    this@LoginActivity,
+                                    DashboardActivity::class.java
+                                )
+                            )
                             finish()
                         }
 
-
                         /** ASHA / SUPERVISOR LOGIN **/
                         "asha", "supervisor" -> {
-                            val parsed = gson.fromJson(json, LoginResponseAshaOrSupervisor::class.java)
+                            val parsed =
+                                gson.fromJson(json, LoginResponseAshaOrSupervisor::class.java)
 
                             saveAshaOrSupervisorLogin(parsed)
 
                             if (role == "supervisor") {
-                                startActivity(Intent(this@LoginActivity, SupervisorHomeActivity::class.java))
+                                startActivity(
+                                    Intent(
+                                        this@LoginActivity,
+                                        SupervisorHomeActivity::class.java
+                                    )
+                                )
                             } else {
-                                Log.d("LoginActivity", "ASHA login branch reached, starting sync...")
+                                Log.d(
+                                    "LoginActivity",
+                                    "ASHA login branch reached, starting sync..."
+                                )
                                 CoroutineScope(Dispatchers.IO).launch {
                                     try {
-                                        val db = AshaLocalDatabase.getInstance(applicationContext)
+                                        val db =
+                                            AshaLocalDatabase.getInstance(applicationContext)
                                         val repo = PatientRepository(db, ApiClient.retrofit)
                                         repo.syncPatientsFromServer(parsed.token)
                                     } catch (e: Exception) {
-                                        Log.e("LoginActivity", "Failed to sync patients", e)
+                                        Log.e(
+                                            "LoginActivity",
+                                            "Failed to sync patients",
+                                            e
+                                        )
                                         runOnUiThread {
                                             Toast.makeText(
                                                 this@LoginActivity,
@@ -120,28 +170,49 @@ class LoginActivity : AppCompatActivity() {
                                     }
 
                                 }
-                                startActivity(Intent(this@LoginActivity, AshaDashboardActivity::class.java))
+                                startActivity(
+                                    Intent(
+                                        this@LoginActivity,
+                                        AshaDashboardActivity::class.java
+                                    )
+                                )
                             }
                             finish()
                         }
 
                         else -> {
-                            Toast.makeText(this@LoginActivity, "Unknown role", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Unknown role",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
-                    Toast.makeText(this@LoginActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Error: ${t.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             })
         }
     }
 
     private fun requestAudioPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                200
+            )
         }
     }
 
@@ -155,7 +226,8 @@ class LoginActivity : AppCompatActivity() {
             // Prefer patientId, fall back to userId, otherwise empty
             putString(
                 "user_id",
-                data.patient.patientId ?: data.patient.userId ?: "")
+                data.patient.patientId ?: data.patient.userId ?: ""
+            )
             putString("user_name", data.patient.name ?: "")
             putString("user_phone", data.patient.phone ?: "")
 
@@ -189,11 +261,11 @@ class LoginActivity : AppCompatActivity() {
             apply()
         }
 
-        // 🔥 NEW: also save into TokenManager so ViewModels can read it
+        // Also save into TokenManager so ViewModels can read it
         TokenManager.saveToken(
             token = data.token,
             userId = data.user.id ?: data.user.phone ?: "unknown",
-            supremeId = "",              // ASHA doesn’t have a supreme_id here, so keep empty
+            supremeId = "",              // ASHA doesn’t have a supreme_id here
             role = data.role
         )
     }
@@ -212,10 +284,10 @@ class LoginActivity : AppCompatActivity() {
                         ?: System.currentTimeMillis().toString(),
                     name = patient.name ?: "Unknown",
                     phone = patient.phone,
-                    gender = null,              // backend doesn't give here
+                    gender = null,
                     weightKg = null,
                     supremeId = patient.supremeId,
-                    age = null                  // backend doesn't give age here
+                    age = null
                 )
 
                 dao.insertOrUpdate(entity)
@@ -228,7 +300,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun calculateAge(dob: String): Int? {
         return try {
-            val formatter = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+            val formatter =
+                java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
             val birthDate = formatter.parse(dob) ?: return null
             val diff = java.util.Calendar.getInstance().time.time - birthDate.time
             (diff / (1000L * 60 * 60 * 24 * 365)).toInt()
@@ -242,7 +315,7 @@ class LoginActivity : AppCompatActivity() {
             "patient" -> "Patient"
             "asha" -> "ASHA Worker"
             "supervisor" -> "ASHA Supervisor"
-            else -> role.capitalize()
+            else -> role.replaceFirstChar { it.uppercase() }
         }
     }
 

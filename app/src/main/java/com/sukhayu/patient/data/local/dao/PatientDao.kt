@@ -14,7 +14,12 @@ interface PatientDao {
      * The query parameter should be passed as-is (e.g., "Sunita" or "9876543210")
      * and the query will automatically wrap it with wildcards.
      */
-    @Query("SELECT * FROM patients WHERE name LIKE '%' || :query || '%' OR phone LIKE '%' || :query || '%' LIMIT 10")
+    @Query(
+        "SELECT * FROM patients " +
+                "WHERE name LIKE '%' || :query || '%' " +
+                "OR phone LIKE '%' || :query || '%' " +
+                "LIMIT 10"
+    )
     suspend fun searchPatients(query: String): List<PatientEntity>
 
     @Query("SELECT * FROM patients WHERE id = :patientId LIMIT 1")
@@ -34,4 +39,8 @@ interface PatientDao {
 
     @Query("DELETE FROM patients")
     suspend fun deleteAll()
+
+    // 🔥 NEW — Delete a single patient by ID
+    @Query("DELETE FROM patients WHERE id = :id")
+    suspend fun deletePatientById(id: String)
 }
