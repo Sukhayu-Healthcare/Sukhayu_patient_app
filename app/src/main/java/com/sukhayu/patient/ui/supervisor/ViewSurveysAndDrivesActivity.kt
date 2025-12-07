@@ -3,24 +3,23 @@ package com.sukhayu.patient.ui.supervisor
 import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.Gravity
-import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.SupervisorSurveyDataResponse
+import com.sukhayu.patient.utils.HeaderUtils
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
-import com.sukhayu.patient.utils.HeaderUtils
 import java.util.*
 
 class ViewSurveysAndDrivesActivity : AppCompatActivity() {
@@ -30,6 +29,7 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
     private lateinit var btnFetchData: Button
     private lateinit var tvSummary: TextView
     private lateinit var btnDownload: Button
+    private lateinit var recordContainer: LinearLayout
     private lateinit var tableLayout: TableLayout
 
     private val surveyTypes = mapOf(
@@ -45,6 +45,7 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_surveys_and_drives)
+
         HeaderUtils.setupRoleInHeader(this)
         initViews()
         setupSpinner()
@@ -57,6 +58,7 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
         btnFetchData = findViewById(R.id.btnFetchData)
         tvSummary = findViewById(R.id.tvSummary)
         btnDownload = findViewById(R.id.btnDownload)
+        recordContainer = findViewById(R.id.recordContainer)
         tableLayout = findViewById(R.id.tableLayout)
     }
 
@@ -102,7 +104,6 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
         val token = prefs.getString("token", "") ?: ""
-
         if (token.isEmpty()) {
             Toast.makeText(this, "Authentication token not found", Toast.LENGTH_SHORT).show()
             return
@@ -113,7 +114,6 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
                 btnFetchData.isEnabled = false
                 btnFetchData.text = "Loading..."
 
-                // Remove supervisorId from API call
                 val response = ApiClient.retrofit.getSupervisorSurveyDataByTableAndDate(
                     "Bearer $token",
                     tableName,
@@ -121,15 +121,12 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
                 )
 
                 currentData = response
-                updateUI(response)
+                updateSummary(response)
+                displayCards(response)
                 displayTable(response)
 
             } catch (e: Exception) {
-                Toast.makeText(
-                    this@ViewSurveysAndDrivesActivity,
-                    "Error: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this@ViewSurveysAndDrivesActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                 e.printStackTrace()
             } finally {
                 btnFetchData.isEnabled = true
@@ -138,93 +135,129 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUI(data: SupervisorSurveyDataResponse) {
+    private fun updateSummary(data: SupervisorSurveyDataResponse) {
         tvSummary.text = "Total Records: ${data.count} | ASHAs: ${data.asha_count}"
         btnDownload.isEnabled = data.count > 0
     }
 
+    private fun displayCards(data: SupervisorSurveyDataResponse) {
+        recordContainer.removeAllViews()
+        if (data.records.isEmpty()) return
+
+        // Group records by date
+        val groupedByDate = data.records.groupBy { it["date"] ?: "Unknown Date" }
+
+        groupedByDate.forEach { (date, recordsByDate) ->
+            // Date header card
+            val dateCard = CardView(this).apply {
+                radius = 12f
+                setCardBackgroundColor(Color.parseColor("#BBDEFB"))
+                setContentPadding(16, 16, 16, 16)
+            }
+            val dateText = TextView(this).apply {
+                text = "Date: $date"
+                textSize = 16f
+                setTextColor(Color.BLACK)
+                setPadding(8, 8, 8, 8)
+            }
+            dateCard.addView(dateText)
+            recordContainer.addView(dateCard)
+
+            // ASHA-wise cards under each date
+            val groupedByAsha = recordsByDate.groupBy { it["asha_name"] ?: "Unknown ASHA" }
+            groupedByAsha.forEach { (ashaName, ashaRecords) ->
+                val ashaCard = CardView(this).apply {
+                    radius = 12f
+                    setCardBackgroundColor(Color.parseColor("#E3F2FD"))
+                    setContentPadding(16, 16, 16, 16)
+                }
+                val layout = LinearLayout(this).apply {
+                    orientation = LinearLayout.VERTICAL
+                }
+
+                val ashaHeader = TextView(this).apply {
+                    text = "ASHA: $ashaName (ID: ${ashaRecords.firstOrNull()?.get("asha_id") ?: "N/A"})"
+                    textSize = 14f
+                    setTextColor(Color.BLACK)
+                    setPadding(8, 8, 8, 8)
+                }
+                layout.addView(ashaHeader)
+
+                // Show record details
+                ashaRecords.forEach { record ->
+                    record.forEach { (key, value) ->
+                        if (key != "asha_name" && key != "asha_id" && key != "date") {
+                            val tv = TextView(this).apply {
+                                text = "${key.replace("_", " ").uppercase()}: ${value ?: "N/A"}"
+                                setPadding(8, 4, 8, 4)
+                            }
+                            layout.addView(tv)
+                        }
+                    }
+                }
+
+                ashaCard.addView(layout)
+                val lp = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(16, 8, 16, 8)
+                }
+                recordContainer.addView(ashaCard, lp)
+            }
+        }
+    }
+
     private fun displayTable(data: SupervisorSurveyDataResponse) {
         tableLayout.removeAllViews()
+        if (data.records.isEmpty()) return
 
-        if (data.records.isEmpty()) {
-            val noDataRow = TableRow(this)
-            val noDataText = TextView(this).apply {
-                text = "No records found"
-                setPadding(16, 16, 16, 16)
-                gravity = Gravity.CENTER
-            }
-            noDataRow.addView(noDataText)
-            tableLayout.addView(noDataRow)
-            return
-        }
-
-        // Header row
-        val headerRow = TableRow(this)
         val headers = data.records.firstOrNull()?.keys?.toList() ?: return
-
-        headers.forEach { header ->
-            val headerText = TextView(this).apply {
-                text = header.replace("_", " ").uppercase()
+        val headerRow = TableRow(this)
+        headers.forEach { key ->
+            val tv = TextView(this).apply {
+                text = key.replace("_", " ").uppercase()
                 setPadding(12, 12, 12, 12)
-                setTypeface(null, Typeface.BOLD)
                 setBackgroundColor(Color.LTGRAY)
                 gravity = Gravity.CENTER
                 minWidth = 150
             }
-            headerRow.addView(headerText)
+            headerRow.addView(tv)
         }
         tableLayout.addView(headerRow)
 
-        // Data rows
         data.records.forEach { record ->
-            val dataRow = TableRow(this)
+            val row = TableRow(this)
             headers.forEach { key ->
-                val cellText = TextView(this).apply {
+                val tv = TextView(this).apply {
                     text = record[key]?.toString() ?: "N/A"
                     setPadding(12, 12, 12, 12)
                     setBackgroundColor(Color.WHITE)
                     minWidth = 150
                 }
-                dataRow.addView(cellText)
+                row.addView(tv)
             }
-            tableLayout.addView(dataRow)
-
-            // Divider between rows
-            val divider = View(this).apply {
-                layoutParams = TableRow.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT,
-                    1
-                )
-                setBackgroundColor(Color.GRAY)
-            }
-            tableLayout.addView(divider)
+            tableLayout.addView(row)
         }
     }
 
     private fun exportToCsv() {
         val data = currentData ?: return
-
         try {
             val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val fileName = "survey_${data.table}_${data.date}_$timestamp.csv"
+            val fileName = "survey_${timestamp}.csv"
 
-            // Build CSV content
             val csvContent = buildString {
-                // Headers
                 val headers = data.records.firstOrNull()?.keys?.toList() ?: return@buildString
                 appendLine(headers.joinToString(",") { "\"${it.replace("_", " ").uppercase()}\"" })
-
-                // Data rows
                 data.records.forEach { record ->
                     val row = headers.joinToString(",") { key ->
-                        val value = record[key]?.toString() ?: "N/A"
-                        "\"${value.replace("\"", "\"\"")}\""
+                        "\"${record[key]?.toString()?.replace("\"", "\"\"") ?: "N/A"}\""
                     }
                     appendLine(row)
                 }
             }
 
-            // Save depending on Android version
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 saveToDownloadsMediaStore(fileName, csvContent)
             } else {
@@ -239,50 +272,23 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun saveToDownloadsMediaStore(fileName: String, content: String) {
-        val contentValues = ContentValues().apply {
+        val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
             put(MediaStore.MediaColumns.MIME_TYPE, "text/csv")
-            put(
-                MediaStore.MediaColumns.RELATIVE_PATH,
-                Environment.DIRECTORY_DOWNLOADS + "/SukhayuSurveys"
-            )
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/SukhayuSurveys")
         }
-
-        val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-
-        if (uri != null) {
-            contentResolver.openOutputStream(uri)?.use { outputStream ->
-                outputStream.write(content.toByteArray())
-                outputStream.flush()
-            }
-
-            Toast.makeText(
-                this,
-                "CSV file saved to Downloads/SukhayuSurveys/$fileName",
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
-            throw Exception("Failed to create file in Downloads")
+        val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+        uri?.let {
+            contentResolver.openOutputStream(it)?.use { out -> out.write(content.toByteArray()) }
+            Toast.makeText(this, "CSV saved: Downloads/SukhayuSurveys/$fileName", Toast.LENGTH_LONG).show()
         }
     }
 
     private fun saveToDownloadsLegacy(fileName: String, content: String) {
-        val directory = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-            "SukhayuSurveys"
-        )
-
-        if (!directory.exists()) {
-            directory.mkdirs()
-        }
-
+        val directory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "SukhayuSurveys")
+        if (!directory.exists()) directory.mkdirs()
         val file = File(directory, fileName)
         file.writeText(content)
-
-        Toast.makeText(
-            this,
-            "CSV file saved to Downloads/SukhayuSurveys/$fileName",
-            Toast.LENGTH_LONG
-        ).show()
+        Toast.makeText(this, "CSV saved: Downloads/SukhayuSurveys/$fileName", Toast.LENGTH_LONG).show()
     }
 }

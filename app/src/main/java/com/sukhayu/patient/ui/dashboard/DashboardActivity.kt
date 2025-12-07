@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
@@ -19,12 +20,13 @@ import com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity
 import com.sukhayu.patient.ui.consultation.ConsultDoctorActivity
 import com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity
 import com.sukhayu.patient.ui.consultation.PastConsultationsActivity
-// import com.sukhayu.patient.ui.emergency.EmergencyActivity
 import com.sukhayu.patient.ui.login.LoginActivity
 import com.sukhayu.patient.ui.profile.ProfileActivity
 import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.utils.HeaderUtils
 import com.sukhayu.utils.LocaleHelper
+import com.sukhayu.patient.ui.patient.appointment.BookAppointmentActivity
+import com.sukhayu.patient.ui.emergency.EmergencyActivity
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -48,6 +50,9 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         HeaderUtils.setupRoleInHeader(this)
+
+        // Setup language toggle in header
+        setupLanguageToggle()
 
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
         val userName = prefs.getString("user_name", "") ?: ""
@@ -93,9 +98,9 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, SymptomChatActivity::class.java))
         }
 
-        // CONSULT DOCTOR
-        findViewById<MaterialCardView>(R.id.cardConsultDoctor).setOnClickListener {
-            consultSymptomLauncher.launch(Intent(this, CheckSymptomsActivity::class.java))
+        // BOOK APPOINTMENT
+        findViewById<MaterialCardView>(R.id.cardBookAppointment).setOnClickListener {
+            startActivity(Intent(this, BookAppointmentActivity::class.java))
         }
 
         // PAST CONSULTATIONS
@@ -108,10 +113,10 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, DiseaseOutbreakActivity::class.java))
         }
 
-        // // EMERGENCY
-        // findViewById<Button>(R.id.btnEmergency).setOnClickListener {
-        //     startActivity(Intent(this, EmergencyActivity::class.java))
-        // }
+        // EMERGENCY
+        findViewById<Button>(R.id.btnEmergency).setOnClickListener {
+            startActivity(Intent(this, EmergencyActivity::class.java))
+        }
 
         // LOGOUT
         findViewById<Button>(R.id.btnLogout).setOnClickListener {
@@ -122,11 +127,18 @@ class DashboardActivity : AppCompatActivity() {
             finish()
         }
 
-        // ----------------------
-        // LANGUAGE TOGGLE BUTTONS (REQUIRED)
-        // ----------------------
-        val tvEnglish = findViewById<TextView>(R.id.tvEnglish)
-        val tvMarathi = findViewById<TextView>(R.id.tvMarathi)
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
+    }
+
+    /**
+     * Finds the language toggle bar in the header and sets up listeners.
+     */
+    private fun setupLanguageToggle() {
+        val headerView = findViewById<View>(R.id.header)
+        val tvEnglish = headerView?.findViewById<TextView>(R.id.tvEnglish)
+        val tvMarathi = headerView?.findViewById<TextView>(R.id.tvMarathi)
 
         tvEnglish?.setOnClickListener {
             getSharedPreferences("settings", MODE_PRIVATE)
@@ -139,12 +151,7 @@ class DashboardActivity : AppCompatActivity() {
                 .edit().putString("app_lang", "mr").apply()
             recreate()
         }
-
-        requestAudioPermission()
-        voiceHelper = VoiceInputHelper(this)
-        VoiceInputHelper.attachToAllEditTexts(this)
     }
-
 
     private fun requestAudioPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)

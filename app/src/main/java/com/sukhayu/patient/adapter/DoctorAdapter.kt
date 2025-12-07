@@ -7,7 +7,7 @@ import com.sukhayu.patient.databinding.ItemDoctorBinding
 import com.sukhayu.patient.model.Doctor
 
 class DoctorAdapter(
-    private val onVideoCallClick: (Doctor) -> Unit
+    private val onDoctorClick: (Doctor) -> Unit
 ) : RecyclerView.Adapter<DoctorAdapter.DoctorViewHolder>() {
 
     private var doctors = listOf<Doctor>()
@@ -20,9 +20,8 @@ class DoctorAdapter(
     override fun onBindViewHolder(holder: DoctorViewHolder, position: Int) {
         val doctor = doctors[position]
         holder.bind(doctor)
-        
-        holder.binding.btnVideoCall.setOnClickListener {
-            onVideoCallClick(doctor)
+        holder.binding.root.setOnClickListener {
+            onDoctorClick(doctor)
         }
     }
 
@@ -39,7 +38,6 @@ class DoctorAdapter(
         fun bind(doctor: Doctor) {
             binding.tvDoctorName.text = doctor.name
             binding.tvDoctorSpecialization.text = doctor.specialty ?: "General Physician"
-            binding.tvDoctorRating.text = "⭐ ${doctor.rating ?: "N/A"}"
         }
     }
 }

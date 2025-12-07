@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "600330207172",
+    "project_id": "asha-c5357",
+    "storage_bucket": "asha-c5357.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:600330207172:android:c5a09e8780f13d50942e91",
+        "android_client_info": {
+          "package_name": "com.sukhayu.patient"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM5wo-j-WSKS-4TPF1N88TNrdspk4zsGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

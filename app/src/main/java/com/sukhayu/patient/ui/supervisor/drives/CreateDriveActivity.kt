@@ -9,13 +9,18 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.sukhayu.utils.VoiceInputHelper
+import com.google.firebase.messaging.FirebaseMessaging
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.CreateNoticeRequest
 import com.sukhayu.patient.data.remote.CreateNoticeResponse
+import com.sukhayu.patient.data.remote.SaveFcmTokenRequest
+import com.sukhayu.patient.data.remote.SaveFcmTokenResponse
+import com.sukhayu.patient.data.remote.SendToAshaRequest
+import com.sukhayu.patient.data.remote.SendToAshaResponse
 import com.sukhayu.patient.utils.HeaderUtils
 import com.sukhayu.patient.utils.TokenManager
+import com.sukhayu.utils.VoiceInputHelper
 import java.text.SimpleDateFormat
 import java.util.*
 import retrofit2.Call
@@ -52,6 +57,9 @@ class CreateDriveActivity : AppCompatActivity() {
     private val authToken: String
         get() = "Bearer ${TokenManager.getToken()}"
 
+    private val PREFS_NAME = "fcm_prefs"
+    private val KEY_FCM_TOKEN = "fcm_token"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_drive)
@@ -62,6 +70,7 @@ class CreateDriveActivity : AppCompatActivity() {
         TokenManager.init(applicationContext)
         setupAnnouncementTypeSpinner()
         setupListeners()
+        fetchAndSaveFcmTokenIfNeeded()
     }
 
     private fun initViews() {
@@ -124,6 +133,31 @@ class CreateDriveActivity : AppCompatActivity() {
         voiceHelper.startVoiceInput(editText)
     }
 
+    private fun fetchAndSaveFcmTokenIfNeeded() {
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val existingToken = prefs.getString(KEY_FCM_TOKEN, null)
+        if (existingToken == null) {
+            FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                if (!token.isNullOrEmpty()) {
+                    prefs.edit().putString(KEY_FCM_TOKEN, token).apply()
+                    saveFcmTokenToServer(token)
+                }
+            }
+        }
+    }
+
+    private fun saveFcmTokenToServer(token: String) {
+        ApiClient.retrofit.saveFcmToken(authToken, SaveFcmTokenRequest(token))
+            .enqueue(object : Callback<SaveFcmTokenResponse> {
+                override fun onResponse(call: Call<SaveFcmTokenResponse>, response: Response<SaveFcmTokenResponse>) {
+                    // Optionally handle response
+                }
+                override fun onFailure(call: Call<SaveFcmTokenResponse>, t: Throwable) {
+                    // Optionally handle failure
+                }
+            })
+    }
+
     private fun createAnnouncement() {
         val venue = etVenue.text.toString().trim()
         val message = etMessage.text.toString().trim()
@@ -170,6 +204,10 @@ class CreateDriveActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<CreateNoticeResponse>, response: Response<CreateNoticeResponse>) {
                     btnCreate.isEnabled = true
                     if (response.isSuccessful && response.body()?.success == true) {
+                        val noticeId = response.body()?.notice?.notice_id
+                        if (noticeId != null) {
+                            sendNoticeToAsha(noticeId)
+                        }
                         Toast.makeText(this@CreateDriveActivity, "Announcement sent: ${response.body()?.message}", Toast.LENGTH_LONG).show()
                         finish()
                     } else {
@@ -180,6 +218,18 @@ class CreateDriveActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<CreateNoticeResponse>, t: Throwable) {
                     btnCreate.isEnabled = true
                     Toast.makeText(this@CreateDriveActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun sendNoticeToAsha(noticeId: Int) {
+        ApiClient.retrofit.sendNoticeToAsha(authToken, SendToAshaRequest(noticeId))
+            .enqueue(object : Callback<SendToAshaResponse> {
+                override fun onResponse(call: Call<SendToAshaResponse>, response: Response<SendToAshaResponse>) {
+                    // Optionally show a toast or log
+                }
+                override fun onFailure(call: Call<SendToAshaResponse>, t: Throwable) {
+                    // Optionally show a toast or log
                 }
             })
     }

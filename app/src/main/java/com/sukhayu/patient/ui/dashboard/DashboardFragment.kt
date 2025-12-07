@@ -36,7 +36,7 @@ class DashboardFragment : Fragment() {
 
     private fun setupDoctorsList() {
         val doctors = DummyData.getDummyDoctors()
-        doctorAdapter = DoctorAdapter(doctors) { doctor ->
+        doctorAdapter = DoctorAdapter { doctor ->
             startVideoCall(doctor.id, doctor.name)
         }
         
@@ -44,6 +44,8 @@ class DashboardFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = doctorAdapter
         }
+
+        doctorAdapter.submitList(doctors)
     }
 
     private fun setupQuickVideoCall() {

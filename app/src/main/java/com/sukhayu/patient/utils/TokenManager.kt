@@ -2,6 +2,7 @@ package com.sukhayu.patient.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 
 object TokenManager {
     private const val PREF_NAME = "auth"              // MUST MATCH LoginActivity
@@ -17,6 +18,7 @@ object TokenManager {
     }
 
     fun saveToken(token: String, userId: String = "", supremeId: String = "", role: String = "") {
+        Log.d("TokenManager", "Saving token: $token")
         sharedPreferences.edit().apply {
             putString(KEY_AUTH_TOKEN, token)
             if (userId.isNotEmpty()) putString(KEY_USER_ID, userId)

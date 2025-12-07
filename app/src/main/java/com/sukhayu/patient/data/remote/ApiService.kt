@@ -170,6 +170,25 @@ data class CreateNoticeResponse(
     val notice: Notice
 )
 
+data class SaveFcmTokenRequest(
+    val fcm_token: String
+)
+
+data class SaveFcmTokenResponse(
+    val success: Boolean,
+    val message: String,
+    val token: Any?
+)
+
+data class SendToAshaRequest(
+    val notice_id: Int
+)
+
+data class SendToAshaResponse(
+    val success: Boolean,
+    val message: String
+)
+
 
 interface ApiService {
 
@@ -310,6 +329,18 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body body: CreateNoticeRequest
     ): Call<CreateNoticeResponse>
+
+    @POST("noti/save-token")
+    fun saveFcmToken(
+        @Header("Authorization") token: String,
+        @Body body: SaveFcmTokenRequest
+    ): Call<SaveFcmTokenResponse>
+
+    @POST("asha/supervisor/send-to-asha")
+    fun sendNoticeToAsha(
+        @Header("Authorization") token: String,
+        @Body body: SendToAshaRequest
+    ): Call<SendToAshaResponse>
 
     @POST("analyze")
     suspend fun analyzeComplaint(

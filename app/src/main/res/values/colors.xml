@@ -33,4 +33,5 @@
     <color name="tip_orange">#FFF4EA</color>
 
     <color name="background_light">#F5F5F5</color>
+    <color name="colorPrimary">#1976D2</color>
 </resources>

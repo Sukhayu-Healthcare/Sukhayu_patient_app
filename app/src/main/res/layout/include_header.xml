@@ -13,6 +13,15 @@
 
     </LinearLayout>
 
+    <!-- 🌐 LANGUAGE TOGGLE BAR (moved from dashboard) -->
+    <LinearLayout android:id="@+id/languageToggleBar" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingHorizontal="16dp" android:paddingVertical="4dp" android:orientation="horizontal" android:gravity="end">
+
+        <TextView android:id="@+id/tvEnglish" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="English" android:textColor="#1E293B" android:textSize="14sp" android:padding="6dp" android:layout_marginEnd="12dp" />
+
+        <TextView android:id="@+id/tvMarathi" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="मराठी" android:textColor="#1E293B" android:textSize="14sp" android:padding="6dp" />
+    </LinearLayout>
+    <!-- END LANGUAGE TOGGLE -->
+
     <!-- Role Badge Row - Full Width, Large & Prominent -->
     <LinearLayout android:id="@+id/headerRoleContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center" android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="16dp" android:paddingBottom="16dp" android:background="@drawable/role_badge_background" android:visibility="visible">
 
