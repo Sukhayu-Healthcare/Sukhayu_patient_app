@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme attributes for color system -->
+    <attr name="colorBackground" format="color" />
+    <attr name="colorTextPrimary" format="color" />
+    <attr name="colorTextSecondary" format="color" />
+    <attr name="colorTextMuted" format="color" />
+    <attr name="colorSuccess" format="color" />
+</resources>
+

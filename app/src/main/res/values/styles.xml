@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         BASE BUTTON STYLES - Reusable across entire app
+         ═════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- PRIMARY BUTTON - Main CTAs (Conduct Survey, Register Patient, etc.) -->
+    <style name="Widget.App.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <!-- SECONDARY BUTTON - Navigation, info screens (View Surveys, Health Drives) -->
+    <style name="Widget.App.Button.Secondary" parent="Widget.MaterialComponents.OutlinedButton">
+        <item name="strokeColor">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorSecondary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <!-- DANGER BUTTON - Logout, delete, emergency (Danger Red) -->
+    <style name="Widget.App.Button.Danger" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/colorError</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <!-- SUCCESS BUTTON - Confirm, submit, complete -->
+    <style name="Widget.App.Button.Success" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/colorSuccess</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         TEXT STYLES
+         ═════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- Heading 1 - Screen titles, main headings -->
+    <style name="TextAppearance.App.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Heading 2 - Card titles, section headers -->
+    <style name="TextAppearance.App.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Body text - Regular content -->
+    <style name="TextAppearance.App.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Secondary text - Labels, captions -->
+    <style name="TextAppearance.App.Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/colorTextSecondary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Caption text - Hints, muted text -->
+    <style name="TextAppearance.App.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">@color/colorTextMuted</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Widget.MaterialComponents.OutlinedButton"
+        parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <!-- Optional: put your secondary button customizations here -->
+    </style>
+
+
+</resources>
+
