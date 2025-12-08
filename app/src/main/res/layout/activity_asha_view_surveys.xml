@@ -43,7 +43,7 @@
                 android:layout_weight="1"
                 android:prompt="@string/action_view_surveys" />
 
-            <SearchView
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_patients"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

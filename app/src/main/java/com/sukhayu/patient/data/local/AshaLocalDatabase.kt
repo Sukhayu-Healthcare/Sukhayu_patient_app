@@ -24,9 +24,10 @@ import kotlinx.coroutines.launch
         TbScreeningEntity::class,
         TbFollowUpEntity::class,
         GeneralSurveyEntity::class,
-        SurveySummaryEntity::class         // ✅ Added for View Surveys Page
+        SurveySummaryEntity::class,
+        TaskEntity::class                  // ✅ Added for Task/Schedule
     ],
-    version = 10,                          // 🚨 MUST increment because entity list changed
+    version = 11,                          // 🚨 INCREMENTED for TaskEntity
     exportSchema = false
 )
 abstract class AshaLocalDatabase : RoomDatabase() {
@@ -39,6 +40,7 @@ abstract class AshaLocalDatabase : RoomDatabase() {
     abstract fun ancVisitDao(): AncVisitDao
     abstract fun tbScreeningDao(): TbScreeningDao
     abstract fun tbFollowUpDao(): TbFollowUpDao
+    abstract fun taskDao(): TaskDao
     abstract fun generalSurveyDao(): GeneralSurveyDao
 
     // ✅ Newly added

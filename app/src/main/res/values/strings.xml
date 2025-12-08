@@ -19,6 +19,7 @@
     <string name="desc_total_patients">Total patients count</string>
     <string name="desc_active_cases">Active cases</string>
     <string name="desc_completed_today">Completed today</string>
+    <string name="desc_my_schedule">My schedule</string>
     <string name="desc_emergency_cases">Emergency cases</string>
 
     <!-- Quick actions -->

@@ -31,4 +31,14 @@ interface SurveySummaryDao {
         WHERE ashaId = :ashaId AND isSynced = 0
     """)
     fun countPendingForAsha(ashaId: String): Flow<Int>
+
+    /**
+     * Mark a survey summary as synced by its surveyLocalId and ashaId
+     */
+    @Query("""
+        UPDATE survey_summary
+        SET isSynced = 1
+        WHERE surveyLocalId = :surveyLocalId AND ashaId = :ashaId
+    """)
+    suspend fun markSummaryAsSynced(surveyLocalId: String, ashaId: String)
 }

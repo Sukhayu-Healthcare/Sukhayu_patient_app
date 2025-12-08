@@ -127,6 +127,12 @@
             android:exported="false"
             android:label="View Surveys" />
 
+        <!-- 🔥 NEW: ASHA Schedule Activity -->
+        <activity
+            android:name="com.sukhayu.patient.ui.asha.schedule.AshaScheduleActivity"
+            android:exported="false"
+            android:label="My Schedule" />
+
         <!-- Pregnancy / ANC -->
         <activity
             android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySurveyActivity"

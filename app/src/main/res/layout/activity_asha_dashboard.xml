@@ -102,15 +102,25 @@
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2">
 
                     <!-- Metric card - Purple -->
-                    <androidx.cardview.widget.CardView android:layout_width="0dp" android:layout_weight="1" android:layout_height="120dp" android:layout_marginEnd="8dp" app:cardCornerRadius="12dp" app:cardElevation="2dp">
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardCompletedToday"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="120dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="2dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
 
                         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="#F3E5F5" android:padding="14dp" android:gravity="center">
 
-                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_calendar" app:tint="#7B1FA2" android:contentDescription="@string/desc_completed_today" />
+                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_calendar" app:tint="#7B1FA2" android:contentDescription="@string/desc_my_schedule" />
 
 
 
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed Today" android:textSize="16sp" android:textColor="#424242" android:layout_marginTop="4dp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="My Schedule" android:textSize="16sp" android:textColor="#424242" android:layout_marginTop="4dp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
