@@ -67,7 +67,7 @@
     <string name="asha_view_surveys">View Surveys</string>
     <string name="asha_health_drives">Health Drives</string>
 
-    <!-- Older quick action labels from your file -->
+    <!-- Older quick action labels -->
     <string name="action_view_surveys">View Patient Survey</string>
     <string name="action_health_drives">Announcement</string>
     <string name="action_register_patient">Register New Patient</string>

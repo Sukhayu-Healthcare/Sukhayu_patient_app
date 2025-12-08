@@ -13,7 +13,6 @@ import retrofit2.http.Query
 import retrofit2.Response
 import com.sukhayu.patient.data.remote.SupervisorSurveyDataResponse
 
-
 data class LoginRequest(
     val phone: String,
     val password: String
@@ -33,7 +32,6 @@ data class LoginResponsePatient(
     val patient: PatientInfo,
     val familyProfiles: List<Any>? = null
 )
-
 
 data class AshaInfo(
     val userId: String,
@@ -59,7 +57,21 @@ data class AshaWorker(
     val profile_pic: String?
 )
 
+/**
+ * Must match backend JSON:
+ * {
+ *   "total": number,
+ *   "page": number,
+ *   "limit": number,
+ *   "totalPages": number,
+ *   "ashas": [ ... ]
+ * }
+ */
 data class AshaListResponse(
+    val total: Int,
+    val page: Int,
+    val limit: Int,
+    val totalPages: Int,
     val ashas: List<AshaWorker>
 )
 
@@ -189,7 +201,6 @@ data class SendToAshaResponse(
     val message: String
 )
 
-
 interface ApiService {
 
     @POST("patient/v2/login")
@@ -208,17 +219,23 @@ interface ApiService {
         @Body body: SelfUpdateRequest
     ): Call<UpdateProfileResponse>
 
-
     @POST("asha/register-asha")
     fun registerAsha(
         @Header("Authorization") token: String,
         @Body body: RegisterAshaRequest
     ): Call<RegisterAshaResponse>
 
+    /**
+     * UPDATED:
+     * Adds `page` & `limit` as query params
+     * Uses suspend for coroutine calls
+     */
     @GET("asha/all-ashas")
-    fun getAshaList(
-        @Header("Authorization") token: String
-    ): Call<AshaListResponse>
+    suspend fun getAshaList(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int
+    ): AshaListResponse
 
     @POST("asha/patient/register")
     fun registerPatient(
@@ -260,7 +277,6 @@ interface ApiService {
         @Path("table") table: String,
         @Path("date") date: String
     ): SupervisorSurveyDataResponse
-
 
     @POST("survey/genral")
     suspend fun submitGeneralSurvey(
@@ -346,6 +362,4 @@ interface ApiService {
     suspend fun analyzeComplaint(
         @Body request: AnalyzeRequest
     ): Response<AnalyzeResponse>
-
-
 }

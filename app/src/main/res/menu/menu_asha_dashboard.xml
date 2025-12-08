@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- Profile -->
+    <!-- Profile (optional, not wired yet) -->
     <item
         android:id="@+id/menu_profile"
-        android:title="Profile" />
+        android:title="Profile"
+        app:showAsAction="never" />
 
-    <!-- Daily Tasks (UI only for now) -->
+    <!-- Language picker -->
     <item
-        android:id="@+id/menu_daily_tasks"
-        android:title="Daily Tasks" />
+        android:id="@+id/menu_language"
+        android:title="Language / भाषा"
+        android:icon="@drawable/ic_language"
+        app:showAsAction="never" />
 
-    <!-- Settings (UI only for now) -->
-    <item
-        android:id="@+id/menu_settings"
-        android:title="Settings" />
-
-    <!-- Logout -->
+    <!-- Logout item (this is what Kotlin uses) -->
     <item
         android:id="@+id/menu_logout"
-        android:title="Logout" />
+        android:title="@string/logout_label"
+        android:icon="@drawable/ic_logout"
+        app:showAsAction="never" />
+
 </menu>
