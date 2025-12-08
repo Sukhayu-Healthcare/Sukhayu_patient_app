@@ -18,8 +18,7 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
-
-    <application android:name="com.sukhayu.SukhayuApplication" android:allowBackup="true" android:icon="@drawable/asha_jyoti_app_logo" android:label="@string/app_name" android:theme="@style/Theme.RoleBasedTelemedicinePatient" android:supportsRtl="true" android:requestLegacyExternalStorage="true">
+    <application android:name="com.sukhayu.SukhayuApplication" android:allowBackup="true" android:icon="@drawable/asha_jyoti_app_logo" android:label="@string/app_name" android:requestLegacyExternalStorage="true" android:supportsRtl="true" android:theme="@style/Theme.RoleBasedTelemedicinePatient">
 
         <!-- Login -->
         <activity android:name="com.sukhayu.patient.ui.login.LoginActivity" android:exported="true">
@@ -37,7 +36,7 @@
         <activity android:name="com.sukhayu.patient.ui.consultation.DoctorDetailActivity" android:exported="false" />
 
         <!-- WebRTC -->
-        <activity android:name="com.sukhayu.patient.ui.consultation.VideoCallActivity" android:exported="false" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name="com.sukhayu.patient.ui.consultation.VideoCallActivity" android:configChanges="orientation|keyboardHidden|screenSize" android:exported="false" android:screenOrientation="portrait" />
 
         <!-- AI Symptom Checker -->
         <activity android:name="com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity" android:exported="true" />
@@ -68,6 +67,12 @@
         <!-- ASHA Survey Home -->
         <activity android:name="com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity" android:exported="false" android:label="Surveys" />
 
+        <!-- 🔥 NEW: ASHA View Surveys -->
+        <activity android:name="com.sukhayu.patient.asha.ui.surveys.AshaViewSurveysActivity" android:exported="false" android:label="View Surveys" />
+
+        <!-- 🔥 NEW: ASHA Schedule Activity -->
+        <activity android:name="com.sukhayu.patient.ui.asha.schedule.AshaScheduleActivity" android:exported="false" android:label="My Schedule" />
+
         <!-- Pregnancy / ANC -->
         <activity android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySurveyActivity" android:exported="false" android:label="Pregnancy / ANC Survey" />
         <activity android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.FirstAncVisitActivity" android:exported="false" android:label="First ANC Visit" />
@@ -97,7 +102,7 @@
         <!-- Supervisor ASHA Detail -->
         <activity android:name="com.sukhayu.patient.ui.supervisor.AshaDetailActivity" android:exported="true" />
 
-        <!-- 🔥 NEW: Total Patients Search Screen -->
+        <!-- Total Patients Search Screen -->
         <activity android:name="com.sukhayu.patient.ui.asha.search.SearchPatientActivity" android:exported="false" android:label="Search Patients" />
 
         <!-- FileProvider -->
@@ -107,7 +112,7 @@
 
         <!-- Emergency -->
         <activity android:name=".ui.emergency.EmergencyActivity" android:exported="false" android:screenOrientation="portrait" />
-        <activity android:name=".ui.emergency.EmergencyVCActivity" android:exported="false" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name=".ui.emergency.EmergencyVCActivity" android:configChanges="orientation|keyboardHidden|screenSize" android:exported="false" android:screenOrientation="portrait" />
 
         <!-- Calls -->
         <activity android:name=".ui.videocall.VideoCallActivity" android:exported="false" android:screenOrientation="portrait" />

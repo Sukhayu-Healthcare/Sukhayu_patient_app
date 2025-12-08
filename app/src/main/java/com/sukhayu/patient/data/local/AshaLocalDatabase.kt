@@ -7,22 +7,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.sukhayu.patient.DummyData
-import com.sukhayu.patient.data.local.dao.AncVisitDao
-import com.sukhayu.patient.data.local.dao.ConsultationDao
-import com.sukhayu.patient.data.local.dao.GeneralSurveyDao
-import com.sukhayu.patient.data.local.dao.PatientDao
-import com.sukhayu.patient.data.local.dao.PregnancyDao
-import com.sukhayu.patient.data.local.dao.PrescriptionDao
-import com.sukhayu.patient.data.local.dao.TbFollowUpDao
-import com.sukhayu.patient.data.local.dao.TbScreeningDao
-import com.sukhayu.patient.data.local.entity.AncVisitEntity
-import com.sukhayu.patient.data.local.entity.ConsultationEntity
-import com.sukhayu.patient.data.local.entity.GeneralSurveyEntity
-import com.sukhayu.patient.data.local.entity.PatientEntity
-import com.sukhayu.patient.data.local.entity.PregnancyEntity
-import com.sukhayu.patient.data.local.entity.PrescriptionItemEntity
-import com.sukhayu.patient.data.local.entity.TbFollowUpEntity
-import com.sukhayu.patient.data.local.entity.TbScreeningEntity
+import com.sukhayu.patient.data.local.dao.*
+import com.sukhayu.patient.data.local.entity.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -37,13 +23,16 @@ import kotlinx.coroutines.launch
         AncVisitEntity::class,
         TbScreeningEntity::class,
         TbFollowUpEntity::class,
-        GeneralSurveyEntity::class
+        GeneralSurveyEntity::class,
+        SurveySummaryEntity::class,
+        TaskEntity::class                  // ✅ Added for Task/Schedule
     ],
-    version = 9,                             // Incremented to trigger DB recreation and seeding
+    version = 11,                          // 🚨 INCREMENTED for TaskEntity
     exportSchema = false
 )
 abstract class AshaLocalDatabase : RoomDatabase() {
 
+    // --- DAO declarations ---
     abstract fun consultationDao(): ConsultationDao
     abstract fun prescriptionDao(): PrescriptionDao
     abstract fun patientDao(): PatientDao
@@ -51,25 +40,26 @@ abstract class AshaLocalDatabase : RoomDatabase() {
     abstract fun ancVisitDao(): AncVisitDao
     abstract fun tbScreeningDao(): TbScreeningDao
     abstract fun tbFollowUpDao(): TbFollowUpDao
+    abstract fun taskDao(): TaskDao
     abstract fun generalSurveyDao(): GeneralSurveyDao
+
+    // ✅ Newly added
+    abstract fun surveySummaryDao(): SurveySummaryDao
+
 
     companion object {
         @Volatile private var INSTANCE: AshaLocalDatabase? = null
 
-        // Coroutine scope for database operations during initialization
         private val databaseScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
         /**
-         * Database callback to seed dummy patient data when database is created for the first time.
-         * This ensures offline-first architecture with test data available immediately.
+         * Callback only seeds PATIENTS table (unchanged).
          */
         private class DatabaseCallback : Callback() {
-
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
-                Log.d("DB_SEED", "Database onCreate triggered - starting patient seeding")
+                Log.d("DB_SEED", "Database created — seeding dummy patients")
 
-                // Get database instance and seed data in background coroutine
                 INSTANCE?.let { database ->
                     databaseScope.launch {
                         try {
@@ -77,23 +67,16 @@ abstract class AshaLocalDatabase : RoomDatabase() {
                             val dummyPatients = DummyData.getDummyPatients()
 
                             Log.d("DB_SEED", "Inserting ${dummyPatients.size} dummy patients...")
-
-                            // Insert all dummy patients
                             patientDao.insertPatients(dummyPatients)
 
                             val count = patientDao.getPatientCount()
-                            Log.d("DB_SEED", "✅ Successfully seeded $count dummy patients to database")
+                            Log.d("DB_SEED", "Seed complete — total patients: $count")
 
-                            // Log sample patient names for verification
-                            val samplePatients = patientDao.searchPatients("Sunita")
-                            if (samplePatients.isNotEmpty()) {
-                                Log.d("DB_SEED", "✅ Test search for 'Sunita' found: ${samplePatients[0].name}")
-                            }
                         } catch (e: Exception) {
-                            Log.e("DB_SEED", "❌ Error seeding dummy patients", e)
+                            Log.e("DB_SEED", "Error during patient seeding", e)
                         }
                     }
-                } ?: Log.e("DB_SEED", "❌ INSTANCE is null - cannot seed data")
+                } ?: Log.e("DB_SEED", "INSTANCE NULL — cannot seed database")
             }
         }
 
@@ -104,9 +87,9 @@ abstract class AshaLocalDatabase : RoomDatabase() {
                     AshaLocalDatabase::class.java,
                     "asha_local_db"
                 )
-                .fallbackToDestructiveMigration()
-                .addCallback(DatabaseCallback())  // Add seeding callback
-                .build()
+                    .fallbackToDestructiveMigration()
+                    .addCallback(DatabaseCallback())
+                    .build()
 
                 INSTANCE = instance
                 instance

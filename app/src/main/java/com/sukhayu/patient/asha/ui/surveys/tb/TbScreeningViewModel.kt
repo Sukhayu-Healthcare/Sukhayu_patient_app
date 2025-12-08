@@ -35,7 +35,10 @@ class TbScreeningViewModel(application: Application) : AndroidViewModel(applicat
 
     init {
         val db = AshaLocalDatabase.getInstance(application)
-        repository = TbScreeningRepository(db.tbScreeningDao())
+        repository = TbScreeningRepository(
+            db.tbScreeningDao(),
+            db.surveySummaryDao()
+        )
     }
 
     /**
@@ -48,7 +51,8 @@ class TbScreeningViewModel(application: Application) : AndroidViewModel(applicat
                 _isSaving.value = true
                 _errorMessage.value = null
 
-                repository.createOrUpdateTbScreening(entity)
+                val ashaId = TokenManager.getUserId()
+                repository.createOrUpdateTbScreening(entity, ashaId)
 
                 _isSaving.value = false
 
@@ -97,6 +101,8 @@ class TbScreeningViewModel(application: Application) : AndroidViewModel(applicat
                 return@launch
             }
 
+            val ashaId = TokenManager.getUserId()
+
             try {
                 val pending = repository.getUnsyncedTbScreenings()
                 Log.d(TAG, "Found ${pending.size} pending TB screenings to sync")
@@ -115,7 +121,7 @@ class TbScreeningViewModel(application: Application) : AndroidViewModel(applicat
                         val response = api.submitTbFirst("Bearer $token", request)
                         Log.d(TAG, "Synced TB screening id=${entity.id}. Response: $response")
 
-                        repository.markAsSynced(entity.id)
+                        repository.markAsSynced(entity.id, ashaId)
                         successCount++
                     } catch (e: HttpException) {
                         val body = e.response()?.errorBody()?.string()
