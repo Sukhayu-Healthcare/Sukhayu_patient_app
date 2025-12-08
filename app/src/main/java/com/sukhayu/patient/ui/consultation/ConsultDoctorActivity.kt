@@ -22,6 +22,15 @@ class ConsultDoctorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_consult_doctor)
         HeaderUtils.setupRoleInHeader(this)
+
+        // Set title based on consult_level extra (CHO by default)
+        val consultLevel = intent.getStringExtra("consult_level") ?: "CHO"
+        if (consultLevel == "MO") {
+            supportActionBar?.title = "Consult Medical Officer"
+        } else {
+            supportActionBar?.title = "Consult Community Health Officer"
+        }
+
         // ------------ Start Questionnaire  ------------
         val startView = findViewById<View>(R.id.cardStart) // replace with your ID
         startView?.setOnClickListener {

@@ -1,8 +1,11 @@
 package com.sukhayu.patient.ui.consultation
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +15,7 @@ import com.sukhayu.patient.R
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.patient.webrtc.WebRTCManager
 import com.sukhayu.patient.utils.HeaderUtils
+import com.sukhayu.patient.ui.teleconsult.VoiceCallActivity
 import org.webrtc.EglBase
 import org.webrtc.SurfaceViewRenderer
 
@@ -27,6 +31,9 @@ class VideoCallActivity : AppCompatActivity() {
     private lateinit var patientId: String
     private lateinit var doctorId: String
     private var doctorSocketId: String = ""
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var connectionWatchdogPosted = false
 
     companion object {
         const val PERMISSION_REQUEST_CODE = 99
@@ -70,6 +77,7 @@ class VideoCallActivity : AppCompatActivity() {
         permissions: Array<out String>,
         results: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, results)
         if (requestCode == PERMISSION_REQUEST_CODE &&
             results.all { it == PackageManager.PERMISSION_GRANTED }
         ) startWebRTC()
@@ -101,10 +109,14 @@ class VideoCallActivity : AppCompatActivity() {
                 runOnUiThread {
                     Toast.makeText(this@VideoCallActivity, "Call Connected", Toast.LENGTH_SHORT).show()
                 }
+                // Cancel watchdog if connected
+                handler.removeCallbacksAndMessages(null)
             }
 
             onError = { msg ->
                 runOnUiThread { Toast.makeText(this@VideoCallActivity, msg, Toast.LENGTH_SHORT).show() }
+                // Fallback to voice call on error
+                fallbackToVoice("WebRTC error: $msg")
             }
 
             onCallEnded = {
@@ -113,6 +125,16 @@ class VideoCallActivity : AppCompatActivity() {
         }
 
         webRTCManager!!.initializeWebSocket()
+
+        // Post a watchdog to fallback to voice if call doesn't connect in reasonable time
+        if (!connectionWatchdogPosted) {
+            connectionWatchdogPosted = true
+            handler.postDelayed({
+                // If still no connection, fallback
+                Toast.makeText(this, "Video connection unstable. Switching to voice call...", Toast.LENGTH_LONG).show()
+                fallbackToVoice("Watchdog timeout")
+            }, 10_000)
+        }
     }
 
     private fun endCall() {
@@ -120,8 +142,22 @@ class VideoCallActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun fallbackToVoice(reason: String) {
+        try {
+            webRTCManager?.endCall()
+        } catch (_: Exception) {
+            // ignore
+        }
+
+        val intent = Intent(this, VoiceCallActivity::class.java)
+        intent.putExtra("REASON", reason)
+        startActivity(intent)
+        finish()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         webRTCManager?.endCall()
+        handler.removeCallbacksAndMessages(null)
     }
 }

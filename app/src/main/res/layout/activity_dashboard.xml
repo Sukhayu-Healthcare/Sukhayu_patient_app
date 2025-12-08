@@ -43,7 +43,7 @@
 
                         <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_symptom" android:contentDescription="@string/symptom_icon_desc" app:tint="#2563EB" />
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ai_symptom_checker" android:textSize="14sp" android:textColor="#0F172A" android:layout_marginTop="8dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/check_symptoms" android:textSize="14sp" android:textColor="#0F172A" android:layout_marginTop="8dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -52,7 +52,7 @@
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
 
-                        <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_history" android:contentDescription="@string/past_consultations" android:tint="#7C3AED" tools:ignore="UseAppTint" />
+                        <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_history" android:contentDescription="@string/past_consultations" app:tint="#7C3AED" tools:ignore="UseAppTint" />
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/past_consultations_label" android:textSize="14sp" android:textColor="#0F172A" android:layout_marginTop="8dp" />
                     </LinearLayout>
@@ -63,7 +63,7 @@
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
 
-                        <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_health_banner" android:tint="#059669" android:contentDescription="@string/medicines" tools:ignore="UseAppTint" />
+                        <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_health_banner" app:tint="#059669" android:contentDescription="@string/medicines" tools:ignore="UseAppTint" />
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/disease_outbreak_label" android:textSize="14sp" android:textColor="#0F172A" android:layout_marginTop="8dp" />
                     </LinearLayout>
@@ -74,9 +74,9 @@
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
 
-                        <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_calendar" android:contentDescription="Book Appointment" android:tint="@color/colorPrimary" />
+                        <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_calendar" android:contentDescription="@string/desc_calendar" app:tint="@color/colorPrimary" />
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Book Appointment" android:textSize="14sp" android:textColor="#0F172A" android:layout_marginTop="8dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/book_appointment" android:textSize="14sp" android:textColor="#0F172A" android:layout_marginTop="8dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -84,6 +84,19 @@
 
             <!-- Emergency Button -->
             <Button android:id="@+id/btnEmergency" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/emergency_label" android:backgroundTint="#DC2626" android:textColor="@android:color/white" android:textStyle="bold" android:paddingVertical="12dp" />
+
+            <!-- DEBUG: Test Video Call (remove in production) -->
+            <Button
+                android:id="@+id/btnDebugTestVideoCall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/test_video_call"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@android:color/white"
+                android:visibility="visible"
+                android:paddingVertical="12dp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -1,22 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Marathi translations for Dashboard strings -->
 
-    <!-- Content descriptions / icons -->
-    <string name="profile_icon_desc">प्रोफाइल चिन्ह</string>
-    <string name="symptom_icon_desc">लक्षण चिन्ह</string>
-    <string name="consult_doctor">डॉक्टर सल्ला चिन्ह</string>
-    <string name="past_consultations">मागील सल्लामसलत चिन्ह</string>
-    <string name="medicines">औषधे चिन्ह</string>
+    <!-- App basics -->
+    <string name="app_name">आशा ज्योती</string>
+    <string name="app_logo_desc">अॅप लोगो</string>
+    <string name="language_icon_desc">भाषा आयकॉन</string>
+    <string name="language_english">इंग्रजी</string>
+    <string name="profile_icon_desc">प्रोफाइल आयकॉन</string>
+    <string name="profile">प्रोफाइल</string>
+    <string name="symptom_icon_desc">लक्षण आयकॉन</string>
+    <string name="check_symptoms">लक्षण तपासा</string>
+    <string name="consult_doctor">डॉक्टर सल्ला आयकॉन</string>
+    <string name="past_consultations">मागील सल्लामसलत आयकॉन</string>
+    <string name="medicines">औषधे आयकॉन</string>
+    <string name="book_appointment">अपॉइंटमेंट बुक करा</string>
+    <string name="test_video_call">व्हिडिओ कॉल तपासा</string>
 
-    <!-- Visible labels / placeholders -->
+    <!-- Patient dashboard defaults -->
     <string name="profile_name_placeholder">नाव</string>
     <string name="profile_phone_placeholder">फोन</string>
-    <string name="logout">लॉग आऊट</string>
-    <string name="ai_symptom_checker">AI लक्षण तपासणी</string>
-    <string name="consult_doctor_label">डॉक्टरांचा सल्ला घ्या</string>
+    <string name="logout">लॉगआऊट</string>
+    <string name="ai_symptom_checker">एआय लक्षण तपासणी</string>
+    <string name="consult_doctor_label">डॉक्टरांचा सल्ला</string>
     <string name="past_consultations_label">मागील सल्लामसलत</string>
-    <string name="disease_outbreak_label">रोगाचा उद्रेक</string>
+    <string name="disease_outbreak_label">रोग उद्रेक</string>
     <string name="emergency_label">⚠️ आपत्कालीन</string>
-</resources>
 
+    <!-- =============================== -->
+    <!--         ASHA DASHBOARD          -->
+    <!-- =============================== -->
+
+    <string name="asha_dashboard_title">आशा डॅशबोर्ड</string>
+    <string name="sample_asha_name">प्रिया पटेल</string>
+
+    <!-- Profile placeholders -->
+    <string name="asha_profile_photo_desc">आशा प्रोफाइल फोटो</string>
+    <string name="asha_id_placeholder">ओळख क्रमांक: A001</string>
+    <string name="asha_village_placeholder">गाव: -</string>
+    <string name="asha_taluka_placeholder">तालुका: -</string>
+    <string name="asha_district_placeholder">जिल्हा: -</string>
+
+    <!-- Dynamic profile formatting -->
+    <string name="asha_default_name">आरोग्य सेविका</string>
+    <string name="asha_id_format">ओळख क्रमांक: %1$s</string>
+    <string name="village_format">गाव: %1$s</string>
+    <string name="taluka_format">तालुका: %1$s</string>
+    <string name="district_format">जिल्हा: %1$s</string>
+
+    <!-- Dashboard tile descriptions -->
+    <string name="desc_total_patients">एकूण रुग्ण</string>
+    <string name="desc_active_cases">सक्रिय प्रकरणे</string>
+    <string name="desc_completed_today">आज पूर्ण केलेली कामे</string>
+    <string name="desc_my_schedule">माझे वेळापत्रक</string>
+    <string name="desc_emergency_cases">आपत्कालीन प्रकरणे</string>
+
+    <!-- Dashboard main tile text -->
+    <string name="asha_total_patients">एकूण रुग्ण</string>
+    <string name="asha_active_cases">सक्रिय प्रकरणे</string>
+    <string name="asha_my_schedule">माझे वेळापत्रक</string>
+    <string name="asha_emergency">आपत्कालीन सेवा</string>
+
+    <!-- Quick Actions section -->
+    <string name="asha_quick_actions">तत्काळ क्रिया</string>
+    <string name="asha_register_patient">रुग्ण नोंदणी</string>
+    <string name="asha_conduct_survey">सर्वेक्षण करा</string>
+    <string name="asha_view_surveys">सर्वेक्षण पहा</string>
+    <string name="asha_health_drives">आरोग्य मोहीमा</string>
+
+    <!-- Older quick action labels translated -->
+    <string name="action_view_surveys">रुग्ण सर्वेक्षण पहा</string>
+    <string name="action_health_drives">जाहिरात</string>
+    <string name="action_register_patient">नवीन रुग्ण नोंदणी</string>
+    <string name="action_help_login">रुग्ण लॉगिन मदत</string>
+
+    <!-- Patient services grid -->
+    <string name="asha_patient_services">रुग्ण सेवा</string>
+    <string name="desc_patient_services">रुग्ण सेवा विभाग</string>
+    <string name="asha_consult_doctor">डॉक्टरांचा सल्ला</string>
+    <string name="desc_consult_doctor">डॉक्टर सल्ला</string>
+    <string name="asha_past_consultations">मागील सल्लामसलत</string>
+    <string name="desc_past_consultations">मागील सल्लामसलत</string>
+    <string name="asha_disease_analytics">रोग विश्लेषण</string>
+    <string name="desc_disease_analytics">रोग विश्लेषण</string>
+
+    <!-- Recent Activity -->
+    <string name="asha_recent_activity">अलीकडील कृती</string>
+    <string name="asha_recent_activity_1">• रुग्ण नोंदणी — राम शर्मा • २ तासांपूर्वी</string>
+    <string name="asha_recent_activity_2">• सल्लामसलत पूर्ण — सीता देवी • ५ तासांपूर्वी</string>
+    <string name="asha_recent_activity_3">• आपत्कालीन प्रकरण रेफर — मोहन गुप्ता • १ दिवसापूर्वी</string>
+
+    <!-- Logout -->
+    <string name="logout_label">लॉगआऊट</string>
+    <string name="logout_warning">नोंद: लॉगआऊट करताना डेटा रीलोड करण्यासाठी इंटरनेट लागेल.</string>
+
+    <!-- National Health Programs -->
+    <string name="asha_nhp_title">राष्ट्रीय आरोग्य कार्यक्रम</string>
+    <string name="asha_nhp_subtitle">भारत सरकारच्या प्रमुख आरोग्य योजना</string>
+    <string name="asha_nhp_view_all">सर्व कार्यक्रम पहा</string>
+
+    <string name="desc_ayush">आयुष आरोग्य मोहीम</string>
+    <string name="desc_idsp">एकात्मिक रोग देखरेख प्रकल्प</string>
+
+    <!-- Community Health Tips -->
+    <string name="asha_health_tips_title">समुदाय आरोग्य टिप्स</string>
+    <string name="asha_tip_monsoon">पावसाळी आरोग्य\nस्वच्छ पिण्याचे पाणी वापरा व जलजन्य आजार टाळा.</string>
+    <string name="asha_tip_vaccination">लसीकरण मोहीम\nयेणाऱ्या लसीकरण वेळापत्रकाची आठवण करून द्या.</string>
+    <string name="asha_tip_diabetes">मधुमेह जनजागृती\n३० वर्षांवरील प्रौढांसाठी नियमित तपासणी करा.</string>
+
+    <!-- Icons -->
+    <string name="desc_open_link">लिंक उघडा</string>
+    <string name="desc_calendar">कॅलेंडर आयकॉन</string>
+
+</resources>

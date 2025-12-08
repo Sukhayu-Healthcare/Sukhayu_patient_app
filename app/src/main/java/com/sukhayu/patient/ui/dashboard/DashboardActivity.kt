@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ApplicationInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -27,6 +29,7 @@ import com.sukhayu.patient.utils.HeaderUtils
 import com.sukhayu.utils.LocaleHelper
 import com.sukhayu.patient.ui.patient.appointment.BookAppointmentActivity
 import com.sukhayu.patient.ui.emergency.EmergencyActivity
+import com.sukhayu.patient.ui.consultation.VideoCallActivity
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -61,6 +64,24 @@ class DashboardActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvUserName)?.text = userName
         findViewById<TextView>(R.id.tvUserPhone)?.text = userPhone
 
+        // DEBUG: direct video call test button (only active when app is debuggable)
+        findViewById<Button?>(R.id.btnDebugTestVideoCall)?.setOnClickListener {
+            val isDebuggable = (applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+            if (!isDebuggable) {
+                Log.w("DashboardActivity", "Debug test button pressed in non-debuggable app; ignoring.")
+                return@setOnClickListener
+            }
+
+            val mockPatientId = "debug_patient"
+            val mockDoctorId = "debug_doctor"
+            Log.d("DashboardActivity", "Starting debug VideoCallActivity with patient=$mockPatientId doctor=$mockDoctorId")
+
+            val intent = Intent(this, VideoCallActivity::class.java).apply {
+                putExtra("patientId", mockPatientId)
+                putExtra("doctorId", mockDoctorId)
+            }
+            startActivity(intent)
+        }
 
         // RESULT HANDLING
         consultSymptomLauncher = registerForActivityResult(

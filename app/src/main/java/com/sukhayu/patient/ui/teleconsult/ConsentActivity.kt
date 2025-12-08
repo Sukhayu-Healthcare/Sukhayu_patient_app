@@ -24,12 +24,14 @@ class ConsentActivity : AppCompatActivity() {
         voiceHelper = VoiceInputHelper(this)
         VoiceInputHelper.attachToAllEditTexts(this)
 
+        // Return RESULT_OK to the caller when user accepts instead of starting VideoCallActivity here.
         binding.btnAccept.setOnClickListener {
-            startActivity(Intent(this, VideoCallActivity::class.java))
+            setResult(RESULT_OK)
             finish()
         }
 
         binding.btnDecline.setOnClickListener {
+            setResult(RESULT_CANCELED)
             finish()
         }
     }

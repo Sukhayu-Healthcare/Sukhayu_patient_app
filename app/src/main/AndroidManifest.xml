@@ -76,6 +76,10 @@
         <activity
             android:name="com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity"
             android:exported="true" />
+        <activity
+            android:name="com.sukhayu.patient.ui.ai_symptom.MockSymptomResultActivity"
+            android:exported="true"
+            android:label="Mock Symptom Result" />
 
         <!-- Prescription -->
         <activity

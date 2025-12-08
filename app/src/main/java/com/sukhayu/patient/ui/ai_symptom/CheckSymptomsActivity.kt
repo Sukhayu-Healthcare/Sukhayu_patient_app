@@ -45,7 +45,10 @@ class CheckSymptomsActivity : AppCompatActivity() {
             if (text.isNotBlank()) {
                 addUserMessage(text)
                 etSymptoms.text.clear()
-                viewModel.sendComplaintOrFollowup(text)
+                // For testing: open the MockSymptomResultActivity instead of calling real AI
+                val intent = android.content.Intent(this, MockSymptomResultActivity::class.java)
+                intent.putExtra(EXTRA_SYMPTOM_TEXT, text)
+                startActivity(intent)
             }
         }
 
@@ -54,7 +57,9 @@ class CheckSymptomsActivity : AppCompatActivity() {
             if (answer.isNotBlank()) {
                 addUserMessage(answer)
                 etFollowupAnswer.text.clear()
-                viewModel.sendComplaintOrFollowup(answer)
+                val intent = android.content.Intent(this, MockSymptomResultActivity::class.java)
+                intent.putExtra(EXTRA_SYMPTOM_TEXT, answer)
+                startActivity(intent)
             }
         }
 

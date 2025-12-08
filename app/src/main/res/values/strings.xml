@@ -1,4 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- App basics -->
     <string name="app_name">Asha Jyoti</string>
     <string name="app_logo_desc">App Logo</string>
     <string name="language_icon_desc">Language Icon</string>
@@ -10,41 +13,10 @@
     <string name="consult_doctor">Consult Doctor Icon</string>
     <string name="past_consultations">Past Consultations Icon</string>
     <string name="medicines">Medicines Icon</string>
+    <string name="book_appointment">Book Appointment</string>
+    <string name="test_video_call">Test Video Call</string>
 
-    <!-- ASHA dashboard strings -->
-    <string name="asha_dashboard_title">ASHA Dashboard</string>
-    <string name="sample_asha_name">प्रिया पटेल</string>
-
-    <!-- content descriptions -->
-    <string name="desc_total_patients">Total patients count</string>
-    <string name="desc_active_cases">Active cases</string>
-    <string name="desc_completed_today">Completed today</string>
-    <string name="desc_my_schedule">My schedule</string>
-    <string name="desc_emergency_cases">Emergency cases</string>
-
-    <!-- Quick actions -->
-    <string name="action_view_surveys">View Patient Survey</string>
-    <string name="action_health_drives">Announcement</string>
-    <string name="action_register_patient">Register New Patient</string>
-    <string name="action_help_login">Help Patient Login</string>
-
-    <!-- Dashboard descriptions -->
-    <string name="desc_patient_services">Patient services section</string>
-    <string name="desc_consult_doctor">Consult doctor</string>
-    <string name="desc_past_consultations">Past consultations</string>
-    <string name="desc_disease_analytics">Disease analytics</string>
-
-    <!-- Program descriptions -->
-    <string name="desc_ayush">AYUSH health mission</string>
-    <string name="desc_idsp">Integrated Disease Surveillance Project</string>
-
-    <!-- Link / Icons -->
-    <string name="desc_open_link">Open link</string>
-
-    <!-- Calendar & metrics -->
-    <string name="desc_calendar">Calendar icon</string>
-
-    <!-- Dashboard UI labels (extracted from activity_dashboard.xml) -->
+    <!-- Patient dashboard defaults -->
     <string name="profile_name_placeholder">Name</string>
     <string name="profile_phone_placeholder">Phone</string>
     <string name="logout">Logout</string>
@@ -54,6 +26,89 @@
     <string name="disease_outbreak_label">Disease Outbreak</string>
     <string name="emergency_label">⚠️ Emergency</string>
 
+    <!-- =============================== -->
+    <!--         ASHA DASHBOARD          -->
+    <!-- =============================== -->
 
+    <string name="asha_dashboard_title">ASHA Dashboard</string>
+    <string name="sample_asha_name">प्रिया पटेल</string>
+
+    <!-- Profile placeholders -->
+    <string name="asha_profile_photo_desc">ASHA profile photo</string>
+    <string name="asha_id_placeholder">ID: A001</string>
+    <string name="asha_village_placeholder">Village: -</string>
+    <string name="asha_taluka_placeholder">Taluka: -</string>
+    <string name="asha_district_placeholder">District: -</string>
+
+    <!-- Dynamic profile formatting -->
+    <string name="asha_default_name">ASHA Worker</string>
+    <string name="asha_id_format">ID: %1$s</string>
+    <string name="village_format">Village: %1$s</string>
+    <string name="taluka_format">Taluka: %1$s</string>
+    <string name="district_format">District: %1$s</string>
+
+    <!-- Dashboard tile descriptions -->
+    <string name="desc_total_patients">Total patients count</string>
+    <string name="desc_active_cases">Active cases</string>
+    <string name="desc_completed_today">Completed today</string>
+    <string name="desc_my_schedule">My schedule</string>
+    <string name="desc_emergency_cases">Emergency cases</string>
+
+    <!-- Dashboard tile text -->
+    <string name="asha_total_patients">Total Patients</string>
+    <string name="asha_active_cases">Active Cases</string>
+    <string name="asha_my_schedule">My Schedule</string>
+    <string name="asha_emergency">Emergency</string>
+
+    <!-- Quick Actions section -->
+    <string name="asha_quick_actions">Quick Actions</string>
+    <string name="asha_register_patient">Register Patient</string>
+    <string name="asha_conduct_survey">Conduct Survey</string>
+    <string name="asha_view_surveys">View Surveys</string>
+    <string name="asha_health_drives">Health Drives</string>
+
+    <!-- Older quick action labels from your file -->
+    <string name="action_view_surveys">View Patient Survey</string>
+    <string name="action_health_drives">Announcement</string>
+    <string name="action_register_patient">Register New Patient</string>
+    <string name="action_help_login">Help Patient Login</string>
+
+    <!-- Patient services grid -->
+    <string name="asha_patient_services">Patient Services</string>
+    <string name="desc_patient_services">Patient services section</string>
+    <string name="asha_consult_doctor">Consult Doctor</string>
+    <string name="desc_consult_doctor">Consult doctor</string>
+    <string name="asha_past_consultations">Past Consultations</string>
+    <string name="desc_past_consultations">Past consultations</string>
+    <string name="asha_disease_analytics">Disease Analytics</string>
+    <string name="desc_disease_analytics">Disease analytics</string>
+
+    <!-- Recent Activity -->
+    <string name="asha_recent_activity">Recent Activity</string>
+    <string name="asha_recent_activity_1">• Patient registered — Ram Sharma • 2 hours ago</string>
+    <string name="asha_recent_activity_2">• Consultation completed — Sita Devi • 5 hours ago</string>
+    <string name="asha_recent_activity_3">• Emergency case referred — Mohan Gupta • 1 day ago</string>
+
+    <!-- Logout -->
+    <string name="logout_label">Logout</string>
+    <string name="logout_warning">Note: Logging out needs internet to reload your data.</string>
+
+    <!-- National Health Programs -->
+    <string name="asha_nhp_title">National Health Programs</string>
+    <string name="asha_nhp_subtitle">Major health schemes by Government of India</string>
+    <string name="asha_nhp_view_all">View All Programs</string>
+
+    <string name="desc_ayush">AYUSH health mission</string>
+    <string name="desc_idsp">Integrated Disease Surveillance Project</string>
+
+    <!-- Community Health Tips -->
+    <string name="asha_health_tips_title">Community Health Tips</string>
+    <string name="asha_tip_monsoon">Monsoon Health\nEnsure clean drinking water and prevent waterborne diseases.</string>
+    <string name="asha_tip_vaccination">Vaccination Drive\nRemind families about upcoming vaccination schedules.</string>
+    <string name="asha_tip_diabetes">Diabetes Awareness\nRegular screening for diabetes in adults above 30 years.</string>
+
+    <!-- Icons / Links -->
+    <string name="desc_open_link">Open link</string>
+    <string name="desc_calendar">Calendar icon</string>
 
 </resources>

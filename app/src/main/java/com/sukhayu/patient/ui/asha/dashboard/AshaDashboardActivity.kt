@@ -16,16 +16,16 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.appbar.MaterialToolbar
 import com.sukhayu.patient.R
-import com.sukhayu.patient.asha.ui.surveys.AshaViewSurveysActivity
 import com.sukhayu.patient.asha.ui.surveys.AshaSurveyHomeActivity
+import com.sukhayu.patient.asha.ui.surveys.AshaViewSurveysActivity
 import com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyViewModel
 import com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySyncViewModel
 import com.sukhayu.patient.asha.ui.surveys.tb.TbFollowUpViewModel
 import com.sukhayu.patient.asha.ui.surveys.tb.TbScreeningViewModel
 import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.ui.asha.emergency.EmergencyContactsActivity
-import com.sukhayu.patient.ui.asha.family.FamilyListActivity
 import com.sukhayu.patient.ui.asha.nhp.NationalHealthProgramsActivity
 import com.sukhayu.patient.ui.asha.registration.RegisterPatientActivity
 import com.sukhayu.patient.ui.asha.schedule.AshaScheduleActivity
@@ -62,10 +62,51 @@ class AshaDashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asha_dashboard)
 
-        // ═══════════════════════════════════════════════════════════════════════════
-        // Setup header with role display (consistent with Patient/Supervisor dashboards)
-        // ═══════════════════════════════════════════════════════════════════════════
+        // Setup common header role text (if header include is present)
         HeaderUtils.setupRoleInHeader(this)
+
+        // Setup toolbar with menu (Profile, Daily Tasks, Settings, Logout)
+        // Setup toolbar with menu (Profile, Daily Tasks, Settings, Logout)
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+
+                R.id.menu_profile -> {
+                    Toast.makeText(
+                        this,
+                        "Profile details are shown here.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+
+                R.id.menu_daily_tasks -> {
+                    Toast.makeText(
+                        this,
+                        "Daily Tasks will be added soon.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+
+                R.id.menu_settings -> {
+                    Toast.makeText(
+                        this,
+                        "Settings will be added soon.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+
+                R.id.menu_logout -> {
+                    performLogout()
+                    true
+                }
+
+                else -> false
+            }
+        }
+
 
         // --- ViewModels for sync jobs ---
         tbScreeningViewModel = ViewModelProvider(this)[TbScreeningViewModel::class.java]
@@ -77,6 +118,8 @@ class AshaDashboardActivity : AppCompatActivity() {
         loadProfileData()
 
         // --- Card clicks ---
+
+        // Total patients / search patient
         findViewById<CardView>(R.id.cardTotalPatients).setOnClickListener {
             startActivity(Intent(this, SearchPatientActivity::class.java))
         }
@@ -86,6 +129,7 @@ class AshaDashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, AshaScheduleActivity::class.java))
         }
 
+        // Emergency contacts
         findViewById<CardView>(R.id.cardEmergency).setOnClickListener {
             startActivity(Intent(this, EmergencyContactsActivity::class.java))
         }
@@ -121,32 +165,8 @@ class AshaDashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterPatientActivity::class.java))
         }
 
-        // ═══════════════════════════════════════════════════════════════════════════
-        // LOGOUT BUTTON - Uses centralized logout logic matching Patient/Supervisor
-        // Clears all auth data and navigates to LoginActivity with proper flags
-        // ═══════════════════════════════════════════════════════════════════════════
-        findViewById<Button>(R.id.tv_logout).setOnClickListener {
-            performLogout()
-        }
-
-        // --- Language toggles ---
-        val tvEnglishId = resources.getIdentifier("tvEnglish", "id", packageName)
-        if (tvEnglishId != 0) {
-            findViewById<TextView>(tvEnglishId)?.setOnClickListener {
-                val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-                prefs.edit().putString("app_lang", "en").apply()
-                recreate()
-            }
-        }
-
-        val tvMarathiId = resources.getIdentifier("tvMarathi", "id", packageName)
-        if (tvMarathiId != 0) {
-            findViewById<TextView>(tvMarathiId)?.setOnClickListener {
-                val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-                prefs.edit().putString("app_lang", "mr").apply()
-                recreate()
-            }
-        }
+        // Setup language toggle in header
+        setupLanguageToggle()
 
         // Voice input
         requestAudioPermission()
@@ -170,7 +190,7 @@ class AshaDashboardActivity : AppCompatActivity() {
                 Log.d(TAG, "TB follow-up sync finished. Synced count = $count")
             }
 
-            // 4) Pregnancy / First ANC sync
+            // 3) Pregnancy / First ANC sync
             pregnacySyncViewModel.syncPendingPregnancies { count ->
                 Log.d(TAG, "Pregnancy (ANC first visit) sync finished. Synced count = $count")
             }
@@ -180,29 +200,19 @@ class AshaDashboardActivity : AppCompatActivity() {
     }
 
     /**
-     * Centralized logout logic matching Patient/Supervisor dashboards.
-     *
-     * This method:
-     * 1. Clears all auth/session data (token, userId, role) from SharedPreferences
-     * 2. Clears TokenManager's in-memory state
-     * 3. Navigates to LoginActivity with proper flags (NEW_TASK + CLEAR_TASK)
-     *    preventing back press from returning to logged-in state
-     * 4. Logs each step for debugging in Logcat
+     * Centralized logout logic.
      */
     private fun performLogout() {
-        Log.d(TAG, "performLogout: Logout button clicked by user")
+        Log.d(TAG, "performLogout: Logout selected from menu")
 
         // Step 1: Clear all auth/session data from SharedPreferences
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
-        Log.d(TAG, "performLogout: Clearing auth SharedPreferences (token, role, userId, etc.)")
         prefs.edit().clear().apply()
 
         // Step 2: Clear TokenManager's in-memory state
-        Log.d(TAG, "performLogout: Calling TokenManager.clearToken() to clear in-memory state")
         TokenManager.clearToken()
 
         // Step 3: Navigate to LoginActivity with proper flags to prevent back press
-        Log.d(TAG, "performLogout: Creating Intent to LoginActivity with NEW_TASK + CLEAR_TASK flags")
         val intent = Intent(this, LoginActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -210,7 +220,6 @@ class AshaDashboardActivity : AppCompatActivity() {
 
         // Step 4: Finish this activity
         finish()
-        Log.d(TAG, "performLogout: AshaDashboardActivity finished. User should see LoginActivity now")
     }
 
     private fun requestAudioPermission() {
@@ -226,23 +235,37 @@ class AshaDashboardActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Loads ASHA profile data and uses string resources so labels
+     * auto-translate between English and Marathi.
+     */
     private fun loadProfileData() {
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
-        val ashaName = prefs.getString("user_name", "ASHA Worker") ?: "ASHA Worker"
+
+        val defaultAshaName = getString(R.string.asha_default_name)
+        val ashaName = prefs.getString("user_name", defaultAshaName) ?: defaultAshaName
         val ashaId = prefs.getString("user_id", "N/A") ?: "N/A"
 
-        // Set default values first
-        findViewById<TextView>(R.id.tv_asha_name).text = ashaName
-        findViewById<TextView>(R.id.tvAshaId).text = "ID: $ashaId"
-        findViewById<TextView>(R.id.tv_asha_village).text = "Village: -"
-        findViewById<TextView>(R.id.tv_asha_taluka).text = "Taluka: -"
-        findViewById<TextView>(R.id.tv_asha_district).text = "District: -"
+        val tvName = findViewById<TextView>(R.id.tv_asha_name)
+        val tvId = findViewById<TextView>(R.id.tvAshaId)
+        val tvVillage = findViewById<TextView>(R.id.tv_asha_village)
+        val tvTaluka = findViewById<TextView>(R.id.tv_asha_taluka)
+        val tvDistrict = findViewById<TextView>(R.id.tv_asha_district)
+
+        // Default values
+        tvName.text = ashaName
+        tvId.text = getString(R.string.asha_id_format, ashaId)
+        tvVillage.text = getString(R.string.village_format, "-")
+        tvTaluka.text = getString(R.string.taluka_format, "-")
+        tvDistrict.text = getString(R.string.district_format, "-")
 
         // Fetch complete profile from API
         val token = TokenManager.getToken()
         if (token.isNotEmpty()) {
             ApiClient.retrofit.getSupervisorProfile("Bearer $token")
-                .enqueue(object : retrofit2.Callback<com.sukhayu.patient.data.remote.SupervisorProfile> {
+                .enqueue(object :
+                    retrofit2.Callback<com.sukhayu.patient.data.remote.SupervisorProfile> {
+
                     override fun onResponse(
                         call: retrofit2.Call<com.sukhayu.patient.data.remote.SupervisorProfile>,
                         response: retrofit2.Response<com.sukhayu.patient.data.remote.SupervisorProfile>
@@ -250,16 +273,23 @@ class AshaDashboardActivity : AppCompatActivity() {
                         if (response.isSuccessful && response.body() != null) {
                             val profile = response.body()!!
 
-                            findViewById<TextView>(R.id.tv_asha_name).text =
-                                profile.user_name ?: ashaName
-                            findViewById<TextView>(R.id.tvAshaId).text =
-                                "ID: ${profile.asha_id ?: ashaId}"
-                            findViewById<TextView>(R.id.tv_asha_village).text =
-                                "Village: ${profile.village ?: "-"}"
-                            findViewById<TextView>(R.id.tv_asha_taluka).text =
-                                "Taluka: ${profile.taluka ?: "-"}"
-                            findViewById<TextView>(R.id.tv_asha_district).text =
-                                "District: ${profile.district ?: "-"}"
+                            tvName.text = profile.user_name ?: ashaName
+
+                            val finalAshaId = profile.asha_id ?: ashaId
+                            tvId.text = getString(R.string.asha_id_format, finalAshaId)
+
+                            tvVillage.text = getString(
+                                R.string.village_format,
+                                profile.village ?: "-"
+                            )
+                            tvTaluka.text = getString(
+                                R.string.taluka_format,
+                                profile.taluka ?: "-"
+                            )
+                            tvDistrict.text = getString(
+                                R.string.district_format,
+                                profile.district ?: "-"
+                            )
                         }
                     }
 
@@ -281,9 +311,32 @@ class AshaDashboardActivity : AppCompatActivity() {
         return caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
+    /**
+     * Sets up the language toggle buttons in the header.
+     * Uses "settings" → "app_lang" just like patient dashboard.
+     */
+    private fun setupLanguageToggle() {
+        val tvEnglishId = resources.getIdentifier("tvEnglish", "id", packageName)
+        if (tvEnglishId != 0) {
+            findViewById<TextView>(tvEnglishId)?.setOnClickListener {
+                val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+                prefs.edit().putString("app_lang", "en").apply()
+                recreate()
+            }
+        }
+
+        val tvMarathiId = resources.getIdentifier("tvMarathi", "id", packageName)
+        if (tvMarathiId != 0) {
+            findViewById<TextView>(tvMarathiId)?.setOnClickListener {
+                val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+                prefs.edit().putString("app_lang", "mr").apply()
+                recreate()
+            }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         voiceHelper.destroy()
     }
 }
-
