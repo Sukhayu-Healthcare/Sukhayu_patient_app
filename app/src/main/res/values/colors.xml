@@ -1,37 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#BB86FC</color>
-    <color name="purple_500">#6200EE</color>
-    <color name="purple_700">#3700B3</color>
-    <color name="teal_200">#03DAC5</color>
-    <color name="teal_700">#018786</color>
-    <color name="card_bg">#FFFFFF</color>
-    <color name="bg_light">#F6F7FB</color>
+
+    <!-- BRAND / PRIMARY PALETTE -->
+    <color name="colorPrimary">#1E3A8A</color>
+    <color name="colorPrimaryVariant">#1D4ED8</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <color name="colorSecondary">#64748B</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+
+    <color name="colorBackground">#F8FAFC</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorSurfaceMuted">#E5E7EB</color>
+
+    <color name="colorAccent">#0F766E</color>
+    <color name="colorError">#DC2626</color>
+    <color name="colorSuccess">#15803D</color>
+
+    <!-- TEXT COLORS -->
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#6B7280</color>
+    <color name="text_muted">#9CA3AF</color>
+
+    <!-- Aliases for theme-style names -->
+    <color name="colorTextPrimary">@color/text_primary</color>
+    <color name="colorTextSecondary">@color/text_secondary</color>
+    <color name="colorTextMuted">@color/text_muted</color>
+
+    <!-- CARD TINTS -->
+    <color name="card_blue_light">#E0F2FE</color>
+    <color name="card_green_light">#DCFCE7</color>
+    <color name="card_purple_light">#F5F3FF</color>
+    <color name="card_red_light">#FEE2E2</color>
+    <color name="card_amber_light">#FFFBEB</color>
+
+    <!-- LEGACY / ALIAS COLORS (Backward compatibility) -->
+    <color name="primary_blue">@color/colorPrimary</color>
+    <color name="red">@color/colorError</color>
+
+    <color name="asha_blue">#2563EB</color>
+    <color name="asha_green">#16A34A</color>
+    <color name="asha_purple">#7C3AED</color>
+    <color name="asha_teal">#0F766E</color>
+
+    <!-- Material defaults that some old styles may still reference -->
+    <color name="purple_200">#E0E7FF</color>
+    <color name="purple_500">#1E3A8A</color>
+    <color name="purple_700">#1E40AF</color>
+    <color name="teal_200">#A7F3D0</color>
+    <color name="teal_700">#047857</color>
+
+    <!-- UTILITIES -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="bg_light">#F8FAFC</color>
     <color name="gray_50">#F8FAFC</color>
-    <color name="blue_600">#2563EB</color>
-    <color name="red_600">#DC2626</color>
-    <color name="red">#E53935</color>
-    <color name="grey_100">#F5F5F5</color>
-    <color name="grey_300">#E0E0E0</color>
-    <color name="primary_blue">#1E88E5</color>
-    <color name="primary">#2563EB</color>
-
-
-    <color name="asha_blue">#146DF6</color>
-    <color name="asha_teal">#0E9A8A</color>
-    <color name="asha_green">#12B63A</color>
-    <color name="asha_purple">#8A2AF7</color>
-    <color name="asha_red">#E31B23</color>
-
-    <color name="card_border">#ECECEC</color>
-    <color name="muted_text">#6F7377</color>
+    <color name="card_border">#E5E7EB</color>
+    <color name="muted_text">#94A3B8</color>
 
     <color name="tip_blue">#EAF4FF</color>
     <color name="tip_green">#E8FAF3</color>
     <color name="tip_orange">#FFF4EA</color>
 
-    <color name="background_light">#F5F5F5</color>
-    <color name="colorPrimary">#1976D2</color>
 </resources>
