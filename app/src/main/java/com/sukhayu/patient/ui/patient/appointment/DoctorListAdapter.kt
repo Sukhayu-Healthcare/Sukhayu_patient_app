@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.R
 
 class DoctorListAdapter(
-    private val doctors: List<Doctor>,
+    private val doctors: List<DoctorAppointment>,
     private val onDoctorClick: (phoneNumber: String) -> Unit
 ) : RecyclerView.Adapter<DoctorListAdapter.DoctorViewHolder>() {
 

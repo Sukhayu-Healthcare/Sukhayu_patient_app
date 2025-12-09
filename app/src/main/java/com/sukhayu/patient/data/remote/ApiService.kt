@@ -189,6 +189,77 @@ data class SendToAshaResponse(
     val message: String
 )
 
+data class PatientQueryRequest(
+    val asha_id: Int? = null,
+    val text: String,
+    val voice_url: String? = null,
+    val disease: String,
+    val doc: String,
+    val doc_id: Int? = null
+)
+
+data class QueryData(
+    val query_id: Int,
+    val patient_id: Int,
+    val asha_id: Int?,
+    val text: String,
+    val voice_url: String?,
+    val disease: String,
+    val doc: String,
+    val doc_id: Int?,
+    val query_status: String,
+    val done_or_not: Boolean
+)
+
+data class PatientQueryResponse(
+    val message: String,
+    val data: QueryData
+)
+
+data class PatientProfileResponse(
+    val message: String,
+    val patient: PatientProfileData,
+    val familyProfiles: List<FamilyProfile>? = null,
+    val ashaWorker: AshaWorkerProfile? = null
+)
+
+data class PatientProfileData(
+    val patient_id: Int,
+    val user_id: Int,
+    val user_name: String?,
+    val supreme_id: Int?,
+    val gender: String?,
+    val dob: String?,
+    val phone: String?,
+    val profile_pic: String?,
+    val village: String?,
+    val taluka: String?,
+    val district: String?,
+    val registered_asha_id: Int?,
+    val created_at: String?
+)
+
+data class FamilyProfile(
+    val patient_id: Int,
+    val gender: String?,
+    val dob: String?,
+    val phone: String?,
+    val profile_pic: String?,
+    val village: String?,
+    val taluka: String?,
+    val district: String?
+)
+
+data class AshaWorkerProfile(
+    val asha_id: Int,
+    val village: String?,
+    val taluka: String?,
+    val district: String?,
+    val profile_pic: String?,
+    val user_id: Int,
+    val asha_name: String?,
+    val asha_phone: String?
+)
 
 interface ApiService {
 
@@ -201,6 +272,7 @@ interface ApiService {
     fun getSupervisorProfile(
         @Header("Authorization") token: String
     ): Call<SupervisorProfile>
+    // Fetches supervisor profile data from backend
 
     @PUT("asha/profile")
     fun updateSupervisorProfile(
@@ -219,6 +291,7 @@ interface ApiService {
     fun getAshaList(
         @Header("Authorization") token: String
     ): Call<AshaListResponse>
+    // Fetches all ASHA workers list from backend
 
     @POST("asha/patient/register")
     fun registerPatient(
@@ -231,12 +304,14 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("ashaId") ashaId: String
     ): Call<AshaDetailsResponse>
+    // Fetches ASHA details from backend
 
     @GET("asha/patients/search")
     suspend fun searchPatients(
         @Header("Authorization") token: String,
         @Query("q") query: String
     ): PatientSearchResponse
+    // Searches patients from backend
 
     @PUT("asha/supervisor/update-asha/{id}")
     fun updateAsha(
@@ -252,6 +327,7 @@ interface ApiService {
         @Query("table") table: String,
         @Query("date") date: String
     ): SupervisorSurveyDataResponse
+    // Fetches supervisor survey data from backend
 
     // Corrected endpoint: /supervisor/data/{table}/{date}
     @GET("survey/supervisor/data/{table}/{date}")
@@ -260,6 +336,7 @@ interface ApiService {
         @Path("table") table: String,
         @Path("date") date: String
     ): SupervisorSurveyDataResponse
+    // Fetches supervisor survey data by table and date from backend
 
 
     @POST("survey/genral")
@@ -272,11 +349,13 @@ interface ApiService {
     suspend fun getGeneralScreenings(
         @Header("Authorization") authHeader: String
     ): GeneralScreeningsResponse
+    // Fetches general screenings from backend
 
     @GET("patient/all")
     suspend fun getAllPatients(
         @Header("Authorization") authHeader: String
     ): AllPatientsResponse
+    // Fetches all patients from backend
 
     @POST("survey/tb-first")
     suspend fun submitTbFirst(
@@ -288,6 +367,7 @@ interface ApiService {
     suspend fun getTbFirstScreenings(
         @Header("Authorization") authHeader: String
     ): TbFirstScreeningsResponse
+    // Fetches TB first screenings from backend
 
     @POST("survey/tb-followup")
     suspend fun submitTbFollowUp(
@@ -300,6 +380,7 @@ interface ApiService {
         @Header("Authorization") authHeader: String,
         @Path("tb_id") tbId: String
     ): TbFollowUpsResponse
+    // Fetches TB follow-ups from backend
 
     @POST("survey/anc")
     suspend fun submitFirstAncVisit(
@@ -311,6 +392,7 @@ interface ApiService {
     suspend fun getAncRecords(
         @Header("Authorization") authHeader: String
     ): AncRecordsResponse
+    // Fetches ANC records from backend
 
     @POST("survey/anc-followup")
     suspend fun submitAncFollowUp(
@@ -323,6 +405,7 @@ interface ApiService {
     suspend fun getPatientConsultations(
         @Header("Authorization") authHeader: String
     ): PatientConsultationsResponse
+    // Fetches patient consultations from backend
 
     @POST("notice/create-notice")
     fun createNotice(
@@ -341,11 +424,21 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body body: SendToAshaRequest
     ): Call<SendToAshaResponse>
+    // Sends notice to ASHA workers with notice_id
 
     @POST("analyze")
     suspend fun analyzeComplaint(
         @Body request: AnalyzeRequest
     ): Response<AnalyzeResponse>
 
+    @POST("query/patient")
+    fun submitPatientQuery(
+        @Header("Authorization") token: String,
+        @Body body: PatientQueryRequest
+    ): Call<PatientQueryResponse>
 
+    @GET("patient/profile")
+    fun getPatientProfile(
+        @Header("Authorization") token: String
+    ): Call<PatientProfileResponse>
 }

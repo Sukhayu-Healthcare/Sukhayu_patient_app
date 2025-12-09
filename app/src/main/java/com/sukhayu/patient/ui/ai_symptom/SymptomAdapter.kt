@@ -8,13 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.databinding.ItemChatBotBinding
 import com.sukhayu.patient.databinding.ItemChatUserBinding
 
-// Simple data class for displaying chat messages
-data class ChatMessage(val text: String, val isUser: Boolean)
-
+// Removed duplicate data class definition
+// Fixed property names to match XML layout ids
 class SymptomAdapter : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun getItemViewType(position: Int): Int =
-        if (getItem(position).isUser) 1 else 0
+        if (getItem(position).isUserMessage) 1 else 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -38,7 +37,6 @@ class SymptomAdapter : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCal
     class UserViewHolder(private val binding: ItemChatUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(text: String) {
-            // ✅ Fixed to match your XML id: tvUserMessage
             binding.tvUserMessage.text = text
         }
     }
@@ -46,7 +44,6 @@ class SymptomAdapter : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(DiffCal
     class BotViewHolder(private val binding: ItemChatBotBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(text: String) {
-            // ✅ Fixed to match your XML id: tvBotMessage
             binding.tvBotMessage.text = text
         }
     }

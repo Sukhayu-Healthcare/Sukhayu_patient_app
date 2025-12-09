@@ -96,13 +96,11 @@ class VideoCallActivity : AppCompatActivity() {
             localVideoView = localVideoView,
             remoteVideoView = remoteVideoView,
             patientId = patientId,
-            doctorId = doctorId,
-            eglBaseContext = ctx
+            doctorId = doctorId
         ).apply {
 
             onDoctorFound = { socketId ->
                 doctorSocketId = socketId
-                initiateCall(socketId)
             }
 
             onCallConnected = {

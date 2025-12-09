@@ -13,7 +13,7 @@ object ApiClient {
 
     // ✅ Added trailing slash - REQUIRED by Retrofit
     const val BASE_URL = "https://sukhayu-backend.onrender.com/api/v1/"
-    private const val BASE_URL_ANALYZE = "https://ai-symptom-checker-p7f7.onrender.com/"
+    private const val BASE_URL_ANALYZE = "https://final-symptom-checker.onrender.com/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY

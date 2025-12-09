@@ -9,291 +9,303 @@ import java.util.concurrent.TimeUnit
 
 class WebRTCManager(
     private val context: Context,
-    private val localVideoView: SurfaceViewRenderer?,
-    private val remoteVideoView: SurfaceViewRenderer?,
+    private val localVideoView: SurfaceViewRenderer,
+    private val remoteVideoView: SurfaceViewRenderer,
     private val patientId: String,
-    private var doctorId: String,
-    private val eglBaseContext: EglBase.Context
+    private var doctorId: String
 ) {
 
-    private val TAG = "WebRTCManager"
+    companion object {
+        private const val TAG = "WebRTCManager"
 
-    private var client: OkHttpClient? = null
+        // CHANGE THIS (IMPORTANT)
+        private const val SIGNALING_URL = "wss://ashartc.onrender.com/ws"
+    }
+
     private var webSocket: WebSocket? = null
-
-    private var peerConnectionFactory: PeerConnectionFactory? = null
     private var peerConnection: PeerConnection? = null
-    private var videoSource: VideoSource? = null
-    private var audioSource: AudioSource? = null
-    private var videoCapturer: VideoCapturer? = null
     private var localVideoTrack: VideoTrack? = null
     private var localAudioTrack: AudioTrack? = null
-    private var surfaceTextureHelper: SurfaceTextureHelper? = null
 
-    private var remoteVideoTrack: VideoTrack? = null
+    private var preferredDoctorLevel: String? = "MO"
 
     private val iceServers = listOf(
         PeerConnection.IceServer.builder("stun:stun.l.google.com:19302").createIceServer()
     )
 
-    var onDoctorFound: ((String) -> Unit)? = null
+    // Callbacks
     var onCallConnected: (() -> Unit)? = null
     var onCallEnded: (() -> Unit)? = null
     var onError: ((String) -> Unit)? = null
+    var onDoctorFound: ((String) -> Unit)? = null
 
-    fun setRemoteRenderer(renderer: SurfaceViewRenderer) {
-        remoteVideoView?.let {
-            remoteVideoTrack?.addSink(renderer)
-        }
+    private val peerConnectionFactory: PeerConnectionFactory by lazy {
+        initPeerConnectionFactory()
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // WebSocket Init
-    // ---------------------------------------------------------------------------------------------
-    fun initializeWebSocket(preferredLevel: String = "CHO") {
-        client = OkHttpClient.Builder()
+    // ----------------------------
+    // INITIALIZATION
+    // ----------------------------
+
+    private fun initPeerConnectionFactory(): PeerConnectionFactory {
+        PeerConnectionFactory.initialize(
+            PeerConnectionFactory.InitializationOptions.builder(context)
+                .createInitializationOptions()
+        )
+
+        return PeerConnectionFactory.builder().createPeerConnectionFactory()
+    }
+
+    fun initializeWebSocket(level: String? = "MO") {
+        preferredDoctorLevel = level
+        Log.d(TAG, "Initializing WebSocket: $SIGNALING_URL")
+
+        val client = OkHttpClient.Builder()
+            .pingInterval(20, TimeUnit.SECONDS)
             .readTimeout(0, TimeUnit.MILLISECONDS)
             .build()
 
         val request = Request.Builder()
-            .url("wss://ashartc.onrender.com")
+            .url(SIGNALING_URL)
             .build()
 
-        webSocket = client!!.newWebSocket(request, object : WebSocketListener() {
+        webSocket = client.newWebSocket(request, object : WebSocketListener() {
+
             override fun onOpen(ws: WebSocket, response: Response) {
-                Log.d(TAG, "WebSocket connected")
+                Log.d(TAG, "WebSocket OPENED")
             }
 
             override fun onMessage(ws: WebSocket, text: String) {
-                Log.d(TAG, "Received signaling message: $text")
+                Log.d(TAG, "Message: $text")
                 handleSignalingMessage(text)
             }
 
             override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
-                onError?.invoke("WebSocket failure: ${t.message}")
+                Log.e(TAG, "WebSocket FAILED: ${t.message}")
+                onError?.invoke("WebSocket failed: ${t.message}")
+            }
+
+            override fun onClosing(ws: WebSocket, code: Int, reason: String) {
+                Log.d(TAG, "WebSocket CLOSING: $reason")
             }
         })
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Doctor Search
-    // ---------------------------------------------------------------------------------------------
-    fun findDoctor(preferredLevel: String? = "MO") {
-        val req = JSONObject()
-        req.put("type", "call-request")
-        req.put("preferredLevel", preferredLevel)
-        webSocket?.send(req.toString())
-    }
+    // ----------------------------
+    // SERVER INTERACTIONS
+    // ----------------------------
 
-    // ---------------------------------------------------------------------------------------------
-    // Call Setup
-    // ---------------------------------------------------------------------------------------------
-    fun initiateCall(doctorSocketId: String) {
-        doctorId = doctorSocketId
-        ensureFactory()
-        createPeerConnection()
-        setupLocalMedia()
-
-        peerConnection?.createOffer(object : SimpleSdpObserver() {
-            override fun onCreateSuccess(desc: SessionDescription?) {
-                peerConnection?.setLocalDescription(SimpleSdpObserver(), desc)
-                sendOffer(desc!!)
-            }
-        }, MediaConstraints())
-    }
-
-    fun endCall() {
-        val msg = JSONObject()
-        msg.put("type", "call-status")
-        msg.put("toUserID", doctorId)
-        msg.put("status", "ended")
+    private fun registerAsPatient() {
+        val msg = JSONObject().apply {
+            put("type", "register")
+            put("id", patientId)
+            put("role", "patient")
+        }
+        Log.d(TAG, "Registering as PATIENT: $msg")
         webSocket?.send(msg.toString())
-
-        cleanup()
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // PeerConnection Factory
-    // ---------------------------------------------------------------------------------------------
-    private fun ensureFactory() {
-        if (peerConnectionFactory != null) return
-
-        val initOpts = PeerConnectionFactory.InitializationOptions.builder(context)
-            .setEnableInternalTracer(true)
-            .createInitializationOptions()
-
-        PeerConnectionFactory.initialize(initOpts)
-
-        peerConnectionFactory = PeerConnectionFactory.builder()
-            .setVideoEncoderFactory(DefaultVideoEncoderFactory(eglBaseContext, true, true))
-            .setVideoDecoderFactory(DefaultVideoDecoderFactory(eglBaseContext))
-            .createPeerConnectionFactory()
+    private fun findDoctor() {
+        val msg = JSONObject().apply {
+            put("type", "call-request")
+            put("preferredLevel", preferredDoctorLevel ?: "MO")
+        }
+        Log.d(TAG, "REQUESTING doctor: $msg")
+        webSocket?.send(msg.toString())
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // PeerConnection
-    // ---------------------------------------------------------------------------------------------
+    private fun sendOffer(sdp: SessionDescription) {
+        val msg = JSONObject().apply {
+            put("type", "offer")
+            put("toUserID", doctorId)
+            put("payload", JSONObject().apply {
+                put("type", sdp.type.canonicalForm())
+                put("sdp", sdp.description)
+            })
+        }
+        webSocket?.send(msg.toString())
+    }
+
+    private fun sendIceCandidate(candidate: IceCandidate) {
+        val msg = JSONObject().apply {
+            put("type", "ice")
+            put("toUserID", doctorId)
+            put("payload", JSONObject().apply {
+                put("candidate", candidate.sdp)
+                put("sdpMid", candidate.sdpMid)
+                put("sdpMLineIndex", candidate.sdpMLineIndex)
+            })
+        }
+        webSocket?.send(msg.toString())
+    }
+
+    // ----------------------------
+    // PEER CONNECTION
+    // ----------------------------
+
     private fun createPeerConnection() {
         val config = PeerConnection.RTCConfiguration(iceServers).apply {
             sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
         }
 
-        peerConnection = peerConnectionFactory?.createPeerConnection(
-            config,
+        peerConnection = peerConnectionFactory.createPeerConnection(config,
             object : PeerConnection.Observer {
 
-                override fun onIceCandidate(candidate: IceCandidate) {
-                    sendIceCandidate(candidate)
+                override fun onIceCandidate(c: IceCandidate) {
+                    sendIceCandidate(c)
                 }
 
-                override fun onAddTrack(receiver: RtpReceiver?, streams: Array<out MediaStream>?) {
-                    val track = receiver?.track()
-                    if (track is VideoTrack) {
-                        remoteVideoTrack = track
-                        remoteVideoView?.let { track.addSink(it) }
+                override fun onAddStream(stream: MediaStream) {
+                    if (stream.videoTracks.isNotEmpty()) {
+                        stream.videoTracks[0].addSink(remoteVideoView)
                     }
                 }
 
                 override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
-                    if (state == PeerConnection.IceConnectionState.CONNECTED)
+                    Log.d(TAG, "ICE STATE: $state")
+                    if (state == PeerConnection.IceConnectionState.CONNECTED) {
                         onCallConnected?.invoke()
+                    }
                     if (state == PeerConnection.IceConnectionState.DISCONNECTED ||
                         state == PeerConnection.IceConnectionState.FAILED
-                    ) onCallEnded?.invoke()
+                    ) {
+                        onCallEnded?.invoke()
+                    }
                 }
 
-                override fun onConnectionChange(newState: PeerConnection.PeerConnectionState) {}
-                override fun onDataChannel(dc: DataChannel?) {}
                 override fun onSignalingChange(state: PeerConnection.SignalingState) {}
+                override fun onIceConnectionReceivingChange(p0: Boolean) {}
                 override fun onIceGatheringChange(state: PeerConnection.IceGatheringState) {}
                 override fun onIceCandidatesRemoved(candidates: Array<out IceCandidate>) {}
-                override fun onAddStream(stream: MediaStream?) {}
-                override fun onRemoveStream(stream: MediaStream?) {}
+                override fun onRemoveStream(stream: MediaStream) {}
+                override fun onDataChannel(dc: DataChannel) {}
                 override fun onRenegotiationNeeded() {}
-                override fun onIceConnectionReceivingChange(receiving: Boolean) {}
+                override fun onAddTrack(r: RtpReceiver, ms: Array<out MediaStream>) {}
             }
         )
+
+        setupLocalMedia()
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Local Media
-    // ---------------------------------------------------------------------------------------------
     private fun setupLocalMedia() {
-        surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", eglBaseContext)
+        val videoCapturer = createVideoCapturer()
 
-        videoCapturer = Camera2Enumerator(context).run {
-            deviceNames.firstOrNull { isFrontFacing(it) }
-                ?.let { createCapturer(it, null) }
+        val videoSource = peerConnectionFactory.createVideoSource(videoCapturer.isScreencast)
+        videoCapturer.initialize(
+            SurfaceTextureHelper.create("CaptureThread", EglBase.create().eglBaseContext),
+            context,
+            videoSource.capturerObserver
+        )
+        videoCapturer.startCapture(720, 480, 30)
+
+        localVideoTrack = peerConnectionFactory.createVideoTrack("local_video", videoSource)
+        localVideoTrack?.addSink(localVideoView)
+
+        val audioSource = peerConnectionFactory.createAudioSource(MediaConstraints())
+        localAudioTrack = peerConnectionFactory.createAudioTrack("local_audio", audioSource)
+
+        peerConnection?.addTrack(localVideoTrack, listOf("local_stream"))
+        peerConnection?.addTrack(localAudioTrack, listOf("local_stream"))
+    }
+
+    private fun createVideoCapturer(): VideoCapturer {
+        val enumerator = Camera2Enumerator(context)
+        val devices = enumerator.deviceNames
+
+        devices.firstOrNull { enumerator.isFrontFacing(it) }?.let {
+            return enumerator.createCapturer(it, null)
+        }
+        devices.firstOrNull { enumerator.isBackFacing(it) }?.let {
+            return enumerator.createCapturer(it, null)
         }
 
-        videoSource = peerConnectionFactory!!.createVideoSource(false)
-        videoCapturer!!.initialize(surfaceTextureHelper, context, videoSource!!.capturerObserver)
-        videoCapturer!!.startCapture(720, 480, 30)
-
-        localVideoTrack = peerConnectionFactory!!.createVideoTrack("local_video", videoSource)
-        localVideoView?.let { localVideoTrack!!.addSink(it) }
-
-        audioSource = peerConnectionFactory!!.createAudioSource(MediaConstraints())
-        localAudioTrack = peerConnectionFactory!!.createAudioTrack("local_audio", audioSource)
-
-        peerConnection?.addTrack(localVideoTrack, listOf("stream-$patientId"))
-        peerConnection?.addTrack(localAudioTrack, listOf("stream-$patientId"))
+        throw RuntimeException("No camera found")
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Signaling Send
-    // ---------------------------------------------------------------------------------------------
-    private fun sendOffer(sdp: SessionDescription) {
-        val msg = JSONObject()
-        msg.put("type", "offer")
-        msg.put("toUserID", doctorId)
+    // ----------------------------
+    // SIGNALLING MESSAGE HANDLER
+    // ----------------------------
 
-        msg.put("payload", JSONObject().apply {
-            put("type", sdp.type.canonicalForm())
-            put("sdp", sdp.description)
-        })
-
-        webSocket?.send(msg.toString())
-    }
-
-    private fun sendIceCandidate(c: IceCandidate) {
-        val msg = JSONObject()
-        msg.put("type", "ice")
-        msg.put("toUserID", doctorId)
-        msg.put("payload", JSONObject().apply {
-            put("candidate", c.sdp)
-            put("sdpMid", c.sdpMid)
-            put("sdpMLineIndex", c.sdpMLineIndex)
-        })
-        webSocket?.send(msg.toString())
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Signaling Receive
-    // ---------------------------------------------------------------------------------------------
     private fun handleSignalingMessage(msg: String) {
         val json = JSONObject(msg)
         when (json.getString("type")) {
 
-            "socket-id" -> {
-                val reg = JSONObject()
-                reg.put("type", "register")
-                reg.put("id", patientId)
-                reg.put("role", "patient")
-                webSocket?.send(reg.toString())
-            }
+            "socket-id" -> registerAsPatient()
 
-            "registered" -> findDoctor(null)
+            "registered" -> findDoctor()
 
             "doctor-assigned" -> {
-                val doctorSocket = json.getString("doctorID")
-                onDoctorFound?.invoke(doctorSocket)
+                doctorId = json.getString("doctorID")
+                onDoctorFound?.invoke(doctorId)
+                createPeerConnection()
+                createOffer()
             }
 
             "answer" -> {
-                val pay = json.getJSONObject("payload")
-                val sdp = SessionDescription(SessionDescription.Type.ANSWER, pay.getString("sdp"))
-                peerConnection?.setRemoteDescription(SimpleSdpObserver(), sdp)
+                val payload = json.getJSONObject("payload")
+                val sdp = SessionDescription(
+                    SessionDescription.Type.ANSWER,
+                    payload.getString("sdp")
+                )
+                peerConnection?.setRemoteDescription(
+                    SimpleSdpObserver(),
+                    sdp
+                )
             }
 
             "ice" -> {
-                val pay = json.getJSONObject("payload")
-                val ice = IceCandidate(
-                    pay.getString("sdpMid"),
-                    pay.getInt("sdpMLineIndex"),
-                    pay.getString("candidate")
+                val payload = json.getJSONObject("payload")
+                val c = IceCandidate(
+                    payload.getString("sdpMid"),
+                    payload.getInt("sdpMLineIndex"),
+                    payload.getString("candidate")
                 )
-                peerConnection?.addIceCandidate(ice)
+                peerConnection?.addIceCandidate(c)
             }
         }
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Cleanup
-    // ---------------------------------------------------------------------------------------------
-    private fun cleanup() {
-        videoCapturer?.stopCapture()
-        videoCapturer?.dispose()
-        videoSource?.dispose()
-        audioSource?.dispose()
-        peerConnection?.close()
-        peerConnection?.dispose()
-        webSocket?.close(1000, "Closed")
+    private fun createOffer() {
+        val constraints = MediaConstraints()
+        peerConnection?.createOffer(object : SdpObserver {
+            override fun onCreateSuccess(sdp: SessionDescription) {
+                peerConnection?.setLocalDescription(SimpleSdpObserver(), sdp)
+                sendOffer(sdp)
+            }
+            override fun onCreateFailure(error: String) {
+                onError?.invoke("Offer failed: $error")
+            }
+
+            override fun onSetSuccess() {}
+            override fun onSetFailure(error: String) {}
+        }, constraints)
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Simple Observer
-    // ---------------------------------------------------------------------------------------------
-    open class SimpleSdpObserver(
-        private val onCreateSuccessCb: ((SessionDescription?) -> Unit)? = null
-    ) : SdpObserver {
+    // ----------------------------
+    // CLEANUP
+    // ----------------------------
 
-        override fun onCreateSuccess(desc: SessionDescription?) {
-            onCreateSuccessCb?.invoke(desc)
+    fun endCall() {
+        val msg = JSONObject().apply {
+            put("type", "call-status")
+            put("status", "ended")
+            put("toUserID", doctorId)
         }
+        webSocket?.send(msg.toString())
+        cleanup()
+    }
 
+    private fun cleanup() {
+        localVideoTrack?.dispose()
+        localAudioTrack?.dispose()
+        peerConnection?.close()
+        webSocket?.close(1000, "bye")
+    }
+
+    inner class SimpleSdpObserver : SdpObserver {
+        override fun onCreateSuccess(sdp: SessionDescription?) {}
         override fun onSetSuccess() {}
-        override fun onCreateFailure(p0: String?) {}
-        override fun onSetFailure(p0: String?) {}
+        override fun onCreateFailure(msg: String?) {}
+        override fun onSetFailure(msg: String?) {}
     }
 }
