@@ -74,12 +74,6 @@
                             android:textSize="13sp" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:contentDescription="Open"
-                        android:src="@drawable/ic_open_in_new"
-                        app:tint="#BE123C" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -134,12 +128,6 @@
                             android:textSize="13sp" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:contentDescription="Open"
-                        android:src="@drawable/ic_open_in_new"
-                        app:tint="#1E40AF" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -194,12 +182,6 @@
                             android:textSize="13sp" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:contentDescription="Open"
-                        android:src="@drawable/ic_open_in_new"
-                        app:tint="#B45309" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -254,12 +236,6 @@
                             android:textSize="13sp" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:contentDescription="Open"
-                        android:src="@drawable/ic_open_in_new"
-                        app:tint="#047857" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

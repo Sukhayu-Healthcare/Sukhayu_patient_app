@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Basic app labels -->
+    <string name="app_name">આશા જ્યોતિ</string>
+
+    <!-- ASHA Dashboard core -->
+    <string name="asha_dashboard_title">આશા ડેશબોર્ડ</string>
+
+    <!-- Profile + placeholders -->
+    <string name="asha_profile_photo_desc">આશા પ્રોફાઇલ ફોટો</string>
+    <string name="asha_default_name">આરોગ્ય કાર્યકર</string>
+    <string name="asha_id_placeholder">ઓળખ નં.: A001</string>
+    <string name="asha_village_placeholder">ગામ: -</string>
+    <string name="asha_taluka_placeholder">તાલુકો: -</string>
+    <string name="asha_district_placeholder">જિલ્લો: -</string>
+
+    <string name="asha_id_format">ઓળખ નં.: %1$s</string>
+    <string name="village_format">ગામ: %1$s</string>
+    <string name="taluka_format">તાલુકો: %1$s</string>
+    <string name="district_format">જિલ્લો: %1$s</string>
+
+    <!-- Tiles -->
+    <string name="asha_total_patients">કુલ દર્દીઓ</string>
+    <string name="asha_active_cases">સક્રિય કેસ</string>
+    <string name="asha_my_schedule">મારું સમયપત્રક</string>
+    <string name="asha_emergency">આપાતકાલીન</string>
+
+    <string name="desc_total_patients">કુલ દર્દીઓ</string>
+    <string name="desc_active_cases">સક્રિય કેસ</string>
+    <string name="desc_my_schedule">મારું સમયપત્રક</string>
+    <string name="desc_emergency_cases">આપાતકાલીન કેસ</string>
+
+    <!-- Quick Actions -->
+    <string name="asha_quick_actions">ઝડપી ક્રિયામાં</string>
+    <string name="asha_register_patient">દર્દી નોંધણી</string>
+    <string name="asha_conduct_survey">સરવે કરો</string>
+    <string name="asha_view_surveys">સરવે જુઓ</string>
+    <string name="asha_health_drives">આરોગ્ય અભિયાન</string>
+
+    <!-- Patient services -->
+    <string name="asha_patient_services">દર્દી સેવાઓ</string>
+    <string name="asha_consult_doctor">ડૉક્ટર સલાહ</string>
+    <string name="asha_past_consultations">પાછલી સલાહ</string>
+    <string name="asha_disease_analytics">રોગ વિશ્લેષણ</string>
+
+    <!-- Recent activity -->
+    <string name="asha_recent_activity">તાજેતરની પ્રવૃત્તિ</string>
+    <string name="asha_recent_activity_1">• દર્દી નોંધાયો — રામ શર્મા • 2 કલાક પહેલા</string>
+    <string name="asha_recent_activity_2">• સલાહ પૂર્ણ — સિતા દેવી • 5 કલાક પહેલા</string>
+    <string name="asha_recent_activity_3">• આપાતકાલ કેસ રીફર — મોહન ગુપ્તા • 1 દિવસ પહેલા</string>
+
+    <!-- NHP block -->
+    <string name="asha_nhp_title">રાષ્ટ્રીય આરોગ્ય કાર્યક્રમો</string>
+    <string name="asha_nhp_subtitle">ભારત સરકારની મુખ્ય આરોગ્ય યોજનાઓ</string>
+    <string name="asha_nhp_view_all">બધા કાર્યક્રમો જુઓ</string>
+
+    <!-- Tips -->
+    <string name="asha_health_tips_title">સમુદાય આરોગ્ય સૂચનો</string>
+    <string name="asha_tip_monsoon">મોન્સૂન આરોગ્ય\nસ્વચ્છ પાણી પીવો અને પાણીજન્ય રોગોથી બચો.</string>
+    <string name="asha_tip_vaccination">રસીકરણ અભિયાન\nપરિવારોને આવતી રસીકરણ તારીખ યાદ કરાવો.</string>
+    <string name="asha_tip_diabetes">ડાયાબિટિસ જાગૃતિ\n30 વર્ષથી વધુની નિયમિત પરીક્ષા કરો.</string>
+
+    <!-- Logout -->
+    <string name="logout_label">લૉગઆઉટ</string>
+    <string name="logout_warning">નોંધ: લૉગઆઉટ કરવા માટે ઇન્ટરનેટ જરૂરી છે.</string>
+
+</resources>

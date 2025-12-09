@@ -13,7 +13,6 @@ import retrofit2.http.Query
 import retrofit2.Response
 import com.sukhayu.patient.data.remote.SupervisorSurveyDataResponse
 
-
 data class LoginRequest(
     val phone: String,
     val password: String
@@ -33,7 +32,6 @@ data class LoginResponsePatient(
     val patient: PatientInfo,
     val familyProfiles: List<Any>? = null
 )
-
 
 data class AshaInfo(
     val userId: String,
@@ -59,7 +57,21 @@ data class AshaWorker(
     val profile_pic: String?
 )
 
+/**
+ * Must match backend JSON:
+ * {
+ *   "total": number,
+ *   "page": number,
+ *   "limit": number,
+ *   "totalPages": number,
+ *   "ashas": [ ... ]
+ * }
+ */
 data class AshaListResponse(
+    val total: Int,
+    val page: Int,
+    val limit: Int,
+    val totalPages: Int,
     val ashas: List<AshaWorker>
 )
 
@@ -189,6 +201,7 @@ data class SendToAshaResponse(
     val message: String
 )
 
+<<<<<<< HEAD
 data class PatientQueryRequest(
     val asha_id: Int? = null,
     val text: String,
@@ -261,6 +274,8 @@ data class AshaWorkerProfile(
     val asha_phone: String?
 )
 
+=======
+>>>>>>> 80dee916ea5736a372a33fdcdf61917785771827
 interface ApiService {
 
     @POST("patient/v2/login")
@@ -280,18 +295,30 @@ interface ApiService {
         @Body body: SelfUpdateRequest
     ): Call<UpdateProfileResponse>
 
-
     @POST("asha/register-asha")
     fun registerAsha(
         @Header("Authorization") token: String,
         @Body body: RegisterAshaRequest
     ): Call<RegisterAshaResponse>
 
+    /**
+     * UPDATED:
+     * Adds `page` & `limit` as query params
+     * Uses suspend for coroutine calls
+     */
     @GET("asha/all-ashas")
+<<<<<<< HEAD
     fun getAshaList(
         @Header("Authorization") token: String
     ): Call<AshaListResponse>
     // Fetches all ASHA workers list from backend
+=======
+    suspend fun getAshaList(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int
+    ): AshaListResponse
+>>>>>>> 80dee916ea5736a372a33fdcdf61917785771827
 
     @POST("asha/patient/register")
     fun registerPatient(
@@ -337,7 +364,6 @@ interface ApiService {
         @Path("date") date: String
     ): SupervisorSurveyDataResponse
     // Fetches supervisor survey data by table and date from backend
-
 
     @POST("survey/genral")
     suspend fun submitGeneralSurvey(
@@ -430,6 +456,7 @@ interface ApiService {
     suspend fun analyzeComplaint(
         @Body request: AnalyzeRequest
     ): Response<AnalyzeResponse>
+<<<<<<< HEAD
 
     @POST("query/patient")
     fun submitPatientQuery(
@@ -441,4 +468,6 @@ interface ApiService {
     fun getPatientProfile(
         @Header("Authorization") token: String
     ): Call<PatientProfileResponse>
+=======
+>>>>>>> 80dee916ea5736a372a33fdcdf61917785771827
 }

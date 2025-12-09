@@ -67,7 +67,7 @@
     <string name="asha_view_surveys">View Surveys</string>
     <string name="asha_health_drives">Health Drives</string>
 
-    <!-- Older quick action labels from your file -->
+    <!-- Older quick action labels -->
     <string name="action_view_surveys">View Patient Survey</string>
     <string name="action_health_drives">Announcement</string>
     <string name="action_register_patient">Register New Patient</string>
@@ -110,5 +110,46 @@
     <!-- Icons / Links -->
     <string name="desc_open_link">Open link</string>
     <string name="desc_calendar">Calendar icon</string>
+
+    <!-- General Survey Language Toggle -->
+    <string name="language_toggle_english">Switch to Marathi</string>
+    <string name="language_toggle_marathi">मराठीमध्ये स्विच करा</string>
+    <string name="general_survey_title">General Health Survey</string>
+    <string name="patient_details">Patient Details</string>
+    <string name="identification_section">1. Identification</string>
+    <string name="existing_conditions_section">2. Existing Conditions</string>
+    <string name="symptoms_section">3. Symptoms</string>
+    <string name="risk_factors_section">4. Risk Factors</string>
+    <string name="service_use_section">5. Service Use</string>
+    <string name="asha_assessment_section">6. ASHA Assessment</string>
+    <string name="save_survey">Save Survey</string>
+    <string name="visit_date">Visit Date</string>
+    <string name="location">Location</string>
+    <string name="diabetes">Diabetes</string>
+    <string name="hypertension">Hypertension</string>
+    <string name="heart_disease">Heart Disease</string>
+    <string name="stroke">Stroke</string>
+    <string name="kidney_disease">Kidney Disease</string>
+    <string name="other_conditions">Other Conditions</string>
+    <string name="frequent_urination">Frequent Urination</string>
+    <string name="excessive_thirst">Excessive Thirst</string>
+    <string name="weight_loss">Weight Loss</string>
+    <string name="blurred_vision">Blurred Vision</string>
+    <string name="chest_pain">Chest Pain</string>
+    <string name="shortness_of_breath">Shortness of Breath</string>
+    <string name="fatigue">Fatigue</string>
+    <string name="family_history">Family History</string>
+    <string name="tobacco_use">Tobacco Use</string>
+    <string name="alcohol_use">Alcohol Use</string>
+    <string name="physical_activity">Physical Activity</string>
+    <string name="unhealthy_diet">Unhealthy Diet</string>
+    <string name="regular_checkups">Regular Checkups</string>
+    <string name="current_medication">Current Medication</string>
+    <string name="medication_details">Medication Details</string>
+    <string name="recent_bp_check">Recent BP Check</string>
+    <string name="recent_sugar_check">Recent Sugar Check</string>
+    <string name="referral_needed">Referral Needed</string>
+    <string name="referral_facility" translatable="false">Referral Facility</string>
+    <string name="remarks">Remarks</string>
 
 </resources>

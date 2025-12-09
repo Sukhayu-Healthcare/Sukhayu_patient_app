@@ -1,9 +1,12 @@
 package com.sukhayu.patient.ui.asha.schedule
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.CalendarView
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,11 +30,16 @@ class AshaScheduleActivity : AppCompatActivity() {
     private lateinit var calendarView: CalendarView
     private lateinit var rvTasks: RecyclerView
     private lateinit var fabAddTask: FloatingActionButton
+    private lateinit var btnWriteNotes: Button
+    private lateinit var btnHandbook: ImageButton
 
     private val tasksForSelectedDay = mutableListOf<ScheduleTask>()
     private lateinit var adapter: ScheduleTaskAdapter
 
     private var selectedDateMillis: Long = System.currentTimeMillis()
+
+    // In-memory map for daily notes keyed by dateMillis
+    private val dailyNotes = mutableMapOf<Long, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,14 +49,19 @@ class AshaScheduleActivity : AppCompatActivity() {
         calendarView = findViewById(R.id.calendarView)
         rvTasks = findViewById(R.id.rvTasks)
         fabAddTask = findViewById(R.id.fabAddTask)
+        btnWriteNotes = findViewById(R.id.btnWriteNotes)
+        btnHandbook = findViewById(R.id.btnHandbook)
 
         setupRecyclerView()
         setupCalendar()
         setupTabs()
         setupFab()
+        setupNotesButton()
+        setupHandbookButton()
 
-        // default tab: Weekly
-        loadPredefinedTasksForTab("Weekly")
+        // Default tab: Daily
+        loadPredefinedTasksForTab("Daily")
+        tabScheduleScope.selectTab(tabScheduleScope.getTabAt(0))
     }
 
     private fun setupRecyclerView() {
@@ -97,6 +110,50 @@ class AshaScheduleActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupNotesButton() {
+        btnWriteNotes.setOnClickListener {
+            showNotesDialog()
+        }
+    }
+
+    private fun setupHandbookButton() {
+        btnHandbook.setOnClickListener {
+            val intent = Intent(this, AshaHandbookActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun showNotesDialog() {
+        val editText = EditText(this)
+        editText.hint = "Write your notes here"
+        editText.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        editText.minLines = 5
+        editText.maxLines = 8
+
+        // Load existing note for this date if available
+        val existingNote = dailyNotes[selectedDateMillis]
+        if (existingNote != null) {
+            editText.setText(existingNote)
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Notes for ${formatDate(selectedDateMillis)}")
+            .setView(editText)
+            .setPositiveButton("Save") { dialog, _ ->
+                val noteText = editText.text.toString().trim()
+                if (noteText.isNotEmpty()) {
+                    dailyNotes[selectedDateMillis] = noteText
+                } else {
+                    dailyNotes.remove(selectedDateMillis)
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
     private fun showAddTaskDialog() {
         val editText = EditText(this)
         editText.hint = "Task title"
@@ -128,6 +185,33 @@ class AshaScheduleActivity : AppCompatActivity() {
         tasksForSelectedDay.clear()
 
         when (tabLabel) {
+            "Daily" -> {
+                tasksForSelectedDay.add(
+                    ScheduleTask(
+                        title = "Home visits as per line list",
+                        dateMillis = selectedDateMillis
+                    )
+                )
+                tasksForSelectedDay.add(
+                    ScheduleTask(
+                        title = "Record services in daily diary/register",
+                        dateMillis = selectedDateMillis
+                    )
+                )
+                tasksForSelectedDay.add(
+                    ScheduleTask(
+                        title = "Follow-up of high-risk mothers and newborns",
+                        dateMillis = selectedDateMillis
+                    )
+                )
+                tasksForSelectedDay.add(
+                    ScheduleTask(
+                        title = "Counseling for pregnant women and eligible couples",
+                        dateMillis = selectedDateMillis
+                    )
+                )
+            }
+
             "Weekly" -> {
                 tasksForSelectedDay.add(
                     ScheduleTask(

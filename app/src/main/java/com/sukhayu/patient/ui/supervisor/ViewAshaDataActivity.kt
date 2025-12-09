@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -32,12 +33,24 @@ class ViewAshaDataActivity : AppCompatActivity() {
     private lateinit var ashaAdapter: AshaAdapter
     private lateinit var etSearchAsha: EditText
     private lateinit var tvAshaCount: TextView
-    private var ashaListFull: List<AshaWorker> = emptyList() // Keep full list for filtering
+    private lateinit var tvPageInfo: TextView
+    private lateinit var btnPrevPage: Button
+    private lateinit var btnNextPage: Button
+
+    // Keep list for current page (filtering is per-page now)
+    private var ashaListFull: List<AshaWorker> = emptyList()
+
     private val TAG = "ViewAshaDataActivity"
     private lateinit var voiceHelper: VoiceInputHelper
     private lateinit var repository: SupervisorRepository
 
-    // new: launcher to open detail and receive result
+    // Pagination state
+    private var currentPage: Int = 1
+    private var totalPages: Int = 1
+    private val pageSize: Int = 5 // must match backend default, or change both sides
+    private var totalAshaCount: Int = 0
+
+    // launcher to open detail and receive result
     private lateinit var ashaDetailLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,21 +61,25 @@ class ViewAshaDataActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerViewAsha)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        
+
         etSearchAsha = findViewById(R.id.etSearchAsha)
         tvAshaCount = findViewById(R.id.tvAshaCount)
+        tvPageInfo = findViewById(R.id.tvPageInfo)
+        btnPrevPage = findViewById(R.id.btnPrevPage)
+        btnNextPage = findViewById(R.id.btnNextPage)
 
         // register launcher before using
-        ashaDetailLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val data = result.data
-                if (data?.getBooleanExtra("ASHA_UPDATED", false) == true) {
-                    // refresh list after edits
-                    fetchAshaList()
-                    Toast.makeText(this, "ASHA profile updated", Toast.LENGTH_SHORT).show()
+        ashaDetailLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val data = result.data
+                    if (data?.getBooleanExtra("ASHA_UPDATED", false) == true) {
+                        // refresh current page after edits
+                        fetchAshaList(currentPage)
+                        Toast.makeText(this, "ASHA profile updated", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-        }
 
         ashaAdapter = AshaAdapter(emptyList()) { ashaWorker ->
             navigateToAshaDetails(ashaWorker)
@@ -70,7 +87,9 @@ class ViewAshaDataActivity : AppCompatActivity() {
         recyclerView.adapter = ashaAdapter
 
         setupSearchFilter()
-        fetchAshaList()
+        setupPaginationButtons()
+
+        fetchAshaList(1)
 
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
@@ -79,14 +98,47 @@ class ViewAshaDataActivity : AppCompatActivity() {
 
     private fun setupSearchFilter() {
         etSearchAsha.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
                 filterAshaList(s.toString())
             }
 
             override fun afterTextChanged(s: Editable?) {}
         })
+    }
+
+    private fun setupPaginationButtons() {
+        btnPrevPage.setOnClickListener {
+            if (currentPage > 1) {
+                fetchAshaList(currentPage - 1)
+            }
+        }
+
+        btnNextPage.setOnClickListener {
+            if (currentPage < totalPages) {
+                fetchAshaList(currentPage + 1)
+            }
+        }
+
+        updatePaginationUi()
+    }
+
+    private fun updatePaginationUi() {
+        tvPageInfo.text = "Page $currentPage of $totalPages"
+        btnPrevPage.isEnabled = currentPage > 1
+        btnNextPage.isEnabled = currentPage < totalPages
     }
 
     private fun filterAshaList(query: String) {
@@ -95,24 +147,28 @@ class ViewAshaDataActivity : AppCompatActivity() {
         } else {
             ashaListFull.filter { asha ->
                 asha.asha_name.contains(query, ignoreCase = true) ||
-                asha.asha_id.contains(query, ignoreCase = true) ||
-                asha.asha_phone.contains(query, ignoreCase = false)
+                        asha.asha_id.contains(query, ignoreCase = true) ||
+                        asha.asha_phone.contains(query, ignoreCase = false)
             }
         }
-        
+
         ashaAdapter.updateData(filteredList)
-        updateAshaCount(filteredList.size, ashaListFull.size)
-        
+        updateAshaCount(filteredList.size)
+
         if (filteredList.isEmpty() && query.isNotEmpty()) {
-            Toast.makeText(this, "No ASHA workers found matching '$query'", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "No ASHA workers found matching '$query'",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
-    private fun updateAshaCount(displayedCount: Int, totalCount: Int) {
-        tvAshaCount.text = if (displayedCount == totalCount) {
-            "Total ASHA Workers: $totalCount"
+    private fun updateAshaCount(displayedCount: Int) {
+        tvAshaCount.text = if (displayedCount == totalAshaCount || totalAshaCount == 0) {
+            "Total ASHA Workers: $totalAshaCount"
         } else {
-            "Showing $displayedCount of $totalCount ASHA Workers"
+            "Showing $displayedCount of $totalAshaCount ASHA Workers"
         }
     }
 
@@ -126,47 +182,78 @@ class ViewAshaDataActivity : AppCompatActivity() {
             putExtra("TALUKA", ashaWorker.taluka)
             putExtra("PROFILE_PIC", ashaWorker.profile_pic)
         }
-        // use launcher to receive possible "edited" result
         ashaDetailLauncher.launch(intent)
     }
 
-    private fun fetchAshaList() {
+    private fun fetchAshaList(page: Int = 1) {
         val token = TokenManager.getToken()
-        
+
         if (token.isEmpty()) {
-            Toast.makeText(this, "Session expired. Please login again.", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "Session expired. Please login again.",
+                Toast.LENGTH_LONG
+            ).show()
             Log.e(TAG, "Auth token not found")
             return
         }
 
-        Log.d(TAG, "Fetching ASHA list for supervisor")
+        Log.d(TAG, "Fetching ASHA list for supervisor. Page = $page")
 
         lifecycleScope.launch {
-            val result = repository.getAshaWorkers()
-            
-            result.onSuccess { ashaWorkers ->
-                Log.d(TAG, "Retrieved ${ashaWorkers.size} ASHA workers")
-                
-                ashaListFull = ashaWorkers
-                ashaAdapter.updateData(ashaWorkers)
-                updateAshaCount(ashaWorkers.size, ashaWorkers.size)
-                
-                if (ashaWorkers.isEmpty()) {
-                    Toast.makeText(this@ViewAshaDataActivity, "No ASHA workers registered yet", Toast.LENGTH_SHORT).show()
+            val result = repository.getAshaWorkers(page, pageSize)
+
+            result.onSuccess { response ->
+                Log.d(
+                    TAG,
+                    "Retrieved page ${response.page}/${response.totalPages}, count=${response.ashas.size}, total=${response.total}"
+                )
+
+                currentPage = response.page
+                totalPages = if (response.totalPages <= 0) 1 else response.totalPages
+                totalAshaCount = response.total
+
+                ashaListFull = response.ashas
+                ashaAdapter.updateData(response.ashas)
+                updateAshaCount(response.ashas.size)
+                updatePaginationUi()
+
+                if (response.ashas.isEmpty()) {
+                    Toast.makeText(
+                        this@ViewAshaDataActivity,
+                        "No ASHA workers found on this page",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    Toast.makeText(this@ViewAshaDataActivity, "Loaded ${ashaWorkers.size} ASHA workers", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@ViewAshaDataActivity,
+                        "Loaded ${response.ashas.size} ASHA workers",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }.onFailure { error ->
                 Log.e(TAG, "Error: ${error.message}", error)
-                Toast.makeText(this@ViewAshaDataActivity, "Error: ${error.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@ViewAshaDataActivity,
+                    "Error: ${error.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
     private fun requestAudioPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 200)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                200
+            )
         }
     }
 

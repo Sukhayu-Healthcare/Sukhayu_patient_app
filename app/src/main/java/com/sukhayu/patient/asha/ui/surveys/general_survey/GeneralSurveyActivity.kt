@@ -1,8 +1,11 @@
 package com.sukhayu.patient.asha.ui.surveys.general_survey
 
 import android.app.DatePickerDialog
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +40,8 @@ class GeneralSurveyActivity : AppCompatActivity() {
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private var patientId: String? = null
     private var patientName: String? = null
+    private lateinit var sharedPreferences: SharedPreferences
+    private var isMarathi: Boolean = false
 
     // Section 1: Identification
     private lateinit var etVisitDate: TextInputEditText
@@ -93,14 +98,20 @@ class GeneralSurveyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_general_survey)
         HeaderUtils.setupRoleInHeader(this)
+
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences("GeneralSurveyPrefs", MODE_PRIVATE)
+        isMarathi = sharedPreferences.getBoolean("isMarathi", false)
+
         supportActionBar?.apply {
-            title = "General Health Survey"
+            title = if (isMarathi) getString(R.string.general_survey_title) else "General Health Survey"
             setDisplayHomeAsUpEnabled(true)
         }
 
         viewModel = ViewModelProvider(this)[GeneralSurveyViewModel::class.java]
 
         initializeViews()
+        applyLanguageForGeneralSurvey()
         readIntentExtrasAndPrefillForm()
         setupDatePickers()
         setupConditionalFields()
@@ -390,4 +401,54 @@ class GeneralSurveyActivity : AppCompatActivity() {
         super.onDestroy()
         voiceHelper.destroy()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_general_survey, menu)
+        updateLanguageMenuTitle(menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_language_toggle -> {
+                toggleLanguage()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun toggleLanguage() {
+        isMarathi = !isMarathi
+        sharedPreferences.edit().putBoolean("isMarathi", isMarathi).apply()
+        applyLanguageForGeneralSurvey()
+        invalidateOptionsMenu()
+    }
+
+    private fun updateLanguageMenuTitle(menu: Menu?) {
+        val languageItem = menu?.findItem(R.id.menu_language_toggle)
+        languageItem?.title = if (isMarathi) {
+            getString(R.string.language_toggle_english)
+        } else {
+            getString(R.string.language_toggle_marathi)
+        }
+    }
+
+    private fun applyLanguageForGeneralSurvey() {
+        if (isMarathi) {
+            supportActionBar?.title = getString(R.string.general_survey_title)
+        } else {
+            supportActionBar?.title = "General Health Survey"
+        }
+
+        // Update all visible text labels based on current language
+        // Note: Most UI elements are hardcoded in XML layout, so we update the title
+        // For a complete implementation, you would need to either:
+        // 1. Use string resources in the XML layout (recommended for production)
+        // 2. Update each view programmatically as shown below
+
+        // Example of updating programmatic views:
+        // tvPatientNameHeader.text = if (isMarathi) getString(R.string.patient_details) else "Patient Details"
+    }
 }
+

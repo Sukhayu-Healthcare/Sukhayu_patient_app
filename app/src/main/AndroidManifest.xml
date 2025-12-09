@@ -59,6 +59,11 @@
         <activity android:name="com.sukhayu.patient.ui.supervisor.drives.CreateDriveActivity" android:exported="false" />
         <activity android:name="com.sukhayu.patient.ui.supervisor.ViewSurveysAndDrivesActivity" android:exported="true" />
 
+        <activity
+            android:name=".ui.asha.dashboard.AshaProfileActivity"
+            android:exported="false" />
+
+
         <!-- ASHA Dashboard -->
         <activity android:name="com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity" android:exported="true" />
 
@@ -73,6 +78,12 @@
 
         <!-- ASHA Schedule Activity -->
         <activity android:name="com.sukhayu.patient.ui.asha.schedule.AshaScheduleActivity" android:exported="false" android:label="My Schedule" />
+
+        <!-- ASHA Handbook Activity -->
+        <activity
+            android:name="com.sukhayu.patient.ui.asha.schedule.AshaHandbookActivity"
+            android:exported="false"
+            android:label="ASHA Handbook" />
 
         <!-- Pregnancy / ANC -->
         <activity android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySurveyActivity" android:exported="false" android:label="Pregnancy / ANC Survey" />
