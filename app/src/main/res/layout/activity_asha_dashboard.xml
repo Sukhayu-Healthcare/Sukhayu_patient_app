@@ -17,33 +17,6 @@
         app:menu="@menu/menu_asha_dashboard"
         app:elevation="4dp" />
 
-    <!-- Language Toggle -->
-    <LinearLayout
-        android:id="@+id/languageToggle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/tvEnglish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="EN"
-            android:textColor="?attr/colorPrimary"
-            android:textStyle="bold"
-            android:padding="6dp" />
-
-        <TextView
-            android:id="@+id/tvMarathi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="मरा"
-            android:textColor="?attr/colorPrimary"
-            android:textStyle="bold"
-            android:padding="6dp" />
-    </LinearLayout>
 
     <ScrollView
         android:id="@+id/asha_dashboard_scroll"

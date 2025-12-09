@@ -146,6 +146,12 @@
             android:exported="false"
             android:label="My Schedule" />
 
+        <!-- ASHA Handbook Activity -->
+        <activity
+            android:name="com.sukhayu.patient.ui.asha.schedule.AshaHandbookActivity"
+            android:exported="false"
+            android:label="ASHA Handbook" />
+
         <!-- Pregnancy / ANC -->
         <activity
             android:name="com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySurveyActivity"
