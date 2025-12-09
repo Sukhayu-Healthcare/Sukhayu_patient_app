@@ -25,9 +25,10 @@ import kotlinx.coroutines.launch
         TbFollowUpEntity::class,
         GeneralSurveyEntity::class,
         SurveySummaryEntity::class,
-        TaskEntity::class                  // ✅ Added for Task/Schedule
+        TaskEntity::class,                  // ✅ Added for Task/Schedule
+        AppointmentEntity::class            // ✅ Added for Appointments
     ],
-    version = 11,                          // 🚨 INCREMENTED for TaskEntity
+    version = 12,                          // 🚨 INCREMENTED for AppointmentEntity
     exportSchema = false
 )
 abstract class AshaLocalDatabase : RoomDatabase() {
@@ -42,6 +43,8 @@ abstract class AshaLocalDatabase : RoomDatabase() {
     abstract fun tbFollowUpDao(): TbFollowUpDao
     abstract fun taskDao(): TaskDao
     abstract fun generalSurveyDao(): GeneralSurveyDao
+    abstract fun appointmentDao(): AppointmentDao           // ✅ Added for Appointments
+
 
     // ✅ Newly added
     abstract fun surveySummaryDao(): SurveySummaryDao

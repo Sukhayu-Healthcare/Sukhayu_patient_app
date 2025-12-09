@@ -21,9 +21,9 @@ class AppointmentAdapter(
 ) : RecyclerView.Adapter<AppointmentAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textViewDoctorName: TextView = itemView.findViewById(R.id.text_view_doctor_name)
-        val textViewDate: TextView = itemView.findViewById(R.id.text_view_date)
-        val textViewTime: TextView = itemView.findViewById(R.id.text_view_time)
+        val tvDoctorName: TextView = itemView.findViewById(R.id.tvDoctorName)
+        val tvAppointmentDate: TextView = itemView.findViewById(R.id.tvAppointmentDate)
+        val tvAppointmentTime: TextView = itemView.findViewById(R.id.tvAppointmentTime)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,33 +33,33 @@ class AppointmentAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val appointment = appointments[position]
-        holder.textViewDoctorName.text = appointment.doctorName
-        holder.textViewDate.text = appointment.date
-        holder.textViewTime.text = appointment.time
+        holder.apply {
+            tvDoctorName.text = appointment.doctorName
+            tvAppointmentDate.text = appointment.date
+            tvAppointmentTime.text = appointment.time ?: "Not specified"
 
-        // Add TTS support for appointment items
-        holder.textViewDoctorName.setOnLongClickListener {
-            ttsHelper.speak("Doctor: ${appointment.doctorName}")
-            true
+            // Add TTS support for appointment items
+            tvDoctorName.setOnLongClickListener {
+                ttsHelper.speak("Doctor: ${appointment.doctorName}")
+                true
+            }
+
+            tvAppointmentDate.setOnLongClickListener {
+                ttsHelper.speak("Date: ${appointment.date}")
+                true
+            }
+
+            tvAppointmentTime.setOnLongClickListener {
+                ttsHelper.speak("Time: ${appointment.time}")
+                true
+            }
+
+            itemView.setOnLongClickListener {
+                val fullText = "Appointment with Doctor ${appointment.doctorName} on ${appointment.date} at ${appointment.time}"
+                ttsHelper.speak(fullText)
+                true
+            }
         }
-
-        holder.textViewDate.setOnLongClickListener {
-            ttsHelper.speak("Date: ${appointment.date}")
-            true
-        }
-
-        holder.textViewTime.setOnLongClickListener {
-            ttsHelper.speak("Time: ${appointment.time}")
-            true
-        }
-
-        holder.itemView.setOnLongClickListener {
-            val fullText = "Appointment with Doctor ${appointment.doctorName} on ${appointment.date} at ${appointment.time}"
-            ttsHelper.speak(fullText)
-            true
-        }
-
-        // ...existing click logic...
     }
 
     override fun getItemCount(): Int {

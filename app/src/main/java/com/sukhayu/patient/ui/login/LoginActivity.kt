@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.local.AshaLocalDatabase
@@ -33,6 +34,7 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     private val gson = Gson()
+    private val TAG = "LoginActivity"
 
     // 🔹 Auto-login if already logged in
     override fun onStart() {
@@ -58,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(Intent(this, DashboardActivity::class.java))
                 }
             }
-            finish() // don’t allow back press to return to login
+            finish() // don't allow back press to return to login
         }
     }
 
@@ -113,11 +115,14 @@ class LoginActivity : AppCompatActivity() {
 
                             savePatientLogin(parsed)
 
+                            // Check and sync FCM token
+                            checkAndSyncFcmToken(parsed.token)
+
                             // guard cache so it can't crash the app
                             try {
                                 cachePatient(parsed.patient)
                             } catch (e: Exception) {
-                                Log.e("LoginActivity", "Failed to cache patient locally", e)
+                                Log.e(TAG, "Failed to cache patient locally", e)
                             }
 
                             startActivity(
@@ -136,6 +141,9 @@ class LoginActivity : AppCompatActivity() {
 
                             saveAshaOrSupervisorLogin(parsed)
 
+                            // Check and sync FCM token
+                            checkAndSyncFcmToken(parsed.token)
+
                             if (role == "supervisor") {
                                 startActivity(
                                     Intent(
@@ -144,10 +152,7 @@ class LoginActivity : AppCompatActivity() {
                                     )
                                 )
                             } else {
-                                Log.d(
-                                    "LoginActivity",
-                                    "ASHA login branch reached, starting sync..."
-                                )
+                                Log.d(TAG, "ASHA login branch reached, starting sync...")
                                 CoroutineScope(Dispatchers.IO).launch {
                                     try {
                                         val db =
@@ -155,11 +160,7 @@ class LoginActivity : AppCompatActivity() {
                                         val repo = PatientRepository(db, ApiClient.retrofit)
                                         repo.syncPatientsFromServer(parsed.token)
                                     } catch (e: Exception) {
-                                        Log.e(
-                                            "LoginActivity",
-                                            "Failed to sync patients",
-                                            e
-                                        )
+                                        Log.e(TAG, "Failed to sync patients", e)
                                         runOnUiThread {
                                             Toast.makeText(
                                                 this@LoginActivity,
@@ -198,6 +199,111 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                 }
             })
+        }
+    }
+
+    private fun checkAndSyncFcmToken(authToken: String) {
+        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+        val savedFcmToken = prefs.getString("fcm_token", null)
+
+        if (savedFcmToken.isNullOrEmpty()) {
+            Log.d(TAG, "========================================")
+            Log.d(TAG, "🔍 FCM TOKEN NOT FOUND IN SHARED PREFS")
+            Log.d("Shlok", "Fetching from Firebase...")
+            Log.d(TAG, "========================================")
+            
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val fcmToken = task.result
+                    Log.d(TAG, "========================================")
+                    Log.d(TAG, "✅ FCM TOKEN FETCHED FROM FIREBASE")
+                    Log.d("Aniket", "FCM Token: $fcmToken")
+                    Log.d(TAG, "Token is null or empty: ${fcmToken.isNullOrEmpty()}")
+                    Log.d(TAG, "========================================")
+
+                    if (!fcmToken.isNullOrEmpty()) {
+                        // Save to SharedPreferences
+                        prefs.edit().putString("fcm_token", fcmToken).apply()
+                        Log.d(TAG, "✅ FCM token saved to SharedPreferences")
+
+                        // Send to backend
+                        sendFcmTokenToBackend(authToken, fcmToken)
+                    } else {
+                        Log.e(TAG, "❌ FCM Token is null or empty from Firebase!")
+                    }
+                } else {
+                    Log.e(TAG, "❌ Failed to fetch FCM token from Firebase", task.exception)
+                    task.exception?.printStackTrace()
+                }
+            }.addOnFailureListener { exception ->
+                Log.e(TAG, "❌ OnFailureListener - Error fetching FCM token: ${exception.message}", exception)
+                exception.printStackTrace()
+            }
+        } else {
+            Log.d(TAG, "========================================")
+            Log.d(TAG, "✅ FCM TOKEN ALREADY EXISTS IN SHARED PREFS")
+            Log.d(TAG, "FCM Token: $savedFcmToken")
+            Log.d(TAG, "Sending existing token to backend...")
+            Log.d(TAG, "========================================")
+            // Send existing token to backend as well
+            sendFcmTokenToBackend(authToken, savedFcmToken)
+        }
+    }
+
+    private fun sendFcmTokenToBackend(authToken: String, fcmToken: String) {
+        Log.d(TAG, "========================================")
+        Log.d(TAG, "📤 SENDING FCM TOKEN TO BACKEND")
+        Log.d(TAG, "Auth Token: $authToken")
+        Log.d(TAG, "FCM Token: $fcmToken")
+        Log.d(TAG, "========================================")
+        
+        val request = SaveFcmTokenRequest(fcmToken)
+        
+        try {
+            ApiClient.retrofit.saveFcmToken("Bearer $authToken", request)
+                .enqueue(object : Callback<SaveFcmTokenResponse> {
+                    override fun onResponse(
+                        call: Call<SaveFcmTokenResponse>,
+                        response: Response<SaveFcmTokenResponse>
+                    ) {
+                        Log.d(TAG, "========================================")
+                        Log.d(TAG, "📡 BACKEND RESPONSE RECEIVED")
+                        Log.d(TAG, "Response Code: ${response.code()}")
+                        Log.d(TAG, "Is Successful: ${response.isSuccessful}")
+                        Log.d(TAG, "Response Body: ${response.body()}")
+                        Log.d(TAG, "========================================")
+                        
+                        if (response.isSuccessful) {
+                            Log.d(TAG, "========================================")
+                            Log.d(TAG, "✅ FCM TOKEN SENT TO BACKEND SUCCESSFULLY")
+                            Log.d(TAG, "Response Message: ${response.body()?.message}")
+                            Log.d(TAG, "Response Success: ${response.body()?.success}")
+                            Log.d(TAG, "FCM Token: $fcmToken")
+                            Log.d(TAG, "========================================")
+                        } else {
+                            Log.e(TAG, "========================================")
+                            Log.e(TAG, "❌ BACKEND RETURNED ERROR")
+                            Log.e(TAG, "Status Code: ${response.code()}")
+                            Log.e(TAG, "Error Body: ${response.errorBody()?.string()}")
+                            Log.e(TAG, "========================================")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<SaveFcmTokenResponse>, t: Throwable) {
+                        Log.e(TAG, "========================================")
+                        Log.e(TAG, "❌ NETWORK ERROR SENDING FCM TOKEN")
+                        Log.e(TAG, "Error Message: ${t.message}")
+                        Log.e(TAG, "Error Type: ${t.javaClass.simpleName}")
+                        Log.e(TAG, "========================================")
+                        t.printStackTrace()
+                    }
+                })
+        } catch (e: Exception) {
+            Log.e(TAG, "========================================")
+            Log.e(TAG, "❌ EXCEPTION WHILE CREATING REQUEST")
+            Log.e(TAG, "Exception: ${e.message}")
+            Log.e(TAG, "========================================")
+            e.printStackTrace()
         }
     }
 
@@ -265,7 +371,7 @@ class LoginActivity : AppCompatActivity() {
         TokenManager.saveToken(
             token = data.token,
             userId = data.user.id ?: data.user.phone ?: "unknown",
-            supremeId = "",              // ASHA doesn’t have a supreme_id here
+            supremeId = "",              // ASHA doesn't have a supreme_id here
             role = data.role
         )
     }
@@ -291,9 +397,9 @@ class LoginActivity : AppCompatActivity() {
                 )
 
                 dao.insertOrUpdate(entity)
-                Log.d("LoginActivity", "Cached patient locally: $entity")
+                Log.d(TAG, "Cached patient locally: $entity")
             } catch (e: Exception) {
-                Log.e("LoginActivity", "Error while caching patient locally", e)
+                Log.e(TAG, "Error while caching patient locally", e)
             }
         }
     }

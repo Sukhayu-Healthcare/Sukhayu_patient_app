@@ -28,9 +28,17 @@ import com.sukhayu.patient.ui.patient.appointment.BookAppointmentActivity
 import com.sukhayu.patient.ui.profile.ProfileActivity
 import com.sukhayu.patient.utils.HeaderUtils
 import com.sukhayu.utils.LocaleHelper
+<<<<<<< HEAD
+import com.sukhayu.patient.ui.patient.appointment.BookAppointmentActivity
+import com.sukhayu.patient.ui.emergency.EmergencyActivity
+import com.sukhayu.patient.ui.consultation.VideoCallActivity
+import com.sukhayu.patient.ui.patient.query.PatientQueryActivity
+=======
 import com.sukhayu.utils.VoiceInputHelper
+>>>>>>> 80dee916ea5736a372a33fdcdf61917785771827
 
 class DashboardActivity : AppCompatActivity() {
+
 
     private lateinit var consultSymptomLauncher: ActivityResultLauncher<Intent>
     private lateinit var voiceHelper: VoiceInputHelper
@@ -39,8 +47,13 @@ class DashboardActivity : AppCompatActivity() {
     // APPLY SAVED LOCALE HERE
     // ----------------------
     override fun attachBaseContext(newBase: Context) {
+<<<<<<< HEAD
+        val langPrefs = newBase.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val lang = langPrefs.getString("app_lang", "en") ?: "en"
+=======
         val prefs = newBase.getSharedPreferences("settings", Context.MODE_PRIVATE)
         val lang = prefs.getString("app_lang", "en") ?: "en"
+>>>>>>> 80dee916ea5736a372a33fdcdf61917785771827
         val ctx = LocaleHelper.setLocale(newBase, lang)
         super.attachBaseContext(ctx)
     }
@@ -87,18 +100,14 @@ class DashboardActivity : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK && result.data != null) {
-
                 val symptomText =
                     result.data!!.getStringExtra(CheckSymptomsActivity.EXTRA_SYMPTOM_TEXT) ?: ""
-
                 val analysis =
                     result.data!!.getStringExtra(CheckSymptomsActivity.EXTRA_SYMPTOM_ANALYSIS) ?: ""
-
                 val consultIntent = Intent(this, ConsultDoctorActivity::class.java).apply {
                     putExtra(CheckSymptomsActivity.EXTRA_SYMPTOM_TEXT, symptomText)
                     putExtra(CheckSymptomsActivity.EXTRA_SYMPTOM_ANALYSIS, analysis)
                 }
-
                 startActivity(consultIntent)
             }
         }
@@ -117,6 +126,12 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, SymptomChatActivity::class.java))
         }
 
+        // WE CARE - HEALTH QUERIES
+        findViewById<MaterialCardView>(R.id.cardWecare).setOnClickListener {
+            Log.d("DashboardActivity", "We Care button clicked - opening PatientQueryActivity")
+            startActivity(Intent(this, PatientQueryActivity::class.java))
+        }
+
         // BOOK APPOINTMENT
         findViewById<MaterialCardView>(R.id.cardBookAppointment).setOnClickListener {
             startActivity(Intent(this, BookAppointmentActivity::class.java))
@@ -127,14 +142,17 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, PastConsultationsActivity::class.java))
         }
 
-        // DISEASE OUTBREAK
-        findViewById<MaterialCardView>(R.id.cardDiseaseOutbreak).setOnClickListener {
-            startActivity(Intent(this, DiseaseOutbreakActivity::class.java))
-        }
-
         // EMERGENCY
         findViewById<Button>(R.id.btnEmergency).setOnClickListener {
             startActivity(Intent(this, EmergencyActivity::class.java))
+        }
+
+        // WEBRTC CALL BUTTON
+        findViewById<Button>(R.id.btnWebRTCCall)?.setOnClickListener {
+            val patientId = prefs.getString("user_id", "") ?: ("patient_" + System.currentTimeMillis())
+            val intent = Intent(this, com.sukhayu.patient.ui.teleconsult.VideoCallActivity::class.java)
+            intent.putExtra("patientId", patientId)
+            startActivity(intent)
         }
 
         // LOGOUT
