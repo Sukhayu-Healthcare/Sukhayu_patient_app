@@ -9,8 +9,8 @@ import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
+import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -25,9 +25,7 @@ import com.sukhayu.patient.asha.ui.surveys.general_survey.GeneralSurveyViewModel
 import com.sukhayu.patient.asha.ui.surveys.pregnancy.PregnancySyncViewModel
 import com.sukhayu.patient.asha.ui.surveys.tb.TbFollowUpViewModel
 import com.sukhayu.patient.asha.ui.surveys.tb.TbScreeningViewModel
-import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.ui.asha.emergency.EmergencyContactsActivity
-import com.sukhayu.patient.ui.asha.family.FamilyListActivity
 import com.sukhayu.patient.ui.asha.nhp.NationalHealthProgramsActivity
 import com.sukhayu.patient.ui.asha.registration.RegisterPatientActivity
 import com.sukhayu.patient.ui.asha.schedule.AshaScheduleActivity
@@ -54,7 +52,6 @@ class AshaDashboardActivity : AppCompatActivity() {
     // Apply saved locale before activity context is used
     override fun attachBaseContext(newBase: Context) {
         val prefs = newBase.getSharedPreferences("settings", Context.MODE_PRIVATE)
-        // Default language: Marathi (mr) as evaluator suggested
         val lang = prefs.getString("app_lang", "mr") ?: "mr"
         val wrapped = LocaleHelper.setLocale(newBase, lang)
         super.attachBaseContext(wrapped)
@@ -64,11 +61,17 @@ class AshaDashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asha_dashboard)
 
-        // ---- Toolbar + menu clicks (Language + Logout) ----
+        // ---- Toolbar + menu clicks (Profile + Language + Logout) ----
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        // app:menu is already set in XML; here we only handle clicks
+        toolbar.setTitleTextColor(Color.WHITE)
+        toolbar.overflowIcon?.setTint(Color.WHITE)
+
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
+                R.id.menu_profile -> {
+                    startActivity(Intent(this, AshaProfileActivity::class.java))
+                    true
+                }
                 R.id.menu_language -> {
                     showLanguageDialog()
                     true
@@ -87,9 +90,6 @@ class AshaDashboardActivity : AppCompatActivity() {
         generalSurveyViewModel = ViewModelProvider(this)[GeneralSurveyViewModel::class.java]
         pregnacySyncViewModel = ViewModelProvider(this)[PregnancySyncViewModel::class.java]
 
-        // Load and display ASHA profile data
-        loadProfileData()
-
         // ---- Card clicks ----
         findViewById<CardView>(R.id.cardTotalPatients).setOnClickListener {
             startActivity(Intent(this, SearchPatientActivity::class.java))
@@ -102,8 +102,6 @@ class AshaDashboardActivity : AppCompatActivity() {
         findViewById<CardView>(R.id.cardEmergency).setOnClickListener {
             startActivity(Intent(this, EmergencyContactsActivity::class.java))
         }
-
-
 
         // ---- Buttons ----
         findViewById<Button>(R.id.btn_view_surveys).setOnClickListener {
@@ -188,73 +186,6 @@ class AshaDashboardActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Loads ASHA profile data and uses string resources so labels
-     * auto-translate between English / Marathi / Hindi / Gujarati.
-     */
-    private fun loadProfileData() {
-        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
-
-        val defaultAshaName = getString(R.string.asha_default_name)
-        val ashaName = prefs.getString("user_name", defaultAshaName) ?: defaultAshaName
-        val ashaId = prefs.getString("user_id", "N/A") ?: "N/A"
-
-        val tvName = findViewById<TextView>(R.id.tv_asha_name)
-        val tvId = findViewById<TextView>(R.id.tvAshaId)
-        val tvVillage = findViewById<TextView>(R.id.tv_asha_village)
-        val tvTaluka = findViewById<TextView>(R.id.tv_asha_taluka)
-        val tvDistrict = findViewById<TextView>(R.id.tv_asha_district)
-
-        // Default values
-        tvName.text = ashaName
-        tvId.text = getString(R.string.asha_id_format, ashaId)
-        tvVillage.text = getString(R.string.village_format, "-")
-        tvTaluka.text = getString(R.string.taluka_format, "-")
-        tvDistrict.text = getString(R.string.district_format, "-")
-
-        val token = TokenManager.getToken()
-        if (token.isNotEmpty()) {
-            ApiClient.retrofit.getSupervisorProfile("Bearer $token")
-                .enqueue(object :
-                    retrofit2.Callback<com.sukhayu.patient.data.remote.SupervisorProfile> {
-
-                    override fun onResponse(
-                        call: retrofit2.Call<com.sukhayu.patient.data.remote.SupervisorProfile>,
-                        response: retrofit2.Response<com.sukhayu.patient.data.remote.SupervisorProfile>
-                    ) {
-                        if (response.isSuccessful && response.body() != null) {
-                            val profile = response.body()!!
-
-                            tvName.text = profile.user_name ?: ashaName
-
-                            val finalAshaId = profile.asha_id ?: ashaId
-                            tvId.text = getString(R.string.asha_id_format, finalAshaId)
-
-                            tvVillage.text = getString(
-                                R.string.village_format,
-                                profile.village ?: "-"
-                            )
-                            tvTaluka.text = getString(
-                                R.string.taluka_format,
-                                profile.taluka ?: "-"
-                            )
-                            tvDistrict.text = getString(
-                                R.string.district_format,
-                                profile.district ?: "-"
-                            )
-                        }
-                    }
-
-                    override fun onFailure(
-                        call: retrofit2.Call<com.sukhayu.patient.data.remote.SupervisorProfile>,
-                        t: Throwable
-                    ) {
-                        Log.e(TAG, "Failed to load profile: ${t.message}")
-                    }
-                })
-        }
-    }
-
     private fun isNetworkAvailable(): Boolean {
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = cm.activeNetwork ?: return false
@@ -274,7 +205,7 @@ class AshaDashboardActivity : AppCompatActivity() {
             .setItems(languages) { _, which ->
                 val prefs = getSharedPreferences("settings", MODE_PRIVATE)
                 prefs.edit().putString("app_lang", codes[which]).apply()
-                recreate() // reload activity in new language
+                recreate()
             }
             .show()
     }

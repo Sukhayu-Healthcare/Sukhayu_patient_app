@@ -111,4 +111,45 @@
     <string name="desc_open_link">लिंक उघडा</string>
     <string name="desc_calendar">कॅलेंडर आयकॉन</string>
 
+    <!-- General Survey Language Toggle -->
+    <string name="language_toggle_english">इंग्रजीमध्ये स्विच करा</string>
+    <string name="language_toggle_marathi">मराठीमध्ये स्विच करा</string>
+    <string name="general_survey_title">सामान्य आरोग्य सर्वेक्षण</string>
+    <string name="patient_details">रुग्ण तपशील</string>
+    <string name="identification_section">१. ओळख</string>
+    <string name="existing_conditions_section">२. विद्यमान स्थिती</string>
+    <string name="symptoms_section">३. लक्षणे</string>
+    <string name="risk_factors_section">४. जोखीम घटक</string>
+    <string name="service_use_section">५. सेवा वापर</string>
+    <string name="asha_assessment_section">६. आशा मूल्यांकन</string>
+    <string name="save_survey">सर्वेक्षण जतन करा</string>
+    <string name="visit_date">भेटचे दिनांक</string>
+    <string name="location">स्थान</string>
+    <string name="diabetes">मधुमेह</string>
+    <string name="hypertension">उच्च रक्तदाब</string>
+    <string name="heart_disease">हृदय रोग</string>
+    <string name="stroke">स्ट्रोक</string>
+    <string name="kidney_disease">किडनी रोग</string>
+    <string name="other_conditions">इतर अवस्था</string>
+    <string name="frequent_urination">वारंवार मूत्रत्याग</string>
+    <string name="excessive_thirst">अत्यधिक तहान</string>
+    <string name="weight_loss">वजन कमी होणे</string>
+    <string name="blurred_vision">धुंदळ दृष्टी</string>
+    <string name="chest_pain">छातीतून दर्द</string>
+    <string name="shortness_of_breath">श्वासाचा अभाव</string>
+    <string name="fatigue">थकवा</string>
+    <string name="family_history">कुटुंब इतिहास</string>
+    <string name="tobacco_use">तंबाखू वापर</string>
+    <string name="alcohol_use">अल्कोहोल वापर</string>
+    <string name="physical_activity">शारीरिक क्रियाकलाप</string>
+    <string name="unhealthy_diet">अस्वास्थ्यकर आहार</string>
+    <string name="regular_checkups">नियमित तपासणी</string>
+    <string name="current_medication">वर्तमान औषध</string>
+    <string name="medication_details">औषध तपशील</string>
+    <string name="recent_bp_check">अलीकडील रक्तदाब तपासणी</string>
+    <string name="recent_sugar_check">अलीकडील साखर तपासणी</string>
+    <string name="referral_needed">संदर्भ आवश्यक</string>
+    <string name="referral_facility">संदर्भ सुविधा</string>
+    <string name="remarks">टिप्पणी</string>
+
 </resources>

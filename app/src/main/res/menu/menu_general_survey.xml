@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Language Toggle -->
+    <item
+        android:id="@+id/menu_language_toggle"
+        android:title="@string/language_toggle_english"
+        app:showAsAction="never" />
+
+</menu>
+

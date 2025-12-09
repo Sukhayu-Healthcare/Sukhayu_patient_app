@@ -117,6 +117,11 @@
             android:name="com.sukhayu.patient.ui.supervisor.ViewSurveysAndDrivesActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".ui.asha.dashboard.AshaProfileActivity"
+            android:exported="false" />
+
+
         <!-- ASHA Dashboard -->
         <activity
             android:name="com.sukhayu.patient.ui.asha.dashboard.AshaDashboardActivity"

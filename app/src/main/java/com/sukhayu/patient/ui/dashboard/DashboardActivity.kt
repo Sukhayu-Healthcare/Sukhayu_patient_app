@@ -3,11 +3,10 @@ package com.sukhayu.patient.ui.dashboard
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
@@ -19,17 +18,17 @@ import com.google.android.material.card.MaterialCardView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity
 import com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity
-import com.sukhayu.patient.ui.consultation.ConsultDoctorActivity
 import com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity
+import com.sukhayu.patient.ui.consultation.ConsultDoctorActivity
 import com.sukhayu.patient.ui.consultation.PastConsultationsActivity
+import com.sukhayu.patient.ui.consultation.VideoCallActivity
+import com.sukhayu.patient.ui.emergency.EmergencyActivity
 import com.sukhayu.patient.ui.login.LoginActivity
+import com.sukhayu.patient.ui.patient.appointment.BookAppointmentActivity
 import com.sukhayu.patient.ui.profile.ProfileActivity
-import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.utils.HeaderUtils
 import com.sukhayu.utils.LocaleHelper
-import com.sukhayu.patient.ui.patient.appointment.BookAppointmentActivity
-import com.sukhayu.patient.ui.emergency.EmergencyActivity
-import com.sukhayu.patient.ui.consultation.VideoCallActivity
+import com.sukhayu.utils.VoiceInputHelper
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -42,20 +41,16 @@ class DashboardActivity : AppCompatActivity() {
     override fun attachBaseContext(newBase: Context) {
         val prefs = newBase.getSharedPreferences("settings", Context.MODE_PRIVATE)
         val lang = prefs.getString("app_lang", "en") ?: "en"
-
         val ctx = LocaleHelper.setLocale(newBase, lang)
         super.attachBaseContext(ctx)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
+        // Set role label in header
         HeaderUtils.setupRoleInHeader(this)
-
-        // Setup language toggle in header
-        setupLanguageToggle()
 
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
         val userName = prefs.getString("user_name", "") ?: ""
@@ -66,7 +61,8 @@ class DashboardActivity : AppCompatActivity() {
 
         // DEBUG: direct video call test button (only active when app is debuggable)
         findViewById<Button?>(R.id.btnDebugTestVideoCall)?.setOnClickListener {
-            val isDebuggable = (applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+            val isDebuggable =
+                (applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
             if (!isDebuggable) {
                 Log.w("DashboardActivity", "Debug test button pressed in non-debuggable app; ignoring.")
                 return@setOnClickListener
@@ -74,7 +70,10 @@ class DashboardActivity : AppCompatActivity() {
 
             val mockPatientId = "debug_patient"
             val mockDoctorId = "debug_doctor"
-            Log.d("DashboardActivity", "Starting debug VideoCallActivity with patient=$mockPatientId doctor=$mockDoctorId")
+            Log.d(
+                "DashboardActivity",
+                "Starting debug VideoCallActivity with patient=$mockPatientId doctor=$mockDoctorId"
+            )
 
             val intent = Intent(this, VideoCallActivity::class.java).apply {
                 putExtra("patientId", mockPatientId)
@@ -83,7 +82,7 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // RESULT HANDLING
+        // RESULT HANDLING for symptom checker → consult doctor
         consultSymptomLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -103,7 +102,6 @@ class DashboardActivity : AppCompatActivity() {
                 startActivity(consultIntent)
             }
         }
-
 
         // PROFILE CARD
         findViewById<MaterialCardView>(R.id.cardProfile).setOnClickListener {
@@ -151,27 +149,6 @@ class DashboardActivity : AppCompatActivity() {
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
         VoiceInputHelper.attachToAllEditTexts(this)
-    }
-
-    /**
-     * Finds the language toggle bar in the header and sets up listeners.
-     */
-    private fun setupLanguageToggle() {
-        val headerView = findViewById<View>(R.id.header)
-        val tvEnglish = headerView?.findViewById<TextView>(R.id.tvEnglish)
-        val tvMarathi = headerView?.findViewById<TextView>(R.id.tvMarathi)
-
-        tvEnglish?.setOnClickListener {
-            getSharedPreferences("settings", MODE_PRIVATE)
-                .edit().putString("app_lang", "en").apply()
-            recreate()
-        }
-
-        tvMarathi?.setOnClickListener {
-            getSharedPreferences("settings", MODE_PRIVATE)
-                .edit().putString("app_lang", "mr").apply()
-            recreate()
-        }
     }
 
     private fun requestAudioPermission() {
