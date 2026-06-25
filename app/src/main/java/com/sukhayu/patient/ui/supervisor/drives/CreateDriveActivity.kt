@@ -19,6 +19,7 @@ import com.sukhayu.patient.data.remote.SaveFcmTokenResponse
 import com.sukhayu.patient.data.remote.SendToAshaRequest
 import com.sukhayu.patient.data.remote.SendToAshaResponse
 import com.sukhayu.patient.utils.HeaderUtils
+import com.sukhayu.patient.utils.LocalizableActivity
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
 import java.text.SimpleDateFormat
@@ -26,8 +27,11 @@ import java.util.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
 
-class CreateDriveActivity : AppCompatActivity() {
+class CreateDriveActivity : LocalizableActivity() {
 
     private lateinit var voiceHelper: VoiceInputHelper
     private lateinit var spinnerAnnouncementType: Spinner
@@ -40,6 +44,8 @@ class CreateDriveActivity : AppCompatActivity() {
     private lateinit var btnMicRemark: ImageButton
     private lateinit var btnCreate: Button
     private lateinit var btnCancel: Button
+
+    private lateinit var ttsHelper: TtsHelper
 
     private var selectedDate: String = ""
     private var selectedAnnouncementType: String = ""
@@ -70,7 +76,21 @@ class CreateDriveActivity : AppCompatActivity() {
         TokenManager.init(applicationContext)
         setupAnnouncementTypeSpinner()
         setupListeners()
+        setupLanguageToggle()
         fetchAndSaveFcmTokenIfNeeded()
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
     }
 
     private fun initViews() {
@@ -244,5 +264,6 @@ class CreateDriveActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         voiceHelper.destroy()
+        ttsHelper.shutdown()
     }
 }

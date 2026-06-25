@@ -7,13 +7,13 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sukhayu.patient.R
@@ -22,16 +22,24 @@ import com.sukhayu.patient.data.remote.PatientQueryRequest
 import com.sukhayu.patient.data.remote.PatientQueryResponse
 import com.sukhayu.patient.ui.dashboard.DashboardActivity
 import com.sukhayu.patient.utils.HeaderUtils
+import com.sukhayu.patient.utils.LocalizableActivity
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
+import com.sukhayu.utils.VoiceInputHelper
+import android.widget.AdapterView
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
-class PatientQueryActivity : AppCompatActivity() {
+class PatientQueryActivity : LocalizableActivity() {
 
     private val TAG = "PatientQueryActivity"
     private val AUDIO_REQUEST_CODE = 100
 
+    private lateinit var ttsHelper: TtsHelper
+    private lateinit var voiceHelper: VoiceInputHelper
     private lateinit var spinnerDisease: Spinner
     private lateinit var etDocType: EditText
     private lateinit var etQueryText: EditText
@@ -66,12 +74,31 @@ class PatientQueryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_query)
 
+        setupLanguageToggle()
         HeaderUtils.setupRoleInHeader(this)
 
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
         initializeViews()
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
+
         setupDiseaseSpinner()
         setupListeners()
         requestAudioPermissions()
+
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun initializeViews() {
@@ -102,13 +129,28 @@ class PatientQueryActivity : AppCompatActivity() {
         spinnerDisease.adapter = adapter
 
         spinnerDisease.setOnItemSelectedListener(object : android.widget.AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+
                 val selectedDisease = diseases[position]
+
                 if (selectedDisease != "Select Health Issue") {
+
+                    ttsHelper.speak(selectedDisease)
+
                     val zone = diseaseZones[selectedDisease]
                     val doctorType = doctorTypeMap[zone] ?: "Not Available"
+
                     etDocType.setText(doctorType)
-                    Log.d(TAG, "Disease selected: $selectedDisease, Zone: $zone, Doctor: $doctorType")
+
+                    Log.d(
+                        TAG,
+                        "Disease selected: $selectedDisease, Zone: $zone, Doctor: $doctorType"
+                    )
                 } else {
                     etDocType.setText("")
                 }
@@ -258,17 +300,30 @@ class PatientQueryActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
         val token = prefs.getString("token", "") ?: ""
         val userIdStr = prefs.getString("user_id", "") ?: ""
-        val patientId = userIdStr.toIntOrNull() ?: 0
+        // Handle both integer and float format (e.g., "14" or "14.0")
+        val patientId = try {
+            userIdStr.toDoubleOrNull()?.toInt() ?: 0
+        } catch (e: Exception) {
+            0
+        }
         
         Log.d(TAG, "========================================")
         Log.d(TAG, "📝 SUBMITTING PATIENT QUERY")
-        Log.d(TAG, "Patient ID: $patientId")
+        Log.d(TAG, "User ID String from Prefs: '$userIdStr'")
+        Log.d(TAG, "Patient ID (parsed): $patientId")
         Log.d(TAG, "Disease: $disease")
         Log.d(TAG, "Doctor Type: $docType")
         Log.d(TAG, "Query: $queryText")
         Log.d(TAG, "Voice File: $voiceFilePath")
-        Log.d(TAG, "Auth Token: $token")
+        Log.d(TAG, "Auth Token: ${if(token.isEmpty()) "NOT FOUND" else "Present (${token.take(20)}...)"}")
         Log.d(TAG, "========================================")
+
+        // Debug: Log all shared preferences keys
+        val allPrefs = prefs.all
+        Log.d(TAG, "All SharedPreferences keys: ${allPrefs.keys}")
+        for ((key, value) in allPrefs) {
+            Log.d(TAG, "  $key = $value")
+        }
 
         // Validate token
         if (token.isEmpty()) {
@@ -278,9 +333,10 @@ class PatientQueryActivity : AppCompatActivity() {
         }
 
         // Validate patient ID
-        if (patientId == 0) {
-            Log.e(TAG, "❌ INVALID PATIENT ID: $patientId")
-            Toast.makeText(this, "Patient ID not found", Toast.LENGTH_SHORT).show()
+        if (patientId == 0 || userIdStr.isEmpty()) {
+            Log.e(TAG, "❌ INVALID PATIENT ID")
+            Log.e(TAG, "User ID String: '$userIdStr', Parsed: $patientId")
+            Toast.makeText(this, "Patient ID not found. Please try logging in again.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -290,7 +346,8 @@ class PatientQueryActivity : AppCompatActivity() {
             voice_url = voiceFilePath,
             disease = disease,
             doc = docType,
-            doc_id = null
+            doc_id = null,
+            query_status = "pending"
         )
 
         Log.d(TAG, "📤 Request Body: $queryRequest")
@@ -371,6 +428,7 @@ class PatientQueryActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        ttsHelper.shutdown()
         mediaRecorder?.release()
         mediaPlayer?.release()
         mediaRecorder = null

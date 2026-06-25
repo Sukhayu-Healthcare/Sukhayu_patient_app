@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:background="#F5F5F5">
 
-    <!-- Include Header -->
     <include layout="@layout/include_header" />
 
     <!-- Header Card -->
@@ -28,7 +27,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Survey Data Viewer"
+                android:text="@string/survey_data_viewer"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
@@ -37,10 +36,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="View and download survey records by type and date"
+                android:text="@string/survey_data_viewer_desc"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray" />
+
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
     <!-- Filter Card -->
@@ -62,7 +63,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Survey Type"
+                android:text="@string/survey_type"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
@@ -79,7 +80,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Date"
+                android:text="@string/visit_date"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
@@ -89,7 +90,7 @@
                 android:id="@+id/etDate"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:hint="Select Date (YYYY-MM-DD)"
+                android:hint="@string/select_date_hint"
                 android:inputType="none"
                 android:focusable="false"
                 android:clickable="true"
@@ -103,14 +104,16 @@
                 android:id="@+id/btnFetchData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Fetch Survey Data"
+                android:text="@string/fetch_survey_data"
                 android:textColor="@android:color/white"
                 android:backgroundTint="#4CAF50"
                 android:padding="12dp" />
+
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Summary and Download Card -->
+    <!-- Summary Card -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -137,7 +140,7 @@
                     android:id="@+id/tvSummary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total Records: 0 | ASHAs: 0"
+                    android:text="@string/default_summary"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/black" />
@@ -145,25 +148,28 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Select filters and fetch data"
+                    android:text="@string/select_filters_fetch_data"
                     android:textSize="12sp"
                     android:textColor="@android:color/darker_gray"
                     android:layout_marginTop="4dp" />
+
             </LinearLayout>
 
             <Button
                 android:id="@+id/btnDownload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Download CSV"
+                android:text="@string/download_csv"
                 android:textColor="@android:color/white"
                 android:backgroundTint="#2196F3"
                 android:enabled="false"
                 android:layout_marginStart="8dp" />
+
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Dynamic Container for ASHA/date-wise survey record cards -->
+    <!-- Dynamic Cards -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -176,9 +182,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="16dp" />
+
     </ScrollView>
 
-    <!-- Optional Table View (if you want both cards and table) -->
+    <!-- Table Section -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -194,7 +201,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Survey Records Table"
+                android:text="@string/survey_records_table"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
@@ -216,9 +223,13 @@
                         android:layout_height="wrap_content"
                         android:stretchColumns="*"
                         android:shrinkColumns="*" />
+
                 </ScrollView>
+
             </HorizontalScrollView>
+
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

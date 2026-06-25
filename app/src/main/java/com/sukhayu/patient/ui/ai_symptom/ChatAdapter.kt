@@ -1,10 +1,13 @@
 package com.sukhayu.patient.ui.ai_symptom
 
 import android.graphics.Color
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.sukhayu.patient.R
 import com.sukhayu.patient.databinding.ChatMessageItemBinding
 
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
@@ -31,31 +34,29 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
         fun bind(message: ChatMessage) {
             binding.tvMessage.text = message.text
             
-            // Get layout params with proper type
-            val params = binding.messageFrame.layoutParams as? LinearLayout.LayoutParams ?: LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
+            val params = binding.messageFrame.layoutParams as LinearLayout.LayoutParams
             
             if (message.isUserMessage) {
-                try {
-                    binding.tvMessage.background = itemView.context.getDrawable(com.sukhayu.patient.R.drawable.bg_user_message)
-                } catch (e: Exception) {
-                    // Fallback if drawable not found
-                }
+                // User Message: Green box on the Right
+                binding.tvMessage.setBackgroundResource(R.drawable.bg_user_message)
                 binding.tvMessage.setTextColor(Color.WHITE)
-                params.gravity = android.view.Gravity.END or android.view.Gravity.CENTER_VERTICAL
-                binding.messageFrame.layoutParams = params
+                params.gravity = Gravity.END
+                
+                // Set margins for better alignment
+                params.setMargins(60, 4, 0, 4)
             } else {
-                try {
-                    binding.tvMessage.background = itemView.context.getDrawable(com.sukhayu.patient.R.drawable.bg_bot_message)
-                } catch (e: Exception) {
-                    // Fallback if drawable not found
-                }
+                // AI Message: White/Grey box on the Left
+                binding.tvMessage.setBackgroundResource(R.drawable.bg_bot_message)
+                
+                // Use zone color for text or default dark blue
                 binding.tvMessage.setTextColor(message.zoneColor ?: Color.parseColor("#1E293B"))
-                params.gravity = android.view.Gravity.START or android.view.Gravity.CENTER_VERTICAL
-                binding.messageFrame.layoutParams = params
+                params.gravity = Gravity.START
+                
+                // Set margins for better alignment
+                params.setMargins(0, 4, 60, 4)
             }
+            
+            binding.messageFrame.layoutParams = params
         }
     }
 }

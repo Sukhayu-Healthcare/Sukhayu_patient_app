@@ -1,16 +1,19 @@
 package com.sukhayu.patient.activities
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.sukhayu.patient.utils.LocalizableActivity
 import com.sukhayu.patient.utils.TtsHelper
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : LocalizableActivity() {
 
     private lateinit var ttsHelper: TtsHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // ...existing code...
+
+        // Setup language toggle in header
+        setupLanguageToggle()
 
         // Initialize TTS
         ttsHelper = TtsHelper(this)

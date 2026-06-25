@@ -5,22 +5,22 @@ import androidx.appcompat.app.AppCompatActivity
 import com.sukhayu.patient.R
 import com.sukhayu.patient.utils.TtsHelper
 import com.sukhayu.patient.utils.HeaderUtils
+import com.sukhayu.patient.utils.LocalizableActivity
 
-class AppointmentsActivity : AppCompatActivity() {
+class AppointmentsActivity : LocalizableActivity() {
 
     private lateinit var ttsHelper: TtsHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_appointments)
+        setupLanguageToggle()
         HeaderUtils.setupRoleInHeader(this)
         ttsHelper = TtsHelper(this)
         ttsHelper.setLanguage("en")
 
         // TODO: Add TTS to appointment list and details
     }
-
-    // ...existing code...
 
     override fun onDestroy() {
         ttsHelper.shutdown()

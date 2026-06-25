@@ -25,10 +25,20 @@ import com.sukhayu.patient.utils.HeaderUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.LocalizableActivity
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
+import com.sukhayu.utils.VoiceInputHelper
 
-class SupervisorAshaProfileActivity : AppCompatActivity() {
+
+class SupervisorAshaProfileActivity : LocalizableActivity() {
 
     private var selectedImageUri: Uri? = null
+
+    private lateinit var ttsHelper: TtsHelper
+
+    private lateinit var voiceHelper: VoiceInputHelper
     private var isPasswordVisible = false
     private var isConfirmPasswordVisible = false
 
@@ -88,8 +98,27 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
             setFieldsEnabled(false)
             loadData()
             setupListeners()
+            setupLanguageToggle()
 
             requestAudioPermission()
+            // Voice input setup
+            requestAudioPermission()
+            voiceHelper = VoiceInputHelper(this)
+            VoiceInputHelper.attachToAllEditTexts(this)
+
+            // Initialize TTS
+            ttsHelper = TtsHelper(this)
+
+            val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+            val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+            ttsHelper.setLanguage(currentLang)
+
+            // Enable TTS on all TextViews and Buttons
+            ViewTtsHelper.attachToAllTextViews(
+                findViewById(android.R.id.content),
+                ttsHelper
+            )
         } catch (e: Exception) {
             Log.e("AshaProfile", "Error in onCreate", e)
             toast("Error initializing profile: ${e.message}")
@@ -367,6 +396,8 @@ class SupervisorAshaProfileActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        ttsHelper.shutdown()
+        voiceHelper.destroy()
     }
 
     private fun toast(msg: String) {

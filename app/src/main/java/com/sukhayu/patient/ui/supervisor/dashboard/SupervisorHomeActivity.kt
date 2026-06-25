@@ -24,10 +24,20 @@ import com.sukhayu.patient.utils.HeaderUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.view.View
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
+import com.sukhayu.patient.utils.LocalizableActivity
+import com.sukhayu.utils.VoiceInputHelper
 
-class SupervisorHomeActivity : AppCompatActivity() {
+class SupervisorHomeActivity : LocalizableActivity() {
 
     private lateinit var tvPatientName: TextView
+
+    private lateinit var ttsHelper: TtsHelper
+
+    private lateinit var voiceHelper: VoiceInputHelper
     private lateinit var tvPatientId: TextView
     private lateinit var imgProfile: ImageView
     private lateinit var btnLogout: Button
@@ -52,6 +62,26 @@ class SupervisorHomeActivity : AppCompatActivity() {
         loadProfile()
         setupListeners()
         requestAudioPermission()
+        setupLanguageToggle()
+
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
+
+        // Voice input setup
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun initViews() {
@@ -157,5 +187,7 @@ class SupervisorHomeActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        ttsHelper.shutdown()
+        voiceHelper.destroy()
     }
 }

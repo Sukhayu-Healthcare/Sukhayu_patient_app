@@ -7,13 +7,14 @@ import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import android.os.Environment
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -23,30 +24,56 @@ import com.sukhayu.patient.data.remote.ApiClient
 import com.sukhayu.patient.data.remote.Consultation
 import com.sukhayu.patient.data.remote.PatientConsultationsResponse
 import com.sukhayu.patient.data.repository.ConsultationRepository
+import com.sukhayu.patient.utils.LocalizableActivity
 import com.sukhayu.patient.utils.NetworkUtils
 import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.utils.formatDate
 import kotlinx.coroutines.launch
 import com.sukhayu.patient.utils.HeaderUtils
 import java.io.File
+import android.view.View
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
 import java.io.FileOutputStream
 
 
-class PastConsultationsActivity : AppCompatActivity() {
+class PastConsultationsActivity : LocalizableActivity() {
 
     private lateinit var repository: ConsultationRepository
     private lateinit var voiceHelper: VoiceInputHelper
+
+    private lateinit var ttsHelper: TtsHelper
     private lateinit var llPast: LinearLayout
+    private lateinit var searchEditText: EditText
     private val TAG = "PastConsultationsActivity"
+    private var allConsultations: List<Consultation> = emptyList()
+    private var displayedConsultations: List<Consultation> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_past_consultations)
         HeaderUtils.setupRoleInHeader(this)
+
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+        // Setup language toggle in header
+        setupLanguageToggle()
         
         llPast = findViewById(R.id.llPast)
+        searchEditText = findViewById(R.id.etSearch)
+        
         val db = AshaLocalDatabase.getInstance(this)
         repository = ConsultationRepository(db)
+
+        // Setup search listener
+        setupSearchListener()
 
         // Fetch consultations from backend
         fetchConsultationsFromBackend()
@@ -54,6 +81,56 @@ class PastConsultationsActivity : AppCompatActivity() {
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
         VoiceInputHelper.attachToAllEditTexts(this)
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
+    }
+
+    private fun setupSearchListener() {
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s?.toString()?.trim() ?: ""
+                if (query.isEmpty()) {
+                    displayedConsultations = allConsultations
+                } else {
+                    displayedConsultations = searchConsultations(query)
+                }
+                refreshConsultationDisplay()
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+    private fun searchConsultations(query: String): List<Consultation> {
+        val lowerQuery = query.lowercase()
+        return allConsultations.filter { consultation ->
+            consultation.doctor_name?.lowercase()?.contains(lowerQuery) == true ||
+            consultation.diagnosis?.lowercase()?.contains(lowerQuery) == true ||
+            consultation.notes?.lowercase()?.contains(lowerQuery) == true ||
+            consultation.items?.any { 
+                it.medicine_name?.lowercase()?.contains(lowerQuery) == true ||
+                it.dosage?.lowercase()?.contains(lowerQuery) == true
+            } == true
+        }
+    }
+
+    private fun refreshConsultationDisplay() {
+        llPast.removeAllViews()
+        
+        if (displayedConsultations.isEmpty()) {
+            showNoConsultations()
+        } else {
+            Log.d(TAG, "📝 DISPLAYING ${displayedConsultations.size} CONSULTATIONS")
+            displayedConsultations.forEach { c ->
+                llPast.addView(createConsultationView(c))
+            }
+        }
     }
 
     private fun fetchConsultationsFromBackend() {
@@ -86,10 +163,13 @@ class PastConsultationsActivity : AppCompatActivity() {
                     val consultations = response.consultations ?: emptyList()
                     Log.d(TAG, "Total Consultations: ${consultations.size}")
                     
+                    allConsultations = consultations
+                    displayedConsultations = consultations
+                    
                     if (consultations.isEmpty()) {
                         showNoConsultations()
                     } else {
-                        displayConsultations(consultations)
+                        refreshConsultationDisplay()
                     }
                 } else {
                     Log.e(TAG, "❌ Failed to fetch consultations. Response is null")
@@ -110,17 +190,6 @@ class PastConsultationsActivity : AppCompatActivity() {
         }
     }
 
-    private fun displayConsultations(consultations: List<Consultation>) {
-        Log.d(TAG, "========================================")
-        Log.d(TAG, "📝 DISPLAYING ${consultations.size} CONSULTATIONS")
-        Log.d(TAG, "========================================")
-
-        consultations.forEach { c ->
-            Log.d(TAG, "Consultation ID: ${c.consultation_id}, Doctor: ${c.doctor_name}, Date: ${c.consultation_date}, Items: ${c.items?.size ?: 0}")
-            llPast.addView(createConsultationView(c))
-        }
-    }
-
     private fun showFromLocal() {
         Log.d(TAG, "Loading consultations from local database...")
         lifecycleScope.launch {
@@ -134,15 +203,22 @@ class PastConsultationsActivity : AppCompatActivity() {
                 return@launch
             }
 
-            consultationsLocal.forEach { c ->
-                val card = layoutInflater.inflate(R.layout.item_consultation_card, llPast, false)
-
-                card.findViewById<TextView>(R.id.tvDoctor).text = "Doctor: ${c.doctor_id}"
-                card.findViewById<TextView>(R.id.tvDate).text = formatDate(c.consultation_date)
-                card.findViewById<TextView>(R.id.tvNotes).text = c.notes ?: "No Notes"
-
-                llPast.addView(card)
+            allConsultations = consultationsLocal.mapNotNull { localConsult ->
+                Consultation(
+                    consultation_id = localConsult.consultation_id ?: 0,
+                    patient_id = localConsult.patient_id ?: 0,
+                    doctor_id = localConsult.doctor_id ?: 0,
+                    doctor_name = "Doctor #${localConsult.doctor_id}",
+                    doctor_phone = null,
+                    diagnosis = null,
+                    notes = localConsult.notes,
+                    consultation_date = localConsult.consultation_date?.toString() ?: "",
+                    items = emptyList()
+                )
             }
+            
+            displayedConsultations = allConsultations
+            refreshConsultationDisplay()
         }
     }
 
@@ -306,6 +382,7 @@ class PastConsultationsActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        ttsHelper.shutdown()
         voiceHelper.destroy()
     }
 }

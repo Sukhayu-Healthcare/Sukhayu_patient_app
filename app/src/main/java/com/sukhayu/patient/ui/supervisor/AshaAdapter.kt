@@ -7,6 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.remote.AshaWorker
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
 
 class AshaAdapter(
     private var ashaList: List<AshaWorker>,
@@ -19,6 +22,8 @@ class AshaAdapter(
         val tvAshaEmail: TextView = view.findViewById(R.id.tvAshaEmail)
         val tvAshaArea: TextView = view.findViewById(R.id.tvAshaArea)
         val tvAshaStatus: TextView = view.findViewById(R.id.tvAshaStatus)
+
+        private lateinit var ttsHelper: TtsHelper
 
         fun bind(asha: AshaWorker) {
             tvAshaName.text = asha.asha_name

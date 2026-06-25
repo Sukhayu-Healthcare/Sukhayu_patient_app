@@ -8,8 +8,10 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.R
 
+import com.sukhayu.patient.data.remote.Doctor
+
 class DoctorListAdapter(
-    private val doctors: List<DoctorAppointment>,
+    private val doctors: List<Doctor>,
     private val onDoctorClick: (phoneNumber: String) -> Unit
 ) : RecyclerView.Adapter<DoctorListAdapter.DoctorViewHolder>() {
 
@@ -29,12 +31,12 @@ class DoctorListAdapter(
 
     override fun onBindViewHolder(holder: DoctorViewHolder, position: Int) {
         val doctor = doctors[position]
-        holder.tvName.text = doctor.name
-        holder.tvSpecialization.text = doctor.specialization
-        holder.tvDays.text = doctor.availableDays
-        holder.tvPhone.text = doctor.phone
+        holder.tvName.text = doctor.doc_name
+        holder.tvSpecialization.text = doctor.doc_speciality ?: "General"
+        holder.tvDays.text = doctor.hospital_taluka ?: "N/A"
+        holder.tvPhone.text = doctor.doc_phone ?: "N/A"
         holder.card.setOnClickListener {
-            onDoctorClick(doctor.phone)
+            onDoctorClick(doctor.doc_phone ?: "")
         }
     }
 

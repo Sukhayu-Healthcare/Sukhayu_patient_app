@@ -3,19 +3,88 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@android:color/white" android:elevation="2dp">
 
     <!-- Main Header Row -->
-    <LinearLayout android:id="@+id/commonHeader" android:layout_width="match_parent" android:layout_height="56dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="12dp" android:paddingEnd="16dp" android:paddingTop="8dp" android:paddingBottom="8dp">
+    <LinearLayout
+        android:id="@+id/commonHeader"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
-        <ImageView android:id="@+id/btnBack" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_arrow_back_24" app:tint="#0F172A" android:contentDescription="Back Button" android:padding="4dp" android:visibility="gone" android:clickable="true" android:focusable="true" />
 
-        <ImageView android:id="@+id/headerLogo" android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/asha_jyoti_logo" android:layout_marginStart="0dp" android:contentDescription="@string/app_name" />
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_back_24"
+            app:tint="#0F172A"
+            android:contentDescription="@string/back"
+            android:padding="4dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true" />
 
-        <TextView android:id="@+id/headerTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AshaJyoti" android:textColor="#0F172A" android:textSize="20sp" android:textStyle="bold" android:layout_marginStart="12dp" />
+
+        <ImageView
+            android:id="@+id/headerLogo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/asha_jyoti_logo"
+            android:contentDescription="@string/app_name" />
+
+
+        <TextView
+            android:id="@+id/headerTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="AshaJyoti"
+            android:textColor="#0F172A"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="12dp" />
+
+
+        <!-- Language Toggle Inside Header -->
+        <LinearLayout
+            android:id="@+id/languageToggleBar"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:background="#F3F4F6"
+            android:elevation="1dp"
+            android:clickable="true"
+            android:focusable="true">
+
+
+            <TextView
+                android:id="@+id/tvLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🌐"
+                android:textSize="18sp"
+                android:padding="6dp"/>
+
+
+            <TextView
+                android:id="@+id/tvLanguageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Language"
+                android:textSize="12sp"
+                android:textColor="#1E40AF"
+                android:padding="6dp"/>
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
-
-    <!-- 🌐 LANGUAGE TOGGLE BAR (moved from dashboard) -->
-    <LinearLayout android:id="@+id/languageToggleBar" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingHorizontal="16dp" android:paddingVertical="4dp" android:orientation="horizontal" android:gravity="end"/>
-    <!-- END LANGUAGE TOGGLE -->
 
     <!-- Role Badge Row - Full Width, Large & Prominent -->
     <LinearLayout android:id="@+id/headerRoleContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center" android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="16dp" android:paddingBottom="16dp" android:background="@drawable/role_badge_background" android:visibility="visible">

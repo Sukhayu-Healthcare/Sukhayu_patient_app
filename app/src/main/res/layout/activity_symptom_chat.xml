@@ -1,35 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#FFFFFF">
 
-    <!-- Header -->
-    <LinearLayout android:id="@+id/header" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp" android:background="#10B981">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
 
-        <ImageView android:id="@+id/backButton" android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_arrow_back_24" android:contentDescription="Back" android:tint="#FFFFFF" />
 
-        <TextView android:id="@+id/tvHeader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AI Symptom Checker" android:textColor="#FFFFFF" android:textSize="18sp" android:textStyle="bold" android:layout_marginStart="12dp" />
+    <!-- Common App Header -->
+    <include
+        android:id="@+id/header"
+        layout="@layout/include_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <!-- Screen Title Header -->
+    <LinearLayout
+        android:id="@+id/symptomHeader"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/header"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:background="#10B981">
+
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_back_24"
+            android:contentDescription="@string/back"
+            android:tint="#FFFFFF"/>
+
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ai_symptom_checker"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginStart="12dp"/>
+
+
     </LinearLayout>
 
-    <!-- RecyclerView for dynamic chat messages -->
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvChat" android:layout_below="@id/header" android:layout_above="@+id/bottomInputBox" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="8dp" android:clipToPadding="false" />
 
-    <!-- Bottom input area -->
-    <LinearLayout android:id="@+id/bottomInputBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:orientation="vertical" android:padding="12dp" android:background="@drawable/rounded_big_card">
 
-        <!-- Main complaint input -->
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+    <!-- Chat Messages -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvChat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/symptomHeader"
+        android:layout_above="@id/bottomInputBox"
+        android:padding="8dp"
+        android:clipToPadding="false"/>
 
-            <EditText android:id="@+id/etComplaint" android:layout_width="0dp" android:layout_weight="1" android:layout_height="50dp" android:hint="Type your message..." android:background="@drawable/input_field_bg" android:padding="12dp" android:textColor="#000" android:textSize="15sp" />
 
-            <ImageView android:id="@+id/btnSend" android:layout_width="50dp" android:layout_height="50dp" android:layout_marginStart="8dp" android:src="@drawable/ic_send" android:background="@drawable/send_button_bg" android:padding="12dp" />
-        </LinearLayout>
 
-        <!-- Follow-up input -->
-        <LinearLayout android:id="@+id/followupContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp" android:gravity="center_vertical">
+    <!-- Bottom Message Box -->
+    <LinearLayout
+        android:id="@+id/bottomInputBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/rounded_big_card">
 
-            <EditText android:id="@+id/etFollowupAnswer" android:layout_width="0dp" android:layout_weight="1" android:layout_height="50dp" android:hint="Answer follow-up question..." android:background="@drawable/input_field_bg" android:padding="12dp" android:textColor="#000" android:textSize="15sp" />
 
-            <Button android:id="@+id/btnSendFollowup" android:layout_width="50dp" android:layout_height="50dp" android:text="Send" />
-        </LinearLayout>
+        <EditText
+            android:id="@+id/etComplaint"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:hint="@string/type_message"
+            android:background="@drawable/input_field_bg"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:layout_marginEnd="8dp"/>
+
+
+        <ImageView
+            android:id="@+id/btnSend"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_send"
+            android:background="@drawable/send_button_bg"
+            android:padding="12dp"/>
+
+
     </LinearLayout>
+
 
 </RelativeLayout>

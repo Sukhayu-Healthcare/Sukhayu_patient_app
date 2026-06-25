@@ -9,12 +9,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sukhayu.patient.R
 import com.sukhayu.patient.ui.asha.emergency.EmergencyContactAdapter
 import com.sukhayu.patient.ui.asha.emergency.EmergencyContact
+import com.sukhayu.patient.utils.HeaderUtils
+import com.sukhayu.patient.utils.LocalizableActivity
+import android.view.View
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
 
-class EmergencyActivity : AppCompatActivity() {
+class EmergencyActivity : LocalizableActivity() {
+
+    private lateinit var ttsHelper: TtsHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_emergency)
+        setupLanguageToggle()
+        HeaderUtils.setupRoleInHeader(this)
 
         val contacts = mutableListOf(
             EmergencyContact(
@@ -63,5 +73,19 @@ class EmergencyActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number"))
             startActivity(intent)
         }
+
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
     }
 }

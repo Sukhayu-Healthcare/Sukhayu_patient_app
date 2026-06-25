@@ -1,10 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:background="@android:color/white" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="16dp">
 
-    <!-- Emergency Title -->
-    <TextView android:id="@+id/tvEmergencyTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Emergency Contacts" android:textSize="20sp" android:textStyle="bold" android:layout_marginBottom="12dp" android:textColor="@color/colorPrimary" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <!-- Emergency Contacts List -->
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvEmergencyContacts" android:layout_width="match_parent" android:layout_height="match_parent" android:clipToPadding="false" />
+    <!-- Header -->
+    <include
+        android:id="@+id/header"
+        layout="@layout/include_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <!-- Content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+        <!-- Emergency Title -->
+        <TextView
+            android:id="@+id/tvEmergencyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/emergency_contacts"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
+            android:textColor="@color/colorPrimary" />
+
+
+        <!-- Emergency Contacts List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvEmergencyContacts"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false" />
+
+
+    </LinearLayout>
 
 </LinearLayout>

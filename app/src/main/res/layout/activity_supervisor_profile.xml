@@ -15,9 +15,9 @@
 
                 <ImageButton android:id="@+id/btn_change_image" android:layout_width="40dp" android:layout_height="40dp" android:layout_below="@id/profile_image" android:layout_centerHorizontal="true" android:layout_marginTop="12dp" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Change profile picture" android:src="@android:drawable/ic_menu_camera" />
 
-                <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/btn_change_image" android:layout_centerHorizontal="true" android:layout_marginTop="12dp" android:text="ASHA Name" android:textSize="22sp" android:textStyle="bold" android:textColor="#212121" />
+                <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/btn_change_image" android:layout_centerHorizontal="true" android:layout_marginTop="12dp" android:text="@string/asha_name" android:textSize="22sp" android:textStyle="bold" android:textColor="#212121" />
 
-                <TextView android:id="@+id/tvPatientId" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPatientName" android:layout_centerHorizontal="true" android:layout_marginTop="6dp" android:text="Supervisor ID: --" android:textSize="16sp" android:textColor="#757575" />
+                <TextView android:id="@+id/tvPatientId" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvPatientName" android:layout_centerHorizontal="true" android:layout_marginTop="6dp" android:text="@string/supervisor_id_label" android:textSize="16sp" android:textColor="#757575" />
 
             </RelativeLayout>
 
@@ -31,7 +31,7 @@
                 <!-- ID -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Supervisor ID" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/supervisor_id" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
 
                     <TextView android:id="@+id/tv_asha_id" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
 
@@ -42,7 +42,7 @@
                 <!-- NAME -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Full Name" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/full_name" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
 
                     <TextView android:id="@+id/tv_full_name" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
 
@@ -53,9 +53,9 @@
                 <!-- Gender -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Gender" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/gender" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
 
-                    <TextView android:id="@+id/tv_gender" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Female" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
+                    <TextView android:id="@+id/tv_gender" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/female" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
 
                 </LinearLayout>
 
@@ -64,7 +64,7 @@
                 <!-- Phone -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Phone Number" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/phone_number" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
 
                     <TextView android:id="@+id/tv_phone_no" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
 
@@ -75,7 +75,7 @@
                 <!-- Village -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Village" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/village" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
 
                     <TextView android:id="@+id/tv_village" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
 
@@ -86,7 +86,7 @@
                 <!-- District -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="District" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/district" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
 
                     <TextView android:id="@+id/tv_district" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
 
@@ -97,7 +97,7 @@
                 <!-- Taluka -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="12dp" android:paddingBottom="12dp">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Taluka" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/taluka" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
 
                     <TextView android:id="@+id/tv_taluka" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="textEnd" android:textSize="16sp" android:textColor="#424242" />
 
@@ -112,38 +112,38 @@
 
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
 
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Supervisor ID" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="@string/supervisor_id" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
                 <EditText android:id="@+id/et_asha_id" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />
 
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Full Name" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="@string/full_name" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
                 <EditText android:id="@+id/et_full_name" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />
 
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Phone Number" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
-                <EditText android:id="@+id/et_phone_no" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:inputType="phone" android:background="@drawable/rounded_edittext" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="@string/phone_number" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <EditText android:id="@+id/et_phone_no" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:inputType="phone" android:maxLength="10" android:background="@drawable/rounded_edittext" />
 
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Password (optional)" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="@string/password" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
                 <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp">
 
-                    <EditText android:id="@+id/et_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="14dp" android:paddingEnd="48dp" android:textSize="16sp" android:hint="Leave blank to keep current" android:inputType="textPassword" android:background="@drawable/rounded_edittext" />
+                    <EditText android:id="@+id/et_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="14dp" android:paddingEnd="48dp" android:textSize="16sp" android:hint="@string/leave_blank_keep_current" android:inputType="textPassword" android:background="@drawable/rounded_edittext" />
 
-                    <ImageButton android:id="@+id/btn_toggle_password" android:layout_width="40dp" android:layout_height="40dp" android:layout_gravity="end|center_vertical" android:layout_marginEnd="8dp" android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_visibility_off" android:contentDescription="Toggle password visibility" android:padding="8dp" />
+                    <ImageButton android:id="@+id/btn_toggle_password" android:layout_width="40dp" android:layout_height="40dp" android:layout_gravity="end|center_vertical" android:layout_marginEnd="8dp" android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_visibility_off" android:contentDescription="@string/toggle_password_visibility" android:padding="8dp" />
                 </FrameLayout>
 
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Confirm Password" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="@string/confirm_password" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
                 <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp">
 
-                    <EditText android:id="@+id/et_confirm_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="14dp" android:paddingEnd="48dp" android:textSize="16sp" android:hint="Confirm new password" android:inputType="textPassword" android:background="@drawable/rounded_edittext" />
+                    <EditText android:id="@+id/et_confirm_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="14dp" android:paddingEnd="48dp" android:textSize="16sp" android:hint="@string/confirm_password_hint" android:inputType="textPassword" android:background="@drawable/rounded_edittext" />
 
-                    <ImageButton android:id="@+id/btn_toggle_confirm_password" android:layout_width="40dp" android:layout_height="40dp" android:layout_gravity="end|center_vertical" android:layout_marginEnd="8dp" android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_visibility_off" android:contentDescription="Toggle confirm password visibility" android:padding="8dp" />
+                    <ImageButton android:id="@+id/btn_toggle_confirm_password" android:layout_width="40dp" android:layout_height="40dp" android:layout_gravity="end|center_vertical" android:layout_marginEnd="8dp" android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_visibility_off" android:contentDescription="@string/toggle_confirm_password_visibility" android:padding="8dp" />
                 </FrameLayout>
 
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Village" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="@string/village" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
                 <EditText android:id="@+id/et_village" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />
 
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="District" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="@string/district" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
                 <EditText android:id="@+id/et_district" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />
 
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="Taluka" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:text="@string/taluka" android:textSize="16sp" android:textStyle="bold" android:textColor="#212121" />
                 <EditText android:id="@+id/et_taluka" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:padding="14dp" android:textSize="16sp" android:enabled="false" android:background="@drawable/rounded_edittext" />
 
                 <Spinner android:id="@+id/spinner_gender" android:visibility="gone" android:layout_width="0dp" android:layout_height="0dp" />
@@ -154,9 +154,9 @@
         <!-- Buttons -->
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginBottom="24dp" android:orientation="horizontal" android:gravity="center">
 
-            <Button android:id="@+id/btn_edit" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:layout_marginEnd="10dp" android:text="Edit Profile" android:textSize="16sp" android:textStyle="bold" android:textColor="@android:color/white" android:backgroundTint="#4CAF50" />
+            <Button android:id="@+id/btn_edit" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:layout_marginEnd="10dp" android:text="@string/edit_profile" android:textSize="16sp" android:textStyle="bold" android:textColor="@android:color/white" android:backgroundTint="#4CAF50" />
 
-            <Button android:id="@+id/btn_logout" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:layout_marginStart="10dp" android:text="Logout" android:textSize="16sp" android:textStyle="bold" android:textColor="@android:color/white" android:backgroundTint="#F44336" />
+            <Button android:id="@+id/btn_logout" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:layout_marginStart="10dp" android:text="@string/logout" android:textSize="16sp" android:textStyle="bold" android:textColor="@android:color/white" android:backgroundTint="#F44336" />
 
         </LinearLayout>
 

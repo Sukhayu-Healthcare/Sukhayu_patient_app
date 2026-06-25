@@ -1,57 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="#F8F9FA">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8F9FA">
 
     <include layout="@layout/include_header" />
 
-    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
 
             <!-- Announcement Type Card -->
-            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:cardBackgroundColor="@android:color/white">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                        <View android:layout_width="3dp" android:layout_height="20dp" android:background="#4CAF50" android:layout_marginEnd="10dp" />
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="#4CAF50" />
 
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Announcement Type" android:textSize="15sp" android:textStyle="bold" android:textColor="#1A1A2E" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/announcement_type"
+                            android:textColor="#1A1A2E"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="*" android:textSize="16sp" android:textColor="#E53935" android:textStyle="bold" />
-
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/required_mark"
+                            android:textColor="#E53935"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
-                    <Spinner android:id="@+id/spinnerAnnouncementType" android:layout_width="match_parent" android:layout_height="50dp" android:background="@drawable/edittext_rounded" android:paddingStart="14dp" android:paddingEnd="14dp" />
+                    <Spinner
+                        android:id="@+id/spinnerAnnouncementType"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/edittext_rounded"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Announcement Date Card -->
-            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:cardBackgroundColor="@android:color/white">
+            <!-- Event Date Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                        <View android:layout_width="3dp" android:layout_height="20dp" android:background="#4CAF50" android:layout_marginEnd="10dp" />
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="#4CAF50" />
 
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Event Date" android:textSize="15sp" android:textStyle="bold" android:textColor="#1A1A2E" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/event_date"
+                            android:textColor="#1A1A2E"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="*" android:textSize="16sp" android:textColor="#E53935" android:textStyle="bold" />
-
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/required_mark"
+                            android:textColor="#E53935"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
-                    <Button android:id="@+id/btnSelectDate" android:layout_width="match_parent" android:layout_height="50dp" android:text="Select Date" android:textSize="15sp" android:textStyle="bold" android:textAllCaps="false" android:background="@drawable/button_rounded_green" android:textColor="@android:color/white" android:stateListAnimator="@null" />
+                    <Button
+                        android:id="@+id/btnSelectDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/button_rounded_green"
+                        android:stateListAnimator="@null"
+                        android:text="@string/select_date"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="12dp" android:paddingStart="4dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="4dp">
 
-                        <View android:layout_width="6dp" android:layout_height="6dp" android:background="#4CAF50" android:layout_marginEnd="8dp" />
+                        <View
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="#4CAF50" />
 
-                        <TextView android:id="@+id/tvSelectedDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No date selected" android:textSize="13sp" android:textColor="#757575" />
-
+                        <TextView
+                            android:id="@+id/tvSelectedDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/no_date_selected"
+                            android:textColor="#757575"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -59,61 +167,146 @@
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Venue Card -->
-            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:cardBackgroundColor="@android:color/white">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/venue"
+                        android:textColor="#1A1A2E"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-                        <View android:layout_width="3dp" android:layout_height="20dp" android:background="#9E9E9E" android:layout_marginEnd="10dp" />
-
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Venue" android:textSize="15sp" android:textStyle="bold" android:textColor="#1A1A2E" />
-
-                    </LinearLayout>
-
-                    <EditText android:id="@+id/etVenue" android:layout_width="match_parent" android:layout_height="50dp" android:inputType="text" android:hint="e.g. Community Center, Ward 5" android:paddingStart="14dp" android:paddingEnd="14dp" android:background="@drawable/edittext_rounded" android:textSize="14sp" android:textColor="#1A1A2E" android:textColorHint="#BDBDBD" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Announcement Message Card -->
-            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:cardBackgroundColor="@android:color/white">
-
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
-
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
-
-                        <View android:layout_width="3dp" android:layout_height="20dp" android:background="#4CAF50" android:layout_marginEnd="10dp" />
-
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Announcement Message" android:textSize="15sp" android:textStyle="bold" android:textColor="#1A1A2E" />
-
-                        <ImageButton android:id="@+id/btnMicMessage" android:layout_width="44dp" android:layout_height="44dp" android:src="@android:drawable/ic_btn_speak_now" android:scaleType="centerInside" android:contentDescription="Voice Input" android:background="@drawable/mic_button_green" android:tint="#4CAF50" />
-
-                    </LinearLayout>
-
-                    <EditText android:id="@+id/etMessage" android:layout_width="match_parent" android:layout_height="120dp" android:inputType="textMultiLine" android:gravity="top|start" android:hint="Tap mic or type announcement message..." android:paddingTop="14dp" android:paddingStart="14dp" android:paddingEnd="14dp" android:paddingBottom="14dp" android:background="@drawable/edittext_rounded" android:textSize="14sp" android:textColor="#1A1A2E" android:textColorHint="#BDBDBD" />
+                    <EditText
+                        android:id="@+id/etVenue"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/edittext_rounded"
+                        android:hint="@string/venue_hint"
+                        android:inputType="text"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Additional Notes Card -->
-            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:cardBackgroundColor="@android:color/white">
+            <!-- Announcement Message -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
 
-                        <View android:layout_width="3dp" android:layout_height="20dp" android:background="#9E9E9E" android:layout_marginEnd="10dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/announcement_message"
+                            android:textColor="#1A1A2E"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Additional Notes" android:textSize="15sp" android:textStyle="bold" android:textColor="#1A1A2E" />
-
-                        <ImageButton android:id="@+id/btnMicRemark" android:layout_width="44dp" android:layout_height="44dp" android:src="@android:drawable/ic_btn_speak_now" android:scaleType="centerInside" android:contentDescription="Voice Input" android:background="@drawable/mic_button_green" android:tint="#4CAF50" />
-
+                        <ImageButton
+                            android:id="@+id/btnMicMessage"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/mic_button_green"
+                            android:contentDescription="@string/voice_input"
+                            android:src="@android:drawable/ic_btn_speak_now"
+                            app:tint="#4CAF50" />
                     </LinearLayout>
 
-                    <EditText android:id="@+id/etRemark" android:layout_width="match_parent" android:layout_height="120dp" android:inputType="textMultiLine" android:gravity="top|start" android:hint="Tap mic or type additional notes..." android:paddingTop="14dp" android:paddingStart="14dp" android:paddingEnd="14dp" android:paddingBottom="14dp" android:background="@drawable/edittext_rounded" android:textSize="14sp" android:textColor="#1A1A2E" android:textColorHint="#BDBDBD" />
+                    <EditText
+                        android:id="@+id/etMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/edittext_rounded"
+                        android:gravity="top|start"
+                        android:hint="@string/announcement_message_hint"
+                        android:inputType="textMultiLine"
+                        android:padding="14dp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Additional Notes -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/additional_notes"
+                            android:textColor="#1A1A2E"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <ImageButton
+                            android:id="@+id/btnMicRemark"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/mic_button_green"
+                            android:contentDescription="@string/voice_input"
+                            android:src="@android:drawable/ic_btn_speak_now"
+                            app:tint="#4CAF50" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etRemark"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/edittext_rounded"
+                        android:gravity="top|start"
+                        android:hint="@string/additional_notes_hint"
+                        android:inputType="textMultiLine"
+                        android:padding="14dp" />
 
                 </LinearLayout>
 
@@ -123,13 +316,40 @@
 
     </ScrollView>
 
-    <!-- Bottom Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="16dp" android:paddingBottom="20dp" android:gravity="center">
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#DC2626"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <Button android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Cancel" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:layout_marginEnd="8dp" android:backgroundTint="#DC2626" android:stateListAnimator="@null" />
-
-        <Button android:id="@+id/btnCreate" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="Announce" android:textSize="15sp" android:textStyle="bold" android:textAllCaps="false" android:layout_marginStart="8dp" android:backgroundTint="#16A34A" android:textColor="@android:color/white" android:stateListAnimator="@null" />
+        <Button
+            android:id="@+id/btnCreate"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#16A34A"
+            android:text="@string/announce"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

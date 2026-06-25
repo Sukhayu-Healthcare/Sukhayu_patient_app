@@ -149,7 +149,184 @@
     <string name="recent_bp_check">Recent BP Check</string>
     <string name="recent_sugar_check">Recent Sugar Check</string>
     <string name="referral_needed">Referral Needed</string>
-    <string name="referral_facility" translatable="false">Referral Facility</string>
+    <string name="referral_facility">Referral Facility</string>
     <string name="remarks">Remarks</string>
+    <string name="dashboard_title">Healthcare Services</string>
+    <string name="ai_health_check">AI Health Check</string>
+    <string name="view_history">View History</string>
+    <string name="schedule_visit">Schedule Visit</string>
+    <string name="we_care">We Care</string>
+    <string name="share_concerns">Share Concerns</string>
+    <string name="health_query">Health Query</string>
+    <string name="quick_actions">Quick Actions</string>
+    <string name="start_video_call">📞Start Video/Voice Call</string>
+    <string name="emergency_services">🚨Emergency Services</string>
+    <string name="language">Language</string>
+    <string name="choose_language">Choose Language</string>
 
+    <string name="back">Back</string>
+    <string name="type_message">Type your message…</string>
+
+    <!-- Appointment Screen -->
+
+    <string name="book_appointment_title">Book Appointment</string>
+
+    <string name="schedule_your_appointment">Schedule Your Appointment</string>
+
+    <string name="select_doctor_type">Select Doctor Type</string>
+
+    <string name="cho">CHO</string>
+    <string name="mo">MO</string>
+
+    <string name="doctor_name">Doctor Name</string>
+    <string name="doctor_name_hint">Doctor name</string>
+
+    <string name="doctor_phone">Doctor Phone</string>
+    <string name="phone_number_hint">Phone number</string>
+
+    <string name="appointment_date">Appointment Date</string>
+    <string name="date_format_hint">yyyy-MM-dd</string>
+
+    <string name="appointment_time_optional">Appointment Time (Optional)</string>
+    <string name="time_format_hint">HH:mm</string>
+
+    <string name="notes_optional">Notes (Optional)</string>
+    <string name="notes_hint">Add any notes or special requests</string>
+
+    <string name="save_appointment">Save Appointment</string>
+
+    <string name="saved_appointments">Saved Appointments</string>
+
+    <string name="no_appointments">No appointments booked yet</string>
+
+    <string name="no_appointments_icon_desc">No appointments</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_picture_desc">Profile Picture</string>
+    <string name="take_profile_picture">Take Profile Picture</string>
+
+    <string name="full_name">Full Name</string>
+    <string name="full_name_hint">Ram Sharma</string>
+
+    <string name="age">Age</string>
+    <string name="age_hint">45</string>
+
+    <string name="gender">Gender</string>
+
+    <string name="phone_number">Phone Number</string>
+
+    <string name="password">Password</string>
+    <string name="password_hint">Min 8 chars with uppercase, lowercase, number, special char</string>
+    <string name="toggle_password_visibility">Toggle password visibility</string>
+
+    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_password_hint">Re-enter password</string>
+    <string name="toggle_confirm_password_visibility">Toggle confirm password visibility</string>
+
+    <string name="patient_id">Patient ID</string>
+    <string name="patient_id_hint">P001</string>
+
+    <string name="edit">Edit</string>
+
+    <!-- We Care / Health Query Screen -->
+
+    <string name="we_care_health_title">💙 We Care About Your Health</string>
+    <string name="we_care_health_subtitle">Share your health concerns and get expert guidance</string>
+
+    <string name="select_health_issue">🏥 Select Health Issue *</string>
+
+    <string name="doctor_type_auto_assigned">👨‍⚕️ Doctor Type (Auto-assigned)</string>
+    <string name="doctor_type_auto_hint">Selected automatically</string>
+
+    <string name="query_concerns_label">📝 Your Query/Concerns *</string>
+    <string name="query_concerns_hint">Describe your health concern in detail…</string>
+
+    <string name="voice_message_optional">🎤 Voice Message (Optional)</string>
+
+    <string name="record_voice">🎤 Record</string>
+    <string name="play_voice">▶️ Play</string>
+    <string name="clear_voice">✕ Clear</string>
+
+    <string name="voice_info_icon" translatable="false">ℹ️</string>
+    <string name="voice_status_empty">No voice recorded yet</string>
+
+    <string name="submit">Submit</string>
+
+    <string name="health_info_secure">✓ Your health information is secure and confidential</string>
+
+    <string name="emergency_contacts">Emergency Contacts</string>
+
+    <!-- Patient Query Screen -->
+    <string name="selected_automatically">Selected automatically</string>
+
+    <string name="info_icon" translatable="false">ℹ️</string>
+    <string name="no_voice_recorded">No voice recorded yet</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="default_state">Select default state</string>
+
+    <string name="register_asha">Register ASHA</string>
+    <string name="state">State</string>
+    <string name="district">District</string>
+    <string name="taluka">Taluka</string>
+    <string name="village">Village</string>
+    <string name="password_criteria">Password must be ≥8 characters, include upper, lower case, a digit and a special character.</string>
+    <string name="register">Register</string>
+    <string name="dummy_supervisor">Dummy Supervisor</string>
+    <string name="view_asha_data">View ASHA Data</string>
+    <string name="view_surveys_drives">View Surveys &amp; Drives</string>
+    <string name="make_announcement">Make Announcement</string>
+
+    <string name="change_profile_picture">Change Profile Picture</string>
+    <string name="asha_name">"Asha Name "</string>
+    <string name="supervisor_id_placeholder">Supervisor ID</string>
+    <string name="supervisor_id">SuperVisor ID</string>
+    <string name="female">Female</string>
+    <string name="leave_blank_keep_current">Leave blank to keep current</string>
+    <string name="supervisor_id_label">Supervisor ID</string>
+
+    <!-- Survey Data Viewer Screen -->
+
+    <string name="survey_data_viewer">Survey Data Viewer</string>
+
+    <string name="survey_data_viewer_desc">
+        View and download survey records by type and date
+    </string>
+
+    <string name="survey_type">Survey Type</string>
+
+    <string name="date">Date</string>
+
+    <string name="select_date_hint">Select Date (YYYY-MM-DD)</string>
+
+    <string name="fetch_survey_data">Fetch Survey Data</string>
+
+    <string name="default_summary">Total Records: 0 | ASHAs: 0</string>
+
+    <string name="select_filters_fetch_data">"         Select filters and fetch data     "</string>
+
+    <string name="download_csv">Download CSV</string>
+
+    <string name="survey_records_table">Survey Records Table</string>
+    <string name="edit_profile">Edit Profile</string>
+
+    <!--Announcement Strings-->
+    <string name="announcement_type">Announcement Type</string>
+    <string name="required_mark" translatable="false">*</string>
+
+    <string name="event_date">Event Date</string>
+    <string name="select_date">Select Date</string>
+    <string name="no_date_selected">No date selected</string>
+
+    <string name="venue">Venue</string>
+    <string name="venue_hint">e.g. Community Center, Ward 5</string>
+
+    <string name="announcement_message">Announcement Message</string>
+    <string name="voice_input">Voice Input</string>
+    <string name="announcement_message_hint">Tap mic or type announcement message…</string>
+
+    <string name="additional_notes">Additional Notes</string>
+    <string name="additional_notes_hint">Tap mic or type additional notes…</string>
+
+    <string name="announce">Announce</string>
 </resources>

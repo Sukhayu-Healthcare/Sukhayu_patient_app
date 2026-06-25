@@ -1,56 +1,58 @@
 package com.sukhayu.patient.ui.patient.appointment
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sukhayu.patient.R
 import com.sukhayu.patient.data.local.AshaLocalDatabase
 import com.sukhayu.patient.data.local.entity.AppointmentEntity
+import com.sukhayu.patient.data.remote.ApiClient
+import com.sukhayu.patient.data.remote.BookAppointmentRequest
+import com.sukhayu.patient.data.remote.Doctor
 import com.sukhayu.patient.databinding.ActivityBookAppointmentBinding
+import com.sukhayu.patient.utils.HeaderUtils
+import com.sukhayu.patient.utils.LocalizableActivity
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import android.view.View
+import android.widget.AdapterView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
+import com.sukhayu.utils.VoiceInputHelper
 
-// Local Doctor data class for appointment booking
-data class DoctorAppointment(
-    val name: String,
-    val phone: String,
-    val specialization: String,
-    val availableDays: String
-)
-
-class BookAppointmentActivity : AppCompatActivity() {
+class BookAppointmentActivity : LocalizableActivity() {
 
     private lateinit var binding: ActivityBookAppointmentBinding
     private lateinit var db: AshaLocalDatabase
-    private var selectedDoctorType: String = "community_health_officer"
-    private var selectedDoctor: DoctorAppointment? = null
+    private var selectedDoctor: Doctor? = null
     private val appointments = mutableListOf<AppointmentEntity>()
     private lateinit var appointmentAdapter: AppointmentAdapter
+    private var availableDoctors: List<Doctor> = emptyList()
+    private val TAG = "BookAppointmentActivity"
 
-    // Sample doctors data (in production, fetch from API)
-    private val choList = listOf(
-        DoctorAppointment("Dr. Rajesh Kumar", "9876543210", "CHO", "Mon-Fri"),
-        DoctorAppointment("Dr. Priya Singh", "9876543211", "CHO", "Tue-Sat"),
-        DoctorAppointment("Dr. Amit Patel", "9876543212", "CHO", "Mon-Wed-Fri")
-    )
+    private lateinit var ttsHelper: TtsHelper
 
-    private val moList = listOf(
-        DoctorAppointment("Dr. Vikram Sharma", "9876543220", "MO", "Mon-Fri"),
-        DoctorAppointment("Dr. Neha Gupta", "9876543221", "MO", "Wed-Sat"),
-        DoctorAppointment("Dr. Suresh Desai", "9876543222", "MO", "Tue-Thu-Sat")
-    )
+    private lateinit var voiceHelper: VoiceInputHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBookAppointmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        HeaderUtils.setupRoleInHeader(this)
+        // Setup language toggle in header
+        setupLanguageToggle()
+        requestAudioPermission()
 
         db = AshaLocalDatabase.getInstance(this)
 
@@ -63,17 +65,17 @@ class BookAppointmentActivity : AppCompatActivity() {
             adapter = appointmentAdapter
         }
 
-        // Doctor type selection
-        binding.btnChoSelect.setOnClickListener {
-            selectedDoctorType = "community_health_officer"
-            updateDoctorTypeUI()
-            showDoctorSelector(choList)
-        }
+        // Fetch available doctors from API
+        fetchAvailableDoctors()
 
-        binding.btnMoSelect.setOnClickListener {
-            selectedDoctorType = "medical_officer"
-            updateDoctorTypeUI()
-            showDoctorSelector(moList)
+        // Doctor selection
+        binding.btnChoSelect.setOnClickListener {
+            if (availableDoctors.isNotEmpty()) {
+                showDoctorSelector()
+            } else {
+                Toast.makeText(this, "Fetching doctors...", Toast.LENGTH_SHORT).show()
+                fetchAvailableDoctors()
+            }
         }
 
         // Date picker
@@ -94,37 +96,78 @@ class BookAppointmentActivity : AppCompatActivity() {
         // Load saved appointments
         loadSavedAppointments()
 
-        // Set default doctor type
-        updateDoctorTypeUI()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
     }
 
-    private fun updateDoctorTypeUI() {
-        when (selectedDoctorType) {
-            "community_health_officer" -> {
-                binding.btnChoSelect.setBackgroundColor(getColor(R.color.color_success))
-                binding.btnChoSelect.setTextColor(getColor(android.R.color.white))
-                binding.btnMoSelect.setBackgroundColor(getColor(android.R.color.white))
-                binding.btnMoSelect.setTextColor(getColor(R.color.color_text_muted))
-            }
-            "medical_officer" -> {
-                binding.btnChoSelect.setBackgroundColor(getColor(android.R.color.white))
-                binding.btnChoSelect.setTextColor(getColor(R.color.color_text_muted))
-                binding.btnMoSelect.setBackgroundColor(getColor(R.color.color_success))
-                binding.btnMoSelect.setTextColor(getColor(android.R.color.white))
+    private fun requestAudioPermission() {
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                200
+            )
+        }
+    }
+
+    private fun fetchAvailableDoctors() {
+        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+        val token = prefs.getString("token", "") ?: ""
+
+        if (token.isEmpty()) {
+            Log.e(TAG, "No auth token found")
+            Toast.makeText(this, "Session expired. Please login again.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        lifecycleScope.launch {
+            try {
+                Log.d(TAG, "Fetching available doctors...")
+                val response = ApiClient.retrofit.getAvailableDoctors("Bearer $token")
+                
+                availableDoctors = response.doctors
+                Log.d(TAG, "✅ Fetched ${availableDoctors.size} doctors")
+                
+                if (availableDoctors.isEmpty()) {
+                    Toast.makeText(this@BookAppointmentActivity, "No doctors available", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error fetching doctors: ${e.message}", e)
+                Toast.makeText(this@BookAppointmentActivity, "Failed to load doctors", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun showDoctorSelector(doctors: List<DoctorAppointment>) {
-        val doctorNames = doctors.map { "${it.name} (${it.phone})" }.toTypedArray()
+    private fun showDoctorSelector() {
+        val doctorNames = availableDoctors.map { 
+            "${it.doc_name} (${it.doc_speciality ?: "General"}) - ${it.doc_phone ?: "N/A"}" 
+        }.toTypedArray()
         
         android.app.AlertDialog.Builder(this)
             .setTitle("Select Doctor")
             .setItems(doctorNames) { _, which ->
-                selectedDoctor = doctors[which]
-                binding.etDoctorName.setText(selectedDoctor?.name ?: "")
-                binding.etDoctorPhone.setText(selectedDoctor?.phone ?: "")
-                Toast.makeText(this, "Doctor selected", Toast.LENGTH_SHORT).show()
+                selectedDoctor = availableDoctors[which]
+                binding.etDoctorName.setText(selectedDoctor?.doc_name ?: "")
+                binding.etDoctorPhone.setText(selectedDoctor?.doc_phone ?: "")
+                Toast.makeText(this, "Doctor selected: ${selectedDoctor?.doc_name}", Toast.LENGTH_SHORT).show()
             }
             .show()
     }
@@ -137,55 +180,55 @@ class BookAppointmentActivity : AppCompatActivity() {
         val notes = binding.etNotes.text.toString().trim()
 
         // Validation
-        if (doctorName.isEmpty() || doctorPhone.isEmpty() || appointmentDate.isEmpty()) {
-            Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show()
+        if (doctorName.isEmpty() || appointmentDate.isEmpty() || appointmentTime.isEmpty()) {
+            Toast.makeText(this, "Please fill all required fields (Doctor, Date, Time)", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Get patient ID from SharedPreferences (stored as String, convert to Int)
+        if (selectedDoctor == null) {
+            Toast.makeText(this, "Please select a doctor", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Get token from SharedPreferences
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
-        val userIdStr = prefs.getString("user_id", "") ?: ""
-        val patientId = userIdStr.toIntOrNull() ?: 0
+        val token = prefs.getString("token", "") ?: ""
 
-        if (patientId == 0) {
-            Toast.makeText(this, "Patient ID not found. Please login again.", Toast.LENGTH_SHORT).show()
+        if (token.isEmpty()) {
+            Toast.makeText(this, "Session expired. Please login again.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Create appointment entity
-        val appointment = AppointmentEntity(
-            patient_id = patientId,
-            doctor_name = doctorName,
-            doctor_phone = doctorPhone,
-            doctor_type = selectedDoctorType,
+        // Prepare request body
+        val appointmentRequest = BookAppointmentRequest(
+            doctor_id = selectedDoctor!!.doc_id,
             appointment_date = appointmentDate,
-            appointment_time = appointmentTime.ifEmpty { null },
-            notes = notes.ifEmpty { null },
-            synced = false,
-            sync_status = "pending"
+            appointment_time = appointmentTime,
+            notes = notes.ifEmpty { null }
         )
 
-        // Save to database
         lifecycleScope.launch {
             try {
-                val appointmentId = db.appointmentDao().insertAppointment(appointment)
+                Log.d(TAG, "Booking appointment: $appointmentRequest")
                 
-                // Update UI
-                loadSavedAppointments()
-                clearForm()
-
+                val response = ApiClient.retrofit.bookAppointment("Bearer $token", appointmentRequest)
+                
+                Log.d(TAG, "✅ Appointment booked successfully: ${response.message}")
                 Toast.makeText(
                     this@BookAppointmentActivity,
-                    "Appointment saved successfully",
+                    "Appointment booked successfully!",
                     Toast.LENGTH_SHORT
                 ).show()
 
-                // Try to sync with backend (optional)
-                syncAppointmentWithBackend(appointment.copy(appointment_id = appointmentId.toInt()))
+                // Clear form
+                clearForm()
+                loadSavedAppointments()
+
             } catch (e: Exception) {
+                Log.e(TAG, "Error booking appointment: ${e.message}", e)
                 Toast.makeText(
                     this@BookAppointmentActivity,
-                    "Error saving appointment: ${e.message}",
+                    "Failed to book appointment: ${e.message}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -194,15 +237,35 @@ class BookAppointmentActivity : AppCompatActivity() {
 
     private fun loadSavedAppointments() {
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
-        val userIdStr = prefs.getString("user_id", "") ?: ""
-        val patientId = userIdStr.toIntOrNull() ?: 0
+        val token = prefs.getString("token", "") ?: ""
 
-        if (patientId == 0) return
+        if (token.isEmpty()) {
+            Log.w(TAG, "No token available for loading appointments")
+            return
+        }
 
         lifecycleScope.launch {
-            db.appointmentDao().getPatientAppointments(patientId).collect { appointmentList ->
+            try {
+                val response = ApiClient.retrofit.getPatientAppointments("Bearer $token")
+                
+                // Convert API appointments to local entities for display
+                val appointmentEntities = response.appointments.map { apt ->
+                    AppointmentEntity(
+                        appointment_id = apt.appointment_id,
+                        patient_id = apt.patient_id,
+                        doctor_name = "Doctor ID: ${apt.doctor_id}",
+                        doctor_phone = "N/A",
+                        doctor_type = "consultation",
+                        appointment_date = apt.appointment_date,
+                        appointment_time = apt.appointment_time,
+                        notes = apt.notes,
+                        synced = true,
+                        sync_status = "synced"
+                    )
+                }
+
                 appointments.clear()
-                appointments.addAll(appointmentList)
+                appointments.addAll(appointmentEntities)
                 appointmentAdapter.notifyDataSetChanged()
 
                 // Show/hide empty state
@@ -213,6 +276,12 @@ class BookAppointmentActivity : AppCompatActivity() {
                     binding.emptyState.visibility = android.view.View.GONE
                     binding.rvSavedAppointments.visibility = android.view.View.VISIBLE
                 }
+                
+                Log.d(TAG, "✅ Loaded ${appointments.size} appointments")
+                
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading appointments: ${e.message}", e)
+                Toast.makeText(this@BookAppointmentActivity, "Failed to load appointments", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -224,13 +293,14 @@ class BookAppointmentActivity : AppCompatActivity() {
             .setPositiveButton("Delete") { _, _ ->
                 lifecycleScope.launch {
                     try {
-                        db.appointmentDao().deleteAppointment(appointment)
-                        loadSavedAppointments()
+                        // In production, you would call the API to delete from backend
+                        // For now, just refresh the list
                         Toast.makeText(
                             this@BookAppointmentActivity,
-                            "Appointment deleted",
+                            "Appointment deletion not available",
                             Toast.LENGTH_SHORT
                         ).show()
+                        loadSavedAppointments()
                     } catch (e: Exception) {
                         Toast.makeText(
                             this@BookAppointmentActivity,
@@ -294,24 +364,5 @@ class BookAppointmentActivity : AppCompatActivity() {
             )
             binding.etAppointmentTime.setText(formattedTime)
         }, hour, minute, true).show()
-    }
-
-    private fun syncAppointmentWithBackend(appointment: AppointmentEntity) {
-        // This will sync with the backend database
-        // For now, we'll just mark it as synced after a delay
-        lifecycleScope.launch {
-            try {
-                // TODO: Make API call to sync with backend
-                // val response = ApiClient.retrofit.syncAppointment(appointment)
-                
-                // Mark as synced
-                db.appointmentDao().markAsSynced(appointment.appointment_id)
-                loadSavedAppointments()
-            } catch (e: Exception) {
-                // Mark sync as failed
-                db.appointmentDao().markAsSyncFailed(appointment.appointment_id)
-                loadSavedAppointments()
-            }
-        }
     }
 }

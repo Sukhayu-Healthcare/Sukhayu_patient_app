@@ -6,92 +6,114 @@
     <string name="app_logo_desc">अॅप लोगो</string>
     <string name="language_icon_desc">भाषा आयकॉन</string>
     <string name="language_english">इंग्रजी</string>
-    <string name="profile_icon_desc">प्रोफाइल आयकॉन</string>
-    <string name="profile">प्रोफाइल</string>
-    <string name="symptom_icon_desc">लक्षण आयकॉन</string>
-    <string name="check_symptoms">लक्षण तपासा</string>
-    <string name="consult_doctor">डॉक्टर सल्ला आयकॉन</string>
-    <string name="past_consultations">मागील सल्लामसलत आयकॉन</string>
-    <string name="medicines">औषधे आयकॉन</string>
-    <string name="book_appointment">अपॉइंटमेंट बुक करा</string>
-    <string name="test_video_call">व्हिडिओ कॉल तपासा</string>
 
-    <!-- Patient dashboard defaults -->
-    <string name="profile_name_placeholder">नाव</string>
-    <string name="profile_phone_placeholder">फोन</string>
-    <string name="logout">लॉगआऊट</string>
-    <string name="ai_symptom_checker">एआय लक्षण तपासणी</string>
+    <!-- Profile -->
+    <string name="profile_icon_desc">प्रोफाइल चित्र</string>
+    <string name="profile">प्रोफाइल</string>
+    <string name="test_video_call">व्हिडिओ कॉल तपासा</string>
+    <string name="profile_name_placeholder">रुग्णाचे नाव</string>
+    <string name="profile_phone_placeholder">मोबाईल क्रमांक</string>
+
+    <!-- Patient dashboard -->
+    <string name="dashboard_title">आरोग्य सेवा</string>
+    <string name="logout">लॉगआउट</string>
+
+    <!-- Icons -->
+    <string name="symptom_icon_desc">लक्षण तपासणी</string>
+    <string name="consult_doctor">डॉक्टर सल्ला आयकॉन</string>
+    <string name="past_consultations">मागील सल्लामसलत</string>
+    <string name="medicines">औषधे आयकॉन</string>
+    <string name="desc_open_link">लिंक उघडा</string>
+    <string name="desc_calendar">कॅलेंडर आयकॉन</string>
+
+    <!-- Patient Services -->
+    <string name="check_symptoms">लक्षणे तपासा</string>
+    <string name="ai_health_check">एआय आरोग्य तपासणी</string>
+
     <string name="consult_doctor_label">डॉक्टरांचा सल्ला</string>
     <string name="past_consultations_label">मागील सल्लामसलत</string>
+    <string name="view_history">इतिहास पहा</string>
+
+    <string name="book_appointment">अपॉइंटमेंट बुक करा</string>
+    <string name="schedule_visit">भेट निश्चित करा</string>
+
+    <string name="we_care">आम्ही काळजी घेतो</string>
+    <string name="share_concerns">आपल्या समस्या सांगा</string>
+    <string name="health_query">आरोग्य प्रश्न</string>
+
+    <!-- Emergency / Buttons -->
     <string name="disease_outbreak_label">रोग उद्रेक</string>
     <string name="emergency_label">⚠️ आपत्कालीन</string>
+    <string name="emergency_services">🚨 आपत्कालीन सेवा</string>
+    <string name="start_video_call">📞 व्हिडिओ/व्हॉइस कॉल सुरू करा</string>
 
-    <!-- =============================== -->
-    <!--         ASHA DASHBOARD          -->
-    <!-- =============================== -->
-
+    <!-- ASHA Dashboard -->
     <string name="asha_dashboard_title">आशा डॅशबोर्ड</string>
     <string name="sample_asha_name">प्रिया पटेल</string>
 
-    <!-- Profile placeholders -->
     <string name="asha_profile_photo_desc">आशा प्रोफाइल फोटो</string>
     <string name="asha_id_placeholder">ओळख क्रमांक: A001</string>
     <string name="asha_village_placeholder">गाव: -</string>
     <string name="asha_taluka_placeholder">तालुका: -</string>
     <string name="asha_district_placeholder">जिल्हा: -</string>
 
-    <!-- Dynamic profile formatting -->
     <string name="asha_default_name">आरोग्य सेविका</string>
     <string name="asha_id_format">ओळख क्रमांक: %1$s</string>
     <string name="village_format">गाव: %1$s</string>
     <string name="taluka_format">तालुका: %1$s</string>
     <string name="district_format">जिल्हा: %1$s</string>
 
-    <!-- Dashboard tile descriptions -->
+    <!-- ASHA Tiles -->
     <string name="desc_total_patients">एकूण रुग्ण</string>
     <string name="desc_active_cases">सक्रिय प्रकरणे</string>
     <string name="desc_completed_today">आज पूर्ण केलेली कामे</string>
     <string name="desc_my_schedule">माझे वेळापत्रक</string>
-    <string name="desc_emergency_cases">आपत्कालीन प्रकरणे</string>
+    <string name="desc_emergency_cases">आपात्कालीन प्रकरणे</string>
 
-    <!-- Dashboard main tile text -->
     <string name="asha_total_patients">एकूण रुग्ण</string>
     <string name="asha_active_cases">सक्रिय प्रकरणे</string>
     <string name="asha_my_schedule">माझे वेळापत्रक</string>
     <string name="asha_emergency">आपत्कालीन सेवा</string>
 
-    <!-- Quick Actions section -->
-    <string name="asha_quick_actions">तत्काळ क्रिया</string>
+    <!-- Quick Actions -->
+    <string name="quick_actions">त्वरित सेवा</string>
+    <string name="asha_quick_actions">तात्काळ क्रिया</string>
+
     <string name="asha_register_patient">रुग्ण नोंदणी</string>
     <string name="asha_conduct_survey">सर्वेक्षण करा</string>
     <string name="asha_view_surveys">सर्वेक्षण पहा</string>
     <string name="asha_health_drives">आरोग्य मोहीमा</string>
 
-    <!-- Older quick action labels translated -->
     <string name="action_view_surveys">रुग्ण सर्वेक्षण पहा</string>
     <string name="action_health_drives">जाहिरात</string>
     <string name="action_register_patient">नवीन रुग्ण नोंदणी</string>
     <string name="action_help_login">रुग्ण लॉगिन मदत</string>
 
-    <!-- Patient services grid -->
+    <!-- Patient services -->
     <string name="asha_patient_services">रुग्ण सेवा</string>
     <string name="desc_patient_services">रुग्ण सेवा विभाग</string>
+
     <string name="asha_consult_doctor">डॉक्टरांचा सल्ला</string>
     <string name="desc_consult_doctor">डॉक्टर सल्ला</string>
-    <string name="asha_past_consultations">मागील सल्लामसलत</string>
-    <string name="desc_past_consultations">मागील सल्लामसलत</string>
+
+    <string name="asha_past_consultations">मागील सल्लाम सलत</string>
+    <string name="desc_past_consultations">मागील सल्लाम सलत</string>
+
     <string name="asha_disease_analytics">रोग विश्लेषण</string>
     <string name="desc_disease_analytics">रोग विश्लेषण</string>
+
 
     <!-- Recent Activity -->
     <string name="asha_recent_activity">अलीकडील कृती</string>
     <string name="asha_recent_activity_1">• रुग्ण नोंदणी — राम शर्मा • २ तासांपूर्वी</string>
-    <string name="asha_recent_activity_2">• सल्लामसलत पूर्ण — सीता देवी • ५ तासांपूर्वी</string>
-    <string name="asha_recent_activity_3">• आपत्कालीन प्रकरण रेफर — मोहन गुप्ता • १ दिवसापूर्वी</string>
+    <string name="asha_recent_activity_2">• सल्लाम सलत पूर्ण — सीता देवी • ५ तासांपूर्वी</string>
+    <string name="asha_recent_activity_3">• आपात्कालीन प्रकरण रेफर — मोहन गुप्ता • १ दिवसापूर्वी</string>
+
 
     <!-- Logout -->
-    <string name="logout_label">लॉगआऊट</string>
-    <string name="logout_warning">नोंद: लॉगआऊट करताना डेटा रीलोड करण्यासाठी इंटरनेट लागेल.</string>
+    <string name="logout_label">लॉग-आऊट</string>
+    <string name="logout_warning">नोंद: लॉग-आऊट करताना डेटा रीलोड करण्यासाठी इंटरनेट लागेल.</string>
+
 
     <!-- National Health Programs -->
     <string name="asha_nhp_title">राष्ट्रीय आरोग्य कार्यक्रम</string>
@@ -101,55 +123,183 @@
     <string name="desc_ayush">आयुष आरोग्य मोहीम</string>
     <string name="desc_idsp">एकात्मिक रोग देखरेख प्रकल्प</string>
 
-    <!-- Community Health Tips -->
+
+    <!-- Community Tips -->
     <string name="asha_health_tips_title">समुदाय आरोग्य टिप्स</string>
-    <string name="asha_tip_monsoon">पावसाळी आरोग्य\nस्वच्छ पिण्याचे पाणी वापरा व जलजन्य आजार टाळा.</string>
-    <string name="asha_tip_vaccination">लसीकरण मोहीम\nयेणाऱ्या लसीकरण वेळापत्रकाची आठवण करून द्या.</string>
-    <string name="asha_tip_diabetes">मधुमेह जनजागृती\n३० वर्षांवरील प्रौढांसाठी नियमित तपासणी करा.</string>
 
-    <!-- Icons -->
-    <string name="desc_open_link">लिंक उघडा</string>
-    <string name="desc_calendar">कॅलेंडर आयकॉन</string>
+    <string name="asha_tip_monsoon">
+        पावसाळी आरोग्य\nस्वच्छ पिण्याचे पाणी वापरा व जलजन्य आजार टाळा.
+    </string>
 
-    <!-- General Survey Language Toggle -->
-    <string name="language_toggle_english">इंग्रजीमध्ये स्विच करा</string>
-    <string name="language_toggle_marathi">मराठीमध्ये स्विच करा</string>
+    <string name="asha_tip_vaccination">
+        लसीकरण मोहीम\nयेणाऱ्या लसीकरण वेळापत्रकाची आठवण करून द्या.
+    </string>
+
+    <string name="asha_tip_diabetes">
+        मधुमेह जनजागृती\n३० वर्षांवरील प्रौढांसाठी नियमित तपासणी करा.
+    </string>
+
+
+    <!-- Survey -->
+    <string name="language_toggle_marathi">मराठीमध्ये बदला</string>
     <string name="general_survey_title">सामान्य आरोग्य सर्वेक्षण</string>
     <string name="patient_details">रुग्ण तपशील</string>
+
     <string name="identification_section">१. ओळख</string>
     <string name="existing_conditions_section">२. विद्यमान स्थिती</string>
     <string name="symptoms_section">३. लक्षणे</string>
     <string name="risk_factors_section">४. जोखीम घटक</string>
     <string name="service_use_section">५. सेवा वापर</string>
     <string name="asha_assessment_section">६. आशा मूल्यांकन</string>
+
     <string name="save_survey">सर्वेक्षण जतन करा</string>
-    <string name="visit_date">भेटचे दिनांक</string>
+    <string name="visit_date">भेटीची तारीख</string>
     <string name="location">स्थान</string>
+
+
+    <!-- Diseases -->
     <string name="diabetes">मधुमेह</string>
     <string name="hypertension">उच्च रक्तदाब</string>
     <string name="heart_disease">हृदय रोग</string>
     <string name="stroke">स्ट्रोक</string>
     <string name="kidney_disease">किडनी रोग</string>
     <string name="other_conditions">इतर अवस्था</string>
+
+
+    <!-- Symptoms -->
     <string name="frequent_urination">वारंवार मूत्रत्याग</string>
     <string name="excessive_thirst">अत्यधिक तहान</string>
     <string name="weight_loss">वजन कमी होणे</string>
-    <string name="blurred_vision">धुंदळ दृष्टी</string>
-    <string name="chest_pain">छातीतून दर्द</string>
-    <string name="shortness_of_breath">श्वासाचा अभाव</string>
+    <string name="blurred_vision">धुसर दृष्टी</string>
+    <string name="chest_pain">छातीत दुखणे</string>
+    <string name="shortness_of_breath">श्वास घेण्यास त्रास</string>
     <string name="fatigue">थकवा</string>
+
+
+    <!-- Risk -->
     <string name="family_history">कुटुंब इतिहास</string>
     <string name="tobacco_use">तंबाखू वापर</string>
     <string name="alcohol_use">अल्कोहोल वापर</string>
     <string name="physical_activity">शारीरिक क्रियाकलाप</string>
     <string name="unhealthy_diet">अस्वास्थ्यकर आहार</string>
+
+
+    <!-- Medication -->
     <string name="regular_checkups">नियमित तपासणी</string>
     <string name="current_medication">वर्तमान औषध</string>
     <string name="medication_details">औषध तपशील</string>
     <string name="recent_bp_check">अलीकडील रक्तदाब तपासणी</string>
     <string name="recent_sugar_check">अलीकडील साखर तपासणी</string>
+
+
+    <!-- Referral -->
     <string name="referral_needed">संदर्भ आवश्यक</string>
     <string name="referral_facility">संदर्भ सुविधा</string>
     <string name="remarks">टिप्पणी</string>
+
+
+    <!-- Language -->
+    <string name="language">भाषा</string>
+    <string name="choose_language">भाषा निवडा</string>
+    <string name="type_message">तुमचा संदेश लिहा...</string>
+    <string name="ai_symptom_checker">एआय लक्षण तपासणी</string>
+    <string name="language_toggle_english">मराठीमध्ये स्विच करा</string>
+    <string name="back">मागे</string>
+    <string name="book_appointment_title">अपॉइंटमेंट बुक करा</string>
+    <string name="schedule_your_appointment">तुमची अपॉइंटमेंट निश्चित करा</string>
+    <string name="select_doctor_type">डॉक्टरांचा प्रकार निवडा</string>
+    <string name="cho">सीएचओ</string>
+    <string name="mo">एमओ</string>
+    <string name="doctor_name">डॉक्टरांचे नाव</string>
+    <string name="doctor_name_hint">डॉक्टरांचे नाव</string>
+    <string name="doctor_phone">डॉक्टरांचा फोन</string>
+    <string name="phone_number_hint">फोन क्रमांक</string>
+    <string name="appointment_date">अपॉइंटमेंट दिनांक</string>
+    <string name="date_format_hint">yyyy-MM-dd</string>
+    <string name="appointment_time_optional">अपॉइंटमेंट वेळ(पर्यायी)</string>
+    <string name="time_format_hint">HH:mm</string>
+    <string name="notes_optional">नोंदी(पर्यायी)</string>
+    <string name="notes_hint">काही नोंदी किंवा विशेष विनंती जोडा</string>
+    <string name="save_appointment">अपॉइंटमेंट जतन करा</string>
+    <string name="saved_appointments">जतन केलेल्या अपॉइंटमेंट्स</string>
+    <string name="no_appointments">अद्याप कोणतीही अपॉइंटमेंट बुक केलेली नाही</string>
+    <string name="no_appointments_icon_desc">कोणतीही अपॉइंटमेंट नाही</string>
+    <string name="profile_picture_desc">प्रोफाइल चित्र</string>
+    <string name="take_profile_picture">प्रोफाइल चित्र घ्या</string>
+    <string name="full_name">पूर्ण नाव</string>
+    <string name="full_name_hint">राम शर्मा</string>
+    <string name="age">वय</string>
+    <string name="age_hint">45</string>
+    <string name="gender">लिंग</string>
+    <string name="phone_number">फोन नंबर</string>
+    <string name="password">पासवर्ड</string>
+    <string name="password_hint">किमान 8 अक्षरे ज्यामध्ये मोठे अक्षर, छोटे अक्षर, संख्या आणि विशेष अक्षर असणे आवश्यक आहे</string>
+    <string name="toggle_password_visibility">पासवर्ड दाखवा</string>
+    <string name="confirm_password">पासवर्डची पुष्टी करा</string>
+    <string name="confirm_password_hint">पासवर्ड पुन्हा टाका</string>
+    <string name="toggle_confirm_password_visibility">पासवर्ड पुष्टी दाखवा</string>
+    <string name="patient_id">रुग्ण ID</string>
+    <string name="patient_id_hint">P001</string>
+    <string name="edit">संपादित करा</string>
+    <string name="we_care_health_title">💙 आम्ही तुमच्या आरोग्याची काळजी घेतो</string>
+    <string name="we_care_health_subtitle">तुमच्या आरोग्याच्या समस्या सांगा आणि तज्ञ मार्गदर्शन मिळवा</string>
+    <string name="select_health_issue">🏥 आरोग्य समस्या निवडा *</string>
+    <string name="doctor_type_auto_assigned">👨‍⚕️ डॉक्टर प्रकार (आपोआप नियुक्त)</string>
+    <string name="doctor_type_auto_hint">आपोआप निवडले जाईल</string>
+    <string name="selected_automatically">आपोआप निवडलेले</string>
+    <string name="query_concerns_label">📝 तुमची समस्या/चिंता *</string>
+    <string name="query_concerns_hint">तुमच्या आरोग्य समस्येचे सविस्तर वर्णन करा...</string>
+    <string name="voice_message_optional">🎤 आवाज संदेश (ऐच्छिक)</string>
+    <string name="record_voice">🎤 रेकॉर्ड करा</string>
+    <string name="play_voice">▶️ प्ले करा</string>
+    <string name="clear_voice">✕ साफ करा</string>
+    <string name="voice_status_empty">अजून कोणताही आवाज रेकॉर्ड केलेला नाही</string>
+    <string name="no_voice_recorded">अद्याप कोणताही आवाज रेकॉर्ड केलेला नाही</string>
+    <string name="additional_notes_hint">माइकवर टॅप करा किंवा अतिरिक्त नोंदी टाइप करा...</string>
+    <string name="cancel">रद्द करा</string>
+    <string name="submit">सबमिट करा</string>
+    <string name="health_info_secure">✓ तुमची आरोग्य माहिती सुरक्षित आणि गोपनीय आहे</string>
+    <string name="emergency_contacts">आपत्कालीन संपर्क</string>
+    <string name="register_asha">आशा नोंदणी</string>
+    <string name="state">राज्य</string>
+    <string name="default_state">डीफॉल्ट राज्य निवडा</string>
+    <string name="district">जिल्हा</string>
+    <string name="taluka">तालुका</string>
+    <string name="village">गाव</string>
+    <string name="password_criteria">पासवर्ड किमान ८ अक्षरांचा असावा, मोठी आणि लहान अक्षरे, एक अंक आणि एक विशेष चिन्ह असावे</string>
+    <string name="register">नोंदणी</string>
+    <string name="dummy_supervisor">डमी सुपरवायझर</string>
+    <string name="leave_blank_keep_current">सध्याचा पासवर्ड ठेवण्यासाठी रिक्त ठेवा</string>
+    <string name="supervisor_id_label">सुपरवायझर आयडी: SUP001</string>
+    <string name="view_asha_data">आशा डेटा पाहा</string>
+    <string name="view_surveys_drives">सर्वेक्षण आणि मोहीमा पाहा</string>
+    <string name="make_announcement">घोषणा करा</string>
+    <string name="change_profile_picture">प्रोफाइल फोटो बदला</string>
+    <string name="asha_name">आशा नाव</string>
+    <string name="supervisor_id_placeholder">पर्यवेक्षक आयडी</string>
+    <string name="supervisor_id">पर्यवेक्षक आयडी</string>
+    <string name="female">महिला</string>
+    <string name="survey_data_viewer">सर्वेक्षण डेटा दर्शक</string>
+    <string name="survey_type">सर्वेक्षण प्रकार</string>
+    <string name="date">तारीख</string>
+    <string name="select_date_hint">तारीख निवडा (YYYY-MM-DD)</string>
+    <string name="fetch_survey_data">सर्वेक्षण डेटा मिळवा</string>
+    <string name="download_csv">CSV डाउनलोड करा</string>
+    <string name="survey_records_table">सर्वेक्षण नोंद तक्ता</string>
+    <string name="default_summary">एकूण नोंदी: 0 | आशा: 0</string>
+    <string name="select_filters_fetch_data">फिल्टर निवडा आणि डेटा मिळवा</string>
+    <string name="survey_data_viewer_desc">प्रकार आणि तारखेनुसार सर्वेक्षण नोंदी पहा आणि डाउनलोड करा</string>
+    <string name="edit_profile">प्रोफाइल संपादित करा</string>
+    <string name="announcement_type">घोषणा प्रकार</string>
+    <string name="event_date">कार्यक्रम दिनांक</string>
+    <string name="select_date">दिनांक निवडा</string>
+    <string name="no_date_selected">कोणताही दिनांक निवडलेला नाही</string>
+    <string name="venue">स्थळ</string>
+    <string name="venue_hint">उदा. समुदाय केंद्र, वॉर्ड ५</string>
+    <string name="announcement_message">घोषणा संदेश</string>
+    <string name="voice_input">आवाजाद्वारे इनपुट</string>
+    <string name="announcement_message_hint">माइकवर टॅप करा किंवा घोषणा संदेश टाइप करा...</string>
+    <string name="additional_notes">अतिरिक्त नोंदी</string>
+    <string name="announce">घोषणा करा</string>
 
 </resources>

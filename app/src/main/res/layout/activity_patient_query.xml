@@ -1,97 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="#F8FAFC">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8FAFC">
 
     <!-- Header -->
     <include layout="@layout/include_header" />
 
     <!-- ScrollView for form -->
-    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <!-- Title Section with Card -->
-            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" app:cardCornerRadius="12dp" app:cardElevation="0dp" app:strokeColor="#E2E8F0" app:strokeWidth="1dp" android:backgroundTint="#F0F9FF">
+            <!-- Title Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="#F0F9FF"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp">
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="💙 We Care About Your Health" android:textSize="20sp" android:textColor="#0F172A" android:textStyle="bold" android:layout_marginBottom="6dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/we_care_health_title"
+                        android:textSize="20sp"
+                        android:textColor="#0F172A"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="6dp" />
 
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Share your health concerns and get expert guidance" android:textSize="12sp" android:textColor="#64748B" android:lineSpacingExtra="1dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/we_care_health_subtitle"
+                        android:textSize="12sp"
+                        android:textColor="#64748B"
+                        android:lineSpacingExtra="1dp" />
 
                 </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Form Section -->
-            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="12dp" app:cardElevation="2dp" app:strokeColor="#E2E8F0" app:strokeWidth="1dp" android:backgroundTint="@android:color/white">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp">
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <!-- Disease Field (Dropdown) -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="16dp">
+                    <!-- Disease -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
 
-                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="🏥 Select Health Issue *" android:textSize="13sp" android:textColor="#0F172A" android:textStyle="bold" android:layout_marginBottom="8dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/select_health_issue"
+                            android:textSize="13sp"
+                            android:textColor="#0F172A"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                        <Spinner android:id="@+id/spinnerDisease" android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/edit_text" android:padding="12dp" />
+                        <Spinner
+                            android:id="@+id/spinnerDisease"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:background="@android:drawable/edit_text"
+                            android:padding="12dp" />
                     </LinearLayout>
 
-                    <!-- Doctor Type Field (Read-only) -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="16dp">
+                    <!-- Doctor Type -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
 
-                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="👨‍⚕️ Doctor Type (Auto-assigned)" android:textSize="13sp" android:textColor="#0F172A" android:textStyle="bold" android:layout_marginBottom="8dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/doctor_type_auto_assigned"
+                            android:textSize="13sp"
+                            android:textColor="#0F172A"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                        <EditText android:id="@+id/etDocType" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Selected automatically" android:inputType="text" android:padding="12dp" android:background="@android:drawable/edit_text" android:textColor="#0F172A" android:textColorHint="#94A3B8" android:textSize="13sp" android:enabled="false" />
+                        <EditText
+                            android:id="@+id/etDocType"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:hint="@string/selected_automatically"
+                            android:inputType="text"
+                            android:padding="12dp"
+                            android:background="@android:drawable/edit_text"
+                            android:textColor="#0F172A"
+                            android:textColorHint="#94A3B8"
+                            android:textSize="13sp"
+                            android:enabled="false" />
                     </LinearLayout>
 
-                    <!-- Query Text Field -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="16dp">
+                    <!-- Query -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
 
-                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="📝 Your Query/Concerns *" android:textSize="13sp" android:textColor="#0F172A" android:textStyle="bold" android:layout_marginBottom="8dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/query_concerns_label"
+                            android:textSize="13sp"
+                            android:textColor="#0F172A"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                        <EditText android:id="@+id/etQueryText" android:layout_width="match_parent" android:layout_height="110dp" android:hint="Describe your health concern in detail..." android:inputType="textMultiLine" android:padding="12dp" android:background="@android:drawable/edit_text" android:textColor="#0F172A" android:textColorHint="#94A3B8" android:textSize="13sp" android:gravity="top" />
+                        <EditText
+                            android:id="@+id/etQueryText"
+                            android:layout_width="match_parent"
+                            android:layout_height="110dp"
+                            android:hint="@string/query_concerns_hint"
+                            android:inputType="textMultiLine"
+                            android:padding="12dp"
+                            android:background="@android:drawable/edit_text"
+                            android:textColor="#0F172A"
+                            android:textColorHint="#94A3B8"
+                            android:textSize="13sp"
+                            android:gravity="top" />
                     </LinearLayout>
 
-                    <!-- Voice Recording Section -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="16dp">
+                    <!-- Voice Recording -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
 
-                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="🎤 Voice Message (Optional)" android:textSize="13sp" android:textColor="#0F172A" android:textStyle="bold" android:layout_marginBottom="10dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/voice_message_optional"
+                            android:textSize="13sp"
+                            android:textColor="#0F172A"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="10dp" />
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:orientation="horizontal" android:layout_marginBottom="10dp" android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center_vertical">
 
-                            <Button android:id="@+id/btnRecordVoice" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="🎤 Record" android:textColor="@android:color/white" android:backgroundTint="#2563EB" android:textSize="12sp" android:textStyle="bold" />
+                            <Button
+                                android:id="@+id/btnRecordVoice"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="6dp"
+                                android:text="@string/record_voice"
+                                android:textColor="@android:color/white"
+                                android:backgroundTint="#2563EB"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
 
-                            <Button android:id="@+id/btnPlayVoice" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:layout_marginEnd="6dp" android:text="▶️ Play" android:textColor="@android:color/white" android:backgroundTint="#64748B" android:textSize="12sp" android:textStyle="bold" android:enabled="false" />
+                            <Button
+                                android:id="@+id/btnPlayVoice"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="6dp"
+                                android:text="@string/play_voice"
+                                android:textColor="@android:color/white"
+                                android:backgroundTint="#64748B"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:enabled="false" />
 
-                            <Button android:id="@+id/btnClearVoice" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:text="✕ Clear" android:textColor="@android:color/white" android:backgroundTint="#DC2626" android:textSize="12sp" android:textStyle="bold" android:enabled="false" />
+                            <Button
+                                android:id="@+id/btnClearVoice"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:text="@string/clear_voice"
+                                android:textColor="@android:color/white"
+                                android:backgroundTint="#DC2626"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:enabled="false" />
 
                         </LinearLayout>
 
-                        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="8dp" app:cardElevation="0dp" android:backgroundTint="#F0F9FF" app:strokeColor="#BFDBFE" app:strokeWidth="1dp">
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#F0F9FF"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#BFDBFE"
+                            app:strokeWidth="1dp">
 
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="10dp" android:gravity="center_vertical">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="10dp"
+                                android:gravity="center_vertical">
 
-                                <TextView android:layout_width="20dp" android:layout_height="20dp" android:text="ℹ️" android:gravity="center" android:layout_marginEnd="8dp" android:textSize="14sp" />
+                                <TextView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:text="@string/info_icon"
+                                    android:gravity="center"
+                                    android:layout_marginEnd="8dp"
+                                    android:textSize="14sp" />
 
-                                <TextView android:id="@+id/tvVoiceStatus" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="No voice recorded yet" android:textSize="12sp" android:textColor="#0369A1" android:lineSpacingExtra="1dp" />
+                                <TextView
+                                    android:id="@+id/tvVoiceStatus"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/no_voice_recorded"
+                                    android:textSize="12sp"
+                                    android:textColor="#0369A1"
+                                    android:lineSpacingExtra="1dp" />
 
                             </LinearLayout>
+
                         </com.google.android.material.card.MaterialCardView>
+
                     </LinearLayout>
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Action Buttons -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="20dp" android:layout_marginBottom="16dp">
+            <!-- Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="16dp">
 
-                <Button android:id="@+id/btnCancel" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:text="Cancel" android:textColor="@android:color/white" android:textSize="14sp" android:textStyle="bold" android:backgroundTint="#6366F1" android:layout_marginEnd="10dp" />
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/cancel"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:backgroundTint="#6366F1"
+                    android:layout_marginEnd="10dp" />
 
-                <Button android:id="@+id/btnSubmitQuery" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:text="Submit" android:textColor="@android:color/white" android:textStyle="bold" android:textSize="14sp" android:backgroundTint="#16A34A" />
+                <Button
+                    android:id="@+id/btnSubmitQuery"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/submit"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:backgroundTint="#16A34A" />
 
             </LinearLayout>
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="✓ Your health information is secure and confidential" android:textSize="11sp" android:textColor="#64748B" android:gravity="center" android:layout_marginBottom="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/health_info_secure"
+                android:textSize="11sp"
+                android:textColor="#64748B"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
 
         </LinearLayout>
 

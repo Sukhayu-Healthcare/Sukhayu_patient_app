@@ -2,96 +2,282 @@
 <!--suppress AndroidDomInspection -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:background="#F8FAFC" tools:context=".ui.supervisor.SupervisorHomeActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F8FAFC"
+    tools:context=".ui.supervisor.SupervisorHomeActivity">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <!-- ===========================
-             HEADER INCLUDE
-        ============================ -->
-        <include android:id="@+id/header" layout="@layout/include_header" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp" />
+        <!-- Header -->
+        <include
+            android:id="@+id/header"
+            layout="@layout/include_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
 
-        <!-- ===========================
-             MAIN CONTENT AREA
-        ============================ -->
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+        <!-- Main Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <!-- ===========================
-                 PROFILE CARD
-            ============================ -->
-            <com.google.android.material.card.MaterialCardView android:id="@+id/cardProfile" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardCornerRadius="12dp" app:cardElevation="3dp" app:strokeColor="#E2E8F0" app:strokeWidth="1dp" android:backgroundTint="@android:color/white" android:clickable="true" android:focusable="true">
+            <!-- Profile Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@android:color/white"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp"
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp">
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                        <ImageView android:id="@+id/image_profile_supervisor" android:layout_width="60dp" android:layout_height="60dp" android:src="@drawable/sample_patient" android:scaleType="centerCrop" android:contentDescription="@string/profile_icon_desc" android:layout_marginEnd="12dp" />
+                        <ImageView
+                            android:id="@+id/image_profile_supervisor"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginEnd="12dp"
+                            android:contentDescription="@string/profile_icon_desc"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/sample_patient" />
 
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                            <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dummy Supervisor" android:textColor="#0F172A" android:textSize="18sp" android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/tvPatientName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/dummy_supervisor"
+                                android:textColor="#0F172A"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
 
-                            <TextView android:id="@+id/tvPatientId" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Supervisor ID: SUP001" android:textColor="#475569" android:textSize="14sp" />
+                            <TextView
+                                android:id="@+id/tvPatientId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/supervisor_id_label"
+                                android:textColor="#475569"
+                                android:textSize="14sp" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Logout -->
-                    <Button android:id="@+id/btnLogout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="end" android:layout_marginTop="12dp" android:text="Logout" android:textColor="@android:color/white" android:backgroundTint="#DC2626" android:paddingHorizontal="16dp" android:paddingVertical="8dp" android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/btnLogout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="12dp"
+                        android:backgroundTint="#DC2626"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/logout"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ===========================
-                 DASHBOARD CARDS
-            ============================ -->
-            <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:rowCount="2" android:layout_marginTop="8dp">
+            <!-- Dashboard Cards -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:columnCount="2"
+                android:rowCount="2">
 
-                <!-- Row 0, Col 0: Register ASHA -->
-                <com.google.android.material.card.MaterialCardView android:id="@+id/cardRegisterAsha" android:layout_width="0dp" android:layout_height="140dp" android:layout_row="0" android:layout_column="0" android:layout_rowWeight="1" android:layout_columnWeight="1" android:layout_margin="8dp" app:cardCornerRadius="12dp" app:cardElevation="3dp" android:clickable="true" android:focusable="true">
+                <!-- Register ASHA -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardRegisterAsha"
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_column="0"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    android:layout_row="0"
+                    android:layout_rowWeight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="3dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                        <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_add_user" android:layout_marginBottom="8dp" app:tint="#059669" />
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginBottom="8dp"
+                            android:src="@drawable/ic_add_user"
+                            app:tint="#059669" />
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Register ASHA" android:textSize="14sp" android:textStyle="bold" android:textAlignment="center" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/register_asha"
+                            android:textAlignment="center"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Row 0, Col 1: View ASHA Data -->
-                <com.google.android.material.card.MaterialCardView android:id="@+id/cardViewAsha" android:layout_width="0dp" android:layout_height="140dp" android:layout_row="0" android:layout_column="1" android:layout_rowWeight="1" android:layout_columnWeight="1" android:layout_margin="8dp" app:cardCornerRadius="12dp" app:cardElevation="3dp" android:clickable="true" android:focusable="true">
+                <!-- View ASHA Data -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewAsha"
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_column="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    android:layout_row="0"
+                    android:layout_rowWeight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="3dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                        <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_data" android:layout_marginBottom="8dp" app:tint="#2563EB" />
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginBottom="8dp"
+                            android:src="@drawable/ic_data"
+                            app:tint="#2563EB" />
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="View ASHA Data" android:textSize="14sp" android:textStyle="bold" android:textAlignment="center" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/view_asha_data"
+                            android:textAlignment="center"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Row 1, Col 0: View Surveys & Drives -->
-                <com.google.android.material.card.MaterialCardView android:id="@+id/cardViewSurveysAndDrives" android:layout_width="0dp" android:layout_height="140dp" android:layout_row="1" android:layout_column="0" android:layout_rowWeight="1" android:layout_columnWeight="1" android:layout_margin="8dp" app:cardCornerRadius="12dp" app:cardElevation="3dp" android:clickable="true" android:focusable="true">
+                <!-- View Surveys & Drives -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewSurveysAndDrives"
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_column="0"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    android:layout_row="1"
+                    android:layout_rowWeight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="3dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                        <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_document" android:layout_marginBottom="8dp" app:tint="#4A5568" />
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginBottom="8dp"
+                            android:src="@drawable/ic_document"
+                            app:tint="#4A5568" />
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="View Surveys &amp; Drives" android:textSize="14sp" android:textStyle="bold" android:textAlignment="center" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/view_surveys_drives"
+                            android:textAlignment="center"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Row 1, Col 1: Make Announcement -->
-                <com.google.android.material.card.MaterialCardView android:id="@+id/cardCreateDrive" android:layout_width="0dp" android:layout_height="140dp" android:layout_row="1" android:layout_column="1" android:layout_rowWeight="1" android:layout_columnWeight="1" android:layout_margin="8dp" app:cardCornerRadius="12dp" app:cardElevation="3dp" android:clickable="true" android:focusable="true">
+                <!-- Make Announcement -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardCreateDrive"
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_column="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    android:layout_row="1"
+                    android:layout_rowWeight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="3dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                        <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_campaign" android:layout_marginBottom="8dp" app:tint="#7C3AED" />
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginBottom="8dp"
+                            android:src="@drawable/ic_campaign"
+                            app:tint="#7C3AED" />
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Make Announcement" android:textAlignment="center" android:textSize="14sp" android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/make_announcement"
+                            android:textAlignment="center"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                 </com.google.android.material.card.MaterialCardView>
+
             </GridLayout>
 
         </LinearLayout>
 
     </LinearLayout>
+
 </ScrollView>

@@ -1,7 +1,7 @@
 package com.sukhayu.patient.data.remote
 
 data class PatientQueryRequest(
-    val patient_id: Int,
+    // patient_id is extracted from JWT token on backend, not sent in body
     val asha_id: Int?,
     val text: String,
     val voice_url: String?,

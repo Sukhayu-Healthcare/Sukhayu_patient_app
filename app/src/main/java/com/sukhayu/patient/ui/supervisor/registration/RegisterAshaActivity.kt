@@ -21,14 +21,19 @@ import com.sukhayu.patient.databinding.ActivitySupervisorRegisterAshaBinding
 import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.utils.HeaderUtils
+import com.sukhayu.patient.utils.LocalizableActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
 
-class RegisterAshaActivity : AppCompatActivity() {
+class RegisterAshaActivity : LocalizableActivity() {
 
     private lateinit var binding: ActivitySupervisorRegisterAshaBinding
     private val TAG = "RegisterAshaActivity"
+
+    private lateinit var ttsHelper: TtsHelper
 
     // Voice helper attached only to specific fields
     private lateinit var voiceHelper: VoiceInputHelper
@@ -74,9 +79,29 @@ class RegisterAshaActivity : AppCompatActivity() {
 
         setupSpinners()
         setupClickListeners()
+        setupLanguageToggle()
 
         // new: setup password toggle and criteria
         setupPasswordToggle()
+
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
+
+        // Voice input setup
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun requestAudioPermission() {
@@ -410,5 +435,6 @@ class RegisterAshaActivity : AppCompatActivity() {
     override fun onDestroy() {
         voiceHelper.destroy()
         super.onDestroy()
+        ttsHelper.shutdown()
     }
 }

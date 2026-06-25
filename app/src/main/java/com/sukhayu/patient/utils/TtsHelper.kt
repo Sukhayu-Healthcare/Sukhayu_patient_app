@@ -29,18 +29,33 @@ class TtsHelper(private val context: Context) : TextToSpeech.OnInitListener {
      * Updates the TTS locale based on selectedLanguage
      */
     private fun updateLocale() {
-        tts?.let {
-            val locale = when (selectedLanguage) {
-                "mr" -> Locale("mr", "IN")
-                else -> Locale.US
+        tts?.let { ttsEngine ->
+
+            val locale = when (selectedLanguage.lowercase()) {
+                "mr" -> Locale("mr", "IN")  // Marathi
+                "hi" -> Locale("hi", "IN")  // Hindi
+                "gu" -> Locale("gu", "IN")  // Gujarati
+                else -> Locale.US           // English
             }
-            val result = it.setLanguage(locale)
-            
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.w("TtsHelper", "Language $selectedLanguage not supported, falling back to English")
-                it.setLanguage(Locale.US)
+
+            val result = ttsEngine.setLanguage(locale)
+
+            if (result == TextToSpeech.LANG_MISSING_DATA ||
+                result == TextToSpeech.LANG_NOT_SUPPORTED
+            ) {
+
+                Log.w(
+                    "TtsHelper",
+                    "Language $selectedLanguage not supported. Falling back to English."
+                )
+
+                ttsEngine.setLanguage(Locale.US)
             } else {
-                Log.d("TtsHelper", "TTS language set to: ${locale.displayName}")
+
+                Log.d(
+                    "TtsHelper",
+                    "TTS language set to ${locale.displayLanguage}"
+                )
             }
         }
     }

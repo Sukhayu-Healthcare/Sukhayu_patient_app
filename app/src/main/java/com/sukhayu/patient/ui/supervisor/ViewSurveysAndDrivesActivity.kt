@@ -21,8 +21,18 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import android.view.View
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.sukhayu.patient.utils.LocalizableActivity
+import com.sukhayu.utils.VoiceInputHelper
 
-class ViewSurveysAndDrivesActivity : AppCompatActivity() {
+class ViewSurveysAndDrivesActivity : LocalizableActivity() {
 
     private lateinit var spinnerSurveyType: Spinner
     private lateinit var etDate: EditText
@@ -31,6 +41,10 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
     private lateinit var btnDownload: Button
     private lateinit var recordContainer: LinearLayout
     private lateinit var tableLayout: TableLayout
+
+    private lateinit var ttsHelper: TtsHelper
+
+    private lateinit var voiceHelper: VoiceInputHelper
 
     private val surveyTypes = mapOf(
         "Patient Screening" to "patient_screening",
@@ -50,6 +64,26 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
         initViews()
         setupSpinner()
         setupListeners()
+        setupLanguageToggle()
+
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
+
+        // Voice input setup
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
     }
 
     private fun initViews() {
@@ -290,5 +324,20 @@ class ViewSurveysAndDrivesActivity : AppCompatActivity() {
         val file = File(directory, fileName)
         file.writeText(content)
         Toast.makeText(this, "CSV saved: Downloads/SukhayuSurveys/$fileName", Toast.LENGTH_LONG).show()
+    }
+
+    private fun requestAudioPermission() {
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                200
+            )
+        }
     }
 }

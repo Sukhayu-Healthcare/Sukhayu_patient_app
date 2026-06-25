@@ -13,9 +13,22 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.sukhayu.patient.R
 import com.sukhayu.patient.utils.HeaderUtils
+import android.view.View
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.sukhayu.patient.utils.LocalizableActivity
+import com.sukhayu.utils.VoiceInputHelper
 
-class AshaDetailActivity : AppCompatActivity() {
+class AshaDetailActivity : LocalizableActivity() {
 
+    private lateinit var ttsHelper: TtsHelper
+
+    private lateinit var voiceHelper: VoiceInputHelper
     // Hierarchical data structure for dropdowns
     private val districtTalukaVillageData = mapOf(
         "Nagpur" to mapOf(
@@ -43,6 +56,25 @@ class AshaDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_asha_detail)
 
         HeaderUtils.setupRoleInHeader(this)
+
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
+
+        // Voice input setup
+        requestAudioPermission()
+        voiceHelper = VoiceInputHelper(this)
+        VoiceInputHelper.attachToAllEditTexts(this)
 
         // bind views
         val tvAshaId = findViewById<TextView>(R.id.tvAshaId)
@@ -165,6 +197,21 @@ class AshaDetailActivity : AppCompatActivity() {
         supportActionBar?.apply {
             title = "ASHA Details"
             setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    private fun requestAudioPermission() {
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                200
+            )
         }
     }
 

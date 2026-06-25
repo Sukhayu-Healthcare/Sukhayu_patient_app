@@ -26,13 +26,22 @@ import com.sukhayu.patient.utils.TokenManager
 import com.sukhayu.utils.VoiceInputHelper
 import com.sukhayu.patient.utils.HeaderUtils
 import kotlinx.coroutines.launch
+import android.view.View
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.LocalizableActivity
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
 
-class ViewAshaDataActivity : AppCompatActivity() {
+class ViewAshaDataActivity : LocalizableActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var ashaAdapter: AshaAdapter
     private lateinit var etSearchAsha: EditText
     private lateinit var tvAshaCount: TextView
+
+    private lateinit var ttsHelper: TtsHelper
+
+    private lateinit var voiceHelper: VoiceInputHelper
     private lateinit var tvPageInfo: TextView
     private lateinit var btnPrevPage: Button
     private lateinit var btnNextPage: Button
@@ -41,7 +50,6 @@ class ViewAshaDataActivity : AppCompatActivity() {
     private var ashaListFull: List<AshaWorker> = emptyList()
 
     private val TAG = "ViewAshaDataActivity"
-    private lateinit var voiceHelper: VoiceInputHelper
     private lateinit var repository: SupervisorRepository
 
     // Pagination state
@@ -57,6 +65,7 @@ class ViewAshaDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_asha_data)
         HeaderUtils.setupRoleInHeader(this)
+        setupLanguageToggle()
         repository = SupervisorRepository(this)
 
         recyclerView = findViewById(R.id.recyclerViewAsha)
@@ -94,6 +103,20 @@ class ViewAshaDataActivity : AppCompatActivity() {
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
         VoiceInputHelper.attachToAllEditTexts(this)
+
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
     }
 
     private fun setupSearchFilter() {
@@ -260,5 +283,6 @@ class ViewAshaDataActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         voiceHelper.destroy()
+        ttsHelper.shutdown()
     }
 }

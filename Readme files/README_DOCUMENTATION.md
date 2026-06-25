@@ -290,3 +290,92 @@ Then choose:
 
 **All documentation complete and ready!** 📚✅
 
+
+-------------------------------------Text To Speech-------------------------------------------------
+import android.view.View
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
+
+private lateinit var ttsHelper: TtsHelper
+
+override fun onCreate(savedInstanceState: Bundle?) {
+...
+// Initialize TTS
+ttsHelper = TtsHelper(this)
+
+        val prefs = getSharedPreferences("Settings", MODE_PRIVATE)
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+// Enable TTS on all TextViews and Buttons
+ViewTtsHelper.attachToAllTextViews(
+findViewById(android.R.id.content),
+ttsHelper
+)
+...
+}
+
+##If required to add TTS to any other element other than layout elements 
+ttsHelper.speak()
+
+##Add in this function
+onDestroy()
+ttsHelper.shutdown()
+
+
+------------------------------------------Voice Input-----------------------------------------------
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.sukhayu.utils.VoiceInputHelper
+
+private lateinit var voiceHelper: VoiceInputHelper
+
+onCreate(){
+...
+// Voice input setup
+requestAudioPermission()
+voiceHelper = VoiceInputHelper(this)
+VoiceInputHelper.attachToAllEditTexts(this)
+...
+}
+
+//Add this function in the class
+private fun requestAudioPermission() {
+if (
+ContextCompat.checkSelfPermission(
+this,
+Manifest.permission.RECORD_AUDIO
+) != PackageManager.PERMISSION_GRANTED
+) {
+ActivityCompat.requestPermissions(
+this,
+arrayOf(Manifest.permission.RECORD_AUDIO),
+200
+)
+}
+}
+
+onDestroy()
+{
+super.onDestroy()
+...
+if (::voiceHelper.isInitialized) {
+voiceHelper.destroy()
+}
+}
+
+-------------------------------------------Language Toggle------------------------------------------
+1. Add replacing strings in strings.xml (english lang)
+2. Replace the replaced strings in the respective XML layout
+3. Open strings.xml , you will see Open Editor for Translation Values
+4. Open it, a table will appear --> add respective Gujarati,Hindi,Marathi values in it
+5. Add setupLanguageToggle() in onCreate() function
+----------------------------------------------------------------------------------------------------
+
+(〃￣︶￣)人(￣︶￣〃)
+
+(⌐■_■)

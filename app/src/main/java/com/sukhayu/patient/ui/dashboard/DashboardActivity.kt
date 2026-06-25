@@ -3,7 +3,6 @@ package com.sukhayu.patient.ui.dashboard
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -16,47 +15,30 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.card.MaterialCardView
 import com.sukhayu.patient.R
-import com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity
 import com.sukhayu.patient.ui.ai_symptom.SymptomChatActivity
-import com.sukhayu.patient.ui.awareness.DiseaseOutbreakActivity
 import com.sukhayu.patient.ui.consultation.ConsultDoctorActivity
 import com.sukhayu.patient.ui.consultation.PastConsultationsActivity
-import com.sukhayu.patient.ui.consultation.VideoCallActivity
-import com.sukhayu.patient.ui.emergency.EmergencyActivity
 import com.sukhayu.patient.ui.login.LoginActivity
-import com.sukhayu.patient.ui.patient.appointment.BookAppointmentActivity
 import com.sukhayu.patient.ui.profile.ProfileActivity
 import com.sukhayu.patient.utils.HeaderUtils
 import com.sukhayu.utils.LocaleHelper
-<<<<<<< HEAD
 import com.sukhayu.patient.ui.patient.appointment.BookAppointmentActivity
 import com.sukhayu.patient.ui.emergency.EmergencyActivity
-import com.sukhayu.patient.ui.consultation.VideoCallActivity
+import com.sukhayu.patient.ui.ai_symptom.CheckSymptomsActivity
 import com.sukhayu.patient.ui.patient.query.PatientQueryActivity
-=======
 import com.sukhayu.utils.VoiceInputHelper
->>>>>>> 80dee916ea5736a372a33fdcdf61917785771827
+import com.sukhayu.patient.utils.LocalizableActivity
+import android.view.View
+import android.widget.AdapterView
+import com.sukhayu.patient.utils.TtsHelper
+import com.sukhayu.patient.utils.ViewTtsHelper
 
-class DashboardActivity : AppCompatActivity() {
-
+class DashboardActivity : LocalizableActivity(){
 
     private lateinit var consultSymptomLauncher: ActivityResultLauncher<Intent>
     private lateinit var voiceHelper: VoiceInputHelper
 
-    // ----------------------
-    // APPLY SAVED LOCALE HERE
-    // ----------------------
-    override fun attachBaseContext(newBase: Context) {
-<<<<<<< HEAD
-        val langPrefs = newBase.getSharedPreferences("settings", Context.MODE_PRIVATE)
-        val lang = langPrefs.getString("app_lang", "en") ?: "en"
-=======
-        val prefs = newBase.getSharedPreferences("settings", Context.MODE_PRIVATE)
-        val lang = prefs.getString("app_lang", "en") ?: "en"
->>>>>>> 80dee916ea5736a372a33fdcdf61917785771827
-        val ctx = LocaleHelper.setLocale(newBase, lang)
-        super.attachBaseContext(ctx)
-    }
+    private lateinit var ttsHelper: TtsHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +46,7 @@ class DashboardActivity : AppCompatActivity() {
 
         // Set role label in header
         HeaderUtils.setupRoleInHeader(this)
+        setupLanguageToggle()
 
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
         val userName = prefs.getString("user_name", "") ?: ""
@@ -71,29 +54,6 @@ class DashboardActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.tvUserName)?.text = userName
         findViewById<TextView>(R.id.tvUserPhone)?.text = userPhone
-
-        // DEBUG: direct video call test button (only active when app is debuggable)
-        findViewById<Button?>(R.id.btnDebugTestVideoCall)?.setOnClickListener {
-            val isDebuggable =
-                (applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
-            if (!isDebuggable) {
-                Log.w("DashboardActivity", "Debug test button pressed in non-debuggable app; ignoring.")
-                return@setOnClickListener
-            }
-
-            val mockPatientId = "debug_patient"
-            val mockDoctorId = "debug_doctor"
-            Log.d(
-                "DashboardActivity",
-                "Starting debug VideoCallActivity with patient=$mockPatientId doctor=$mockDoctorId"
-            )
-
-            val intent = Intent(this, VideoCallActivity::class.java).apply {
-                putExtra("patientId", mockPatientId)
-                putExtra("doctorId", mockDoctorId)
-            }
-            startActivity(intent)
-        }
 
         // RESULT HANDLING for symptom checker → consult doctor
         consultSymptomLauncher = registerForActivityResult(
@@ -167,6 +127,19 @@ class DashboardActivity : AppCompatActivity() {
         requestAudioPermission()
         voiceHelper = VoiceInputHelper(this)
         VoiceInputHelper.attachToAllEditTexts(this)
+
+        // Initialize TTS
+        ttsHelper = TtsHelper(this)
+
+        val currentLang = prefs.getString("My_Lang", "en") ?: "en"
+
+        ttsHelper.setLanguage(currentLang)
+
+        // Enable TTS on all TextViews and Buttons
+        ViewTtsHelper.attachToAllTextViews(
+            findViewById(android.R.id.content),
+            ttsHelper
+        )
     }
 
     private fun requestAudioPermission() {

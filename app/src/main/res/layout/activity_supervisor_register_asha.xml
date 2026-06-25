@@ -1,55 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <include android:id="@+id/header" layout="@layout/include_header" />
+    <!-- Top Header -->
+    <include
+        android:id="@+id/header"
+        layout="@layout/include_header" />
 
-    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:padding="16dp" android:layout_marginTop="?attr/actionBarSize">
+    <!-- Main Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="110dp"
+        android:padding="16dp">
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center_horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <ImageView android:id="@+id/iv_back" android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_arrow_back_24" android:layout_gravity="start" android:layout_marginBottom="16dp" android:contentDescription="Back" />
+            <!-- Back Button + Title -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="24dp">
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Register ASHA" android:textColor="#2563EB" android:textSize="24sp" android:textStyle="bold" android:layout_marginBottom="24dp" />
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_back_24"
+                    android:contentDescription="@string/back"
+                    android:layout_marginEnd="16dp" />
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Full Name" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_asha"
+                    android:textColor="#2563EB"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-            <EditText android:id="@+id/et_full_name" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Full Name" android:inputType="text" android:layout_marginBottom="16dp" android:paddingStart="12dp" android:paddingEnd="12dp" android:background="@android:color/white" />
+            </LinearLayout>
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Phone Number" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
+            <!-- Full Name -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/full_name"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
 
-            <EditText android:id="@+id/et_phone_no" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Phone Number" android:inputType="phone" android:layout_marginBottom="16dp" android:paddingStart="12dp" android:paddingEnd="12dp" android:background="@android:color/white" />
+            <EditText
+                android:id="@+id/et_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="@string/full_name"
+                android:inputType="text"
+                android:layout_marginBottom="16dp"
+                android:paddingHorizontal="12dp"
+                android:background="@android:color/white" />
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="State" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
+            <!-- Phone -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/phone_number"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
 
-            <EditText android:id="@+id/et_state" android:layout_width="match_parent" android:layout_height="48dp" android:text="Maharashtra" android:inputType="none" android:focusable="false" android:layout_marginBottom="16dp" android:paddingStart="12dp" android:paddingEnd="12dp" android:background="@android:color/white" android:textColor="#666666" />
+            <EditText
+                android:id="@+id/et_phone_no"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="@string/phone_number"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:layout_marginBottom="16dp"
+                android:paddingHorizontal="12dp"
+                android:background="@android:color/white" />
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="District" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
+            <!-- State -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/state"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
 
-            <Spinner android:id="@+id/spinner_district" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginBottom="16dp" android:paddingStart="12dp" android:paddingEnd="12dp" android:background="@android:color/white" />
+            <EditText
+                android:id="@+id/et_state"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/default_state"
+                android:focusable="false"
+                android:clickable="false"
+                android:layout_marginBottom="16dp"
+                android:paddingHorizontal="12dp"
+                android:background="@android:color/white"
+                android:textColor="#666666" />
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Taluka" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
+            <!-- District -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/district"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
 
-            <Spinner android:id="@+id/spinner_taluka" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginBottom="16dp" android:paddingStart="12dp" android:paddingEnd="12dp" android:background="@android:color/white" />
+            <Spinner
+                android:id="@+id/spinner_district"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/white" />
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Village" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
+            <!-- Taluka -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/taluka"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
 
-            <Spinner android:id="@+id/spinner_village" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginBottom="16dp" android:paddingStart="12dp" android:paddingEnd="12dp" android:background="@android:color/white" />
+            <Spinner
+                android:id="@+id/spinner_taluka"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/white" />
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Age" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
+            <!-- Village -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/village"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
 
-            <EditText android:id="@+id/et_age" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Age" android:inputType="number" android:layout_marginBottom="16dp" android:paddingStart="12dp" android:paddingEnd="12dp" android:background="@android:color/white" />
+            <Spinner
+                android:id="@+id/spinner_village"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/white" />
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Password" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
+            <!-- Age -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/age"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
 
-            <EditText android:id="@+id/etPassword" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Password" android:inputType="textPassword" android:layout_marginBottom="8dp" android:paddingStart="12dp" android:paddingEnd="44dp" android:background="@android:color/white" android:drawableEnd="@android:drawable/ic_menu_view" />
+            <EditText
+                android:id="@+id/et_age"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="@string/age"
+                android:inputType="number"
+                android:layout_marginBottom="16dp"
+                android:paddingHorizontal="12dp"
+                android:background="@android:color/white" />
 
-            <TextView android:id="@+id/tv_password_criteria" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Password must be ≥8 chars, include upper and lower case, a digit and a special character." android:textSize="12sp" android:textColor="#666666" android:layout_marginBottom="16dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
+            <!-- Password -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/password"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Confirm Password" android:textSize="14sp" android:textStyle="bold" android:textColor="#000000" android:layout_marginBottom="8dp" android:paddingStart="8dp" android:paddingEnd="8dp" />
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:layout_marginBottom="8dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="44dp"
+                android:background="@android:color/white"
+                android:drawableEnd="@android:drawable/ic_menu_view" />
 
-            <EditText android:id="@+id/et_confirm_password" android:layout_width="match_parent" android:layout_height="48dp" android:hint="Confirm Password" android:inputType="textPassword" android:layout_marginBottom="24dp" android:paddingStart="12dp" android:paddingEnd="44dp" android:background="@android:color/white" android:drawableEnd="@android:drawable/ic_menu_view" />
+            <TextView
+                android:id="@+id/tv_password_criteria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/password_criteria"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="16dp" />
 
-            <Button android:id="@+id/btn_register" android:layout_width="match_parent" android:layout_height="48dp" android:text="Register" android:textSize="16sp" android:layout_marginTop="16dp" android:backgroundTint="#00AA00" />
+            <!-- Confirm Password -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/confirm_password"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/et_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword"
+                android:layout_marginBottom="24dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="44dp"
+                android:background="@android:color/white"
+                android:drawableEnd="@android:drawable/ic_menu_view" />
+
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/register"
+                android:textSize="16sp"
+                android:backgroundTint="#00AA00" />
 
         </LinearLayout>
 

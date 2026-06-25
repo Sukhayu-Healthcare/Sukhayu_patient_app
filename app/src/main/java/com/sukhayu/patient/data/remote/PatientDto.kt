@@ -16,9 +16,7 @@ data class PatientDto(
     val age: Int? = null
 )
 
-data class PatientSearchResponse(
-    val patients: List<PatientDto>
-)
+// PatientSearchResponse moved to ApiService.kt to avoid redeclaration
 
 fun PatientDto.toEntity(): PatientEntity {
     return PatientEntity(
